@@ -1,4 +1,4 @@
-## 🗺️ Roadmap Backend — Ordre de travail conseillé
+##  Roadmap Backend — Ordre de travail conseillé
 
 Cette roadmap décrit **par quoi commencer**, **dans quel ordre**, et **quoi faire précisément** à chaque étape.
 
@@ -58,7 +58,7 @@ Cette roadmap décrit **par quoi commencer**, **dans quel ordre**, et **quoi fai
 
 ---
 
-### 🔑 PHASE 3 — Sécurité & JWT
+###  PHASE 3 — Sécurité & JWT
 
 - [ ] Configurer `jwt.config.ts`
 - [ ] Générer un token JWT au login
@@ -67,7 +67,7 @@ Cette roadmap décrit **par quoi commencer**, **dans quel ordre**, et **quoi fai
 
 ---
 
-### 🗄️ PHASE 4 — Base de données réelle
+###  PHASE 4 — Base de données réelle
 
 - [ ] Choisir la base de données (Postgres / autre)
 - [ ] Configurer `database.config.ts`
