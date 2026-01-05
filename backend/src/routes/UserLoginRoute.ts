@@ -5,7 +5,8 @@ import pool from "../config/database.config";
 export default function userLoginRoute(controller: UserLoginController) {
   const router = express.Router();
 
-  router.post("/login", controller.login.bind(controller));
+router.post("/login", controller.login.bind(controller));
+
 
   // test DB réel
   router.get("/db-test", async (_req, res) => {
