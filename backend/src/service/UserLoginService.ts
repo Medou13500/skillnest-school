@@ -1,22 +1,28 @@
 import argon2 from "argon2";
 import UserLoginRepository from "../infrastructure/UserLoginRepository";
 
-class UserLoginService {
-  constructor(private readonly repository: UserLoginRepository) {}
+export default class UserLoginService {
+  constructor(private repository: UserLoginRepository) {}
 
   async login(email: string, password: string) {
+    // 1. récupérer l'utilisateur
     const user = await this.repository.findByEmail(email);
 
     if (!user) {
-      throw new Error("User not found");
+      throw new Error("USER_NOT_FOUND");
     }
 
-    const isValid = await argon2.verify(user.password_hash, password);
+    // 2. comparer le mot de passe (ARGON2)
+    const isPasswordValid = await argon2.verify(
+      user.password_hash,
+      password
+    );
 
-    if (!isValid) {
-      throw new Error("Invalid password");
+    if (!isPasswordValid) {
+      throw new Error("INVALID_PASSWORD");
     }
 
+    // 3. retour clean (jamais le hash)
     return {
       id: user.id,
       email: user.email,
@@ -24,5 +30,3 @@ class UserLoginService {
     };
   }
 }
-
-export default UserLoginService;

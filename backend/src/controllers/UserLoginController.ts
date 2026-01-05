@@ -15,7 +15,7 @@ export default class UserLoginController {
 
     try {
       const user = await this.service.login(email, password);
-      res.json(user);
+      return res.json(user);
     } catch (err: any) {
       if (err.message === "USER_NOT_FOUND") {
         return res.status(401).json({ message: "User not found" });
@@ -25,7 +25,7 @@ export default class UserLoginController {
         return res.status(401).json({ message: "Invalid password" });
       }
 
-      res.status(500).json({ message: "Internal error" });
+      return res.status(500).json({ message: "Internal error" });
     }
   }
 }
