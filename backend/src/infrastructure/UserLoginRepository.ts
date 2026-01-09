@@ -1,16 +1,17 @@
 import { Pool } from "pg";
 
-class UserLoginRepository {
-  constructor(private readonly pool: Pool) {}
+export default class UserLoginRepository {
+  constructor(private pool: Pool) {}
 
   async findByEmail(email: string) {
-    const result = await this.pool.query(
-      "SELECT id, email, role, password_hash FROM users WHERE email = $1",
-      [email]
-    );
+    const query = `
+      SELECT id, email, role, password_hash
+      FROM public.users
+      WHERE email = $1
+      LIMIT 1
+    `;
 
+    const result = await this.pool.query(query, [email]);
     return result.rows[0] ?? null;
   }
 }
-
-export default UserLoginRepository;
