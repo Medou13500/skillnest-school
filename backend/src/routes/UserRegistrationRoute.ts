@@ -6,7 +6,6 @@ export default function userRegistrationRoute(
 ) {
   const router = express.Router();
 
-  // POST /api/register
   router.post("/register", controller.register.bind(controller));
 
   return router;

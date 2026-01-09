@@ -1,31 +1,29 @@
 import { Request, Response } from "express";
 import UserLoginService from "../service/UserLoginService";
+import { AuthRequest } from "../middleware/auth.middlware";
 
 export default class UserLoginController {
-  constructor(private readonly service: UserLoginService) {}
+  constructor(private service: UserLoginService) {}
 
+  // POST /api/login
   async login(req: Request, res: Response) {
-    const { email, password } = req.body;
+    try {
+      const { email, password } = req.body;
 
-    if (!email || !password) {
-      return res.status(400).json({
-        message: "Email and password are required",
+      const result = await this.service.login(email, password);
+
+      return res.json(result);
+    } catch (error: any) {
+      return res.status(401).json({
+        error: error.message,
       });
     }
+  }
 
-    try {
-      const user = await this.service.login(email, password);
-      return res.json(user);
-    } catch (err: any) {
-      if (err.message === "USER_NOT_FOUND") {
-        return res.status(401).json({ message: "User not found" });
-      }
-
-      if (err.message === "INVALID_PASSWORD") {
-        return res.status(401).json({ message: "Invalid password" });
-      }
-
-      return res.status(500).json({ message: "Internal error" });
-    }
+  // GET /api/me (protégé par JWT)
+  async me(req: AuthRequest, res: Response) {
+    return res.json({
+      user: req.user,
+    });
   }
 }
