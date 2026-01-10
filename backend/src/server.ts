@@ -1,11 +1,4 @@
-// =======================
-// 1️⃣ Charger l'environnement (ESM SAFE)
-// =======================
 import "dotenv/config";
-
-// =======================
-// 2️⃣ Imports normaux
-// =======================
 import express from "express";
 import pool from "./config/database.config";
 
@@ -15,50 +8,56 @@ import UserLoginService from "./service/UserLoginService";
 import UserLoginController from "./controllers/UserLoginController";
 import userLoginRoute from "./routes/UserLoginRoute";
 
+// REFRESH TOKEN
+import RefreshTokenRepository from "./infrastructure/RefreshTokenRepository";
+import RefreshTokenService from "./service/RefreshTokenService";
+import RefreshTokenController from "./controllers/RefreshTokenController";
+import refreshTokenRoute from "./routes/RefreshTokenRoute";
+
 // REGISTER
 import UserRegistrationRepository from "./infrastructure/UserRegistrationRepository";
 import UserRegistrationService from "./service/UserRegistrationService";
 import UserRegistrationController from "./controllers/UserRegistrationController";
 import userRegistrationRoute from "./routes/UserRegistrationRoute";
 
-// =======================
-// 3️⃣ App Express
-// =======================
 const app = express();
 app.use(express.json());
 
-// =======================
-// 4️⃣ LOGIN wiring
-// =======================
+// ===== Repositories =====
 const loginRepository = new UserLoginRepository(pool);
-const loginService = new UserLoginService(loginRepository);
-const loginController = new UserLoginController(loginService);
-
-// =======================
-// 5️⃣ REGISTER wiring
-// =======================
+const refreshTokenRepository = new RefreshTokenRepository(pool);
 const registrationRepository = new UserRegistrationRepository();
-const registrationService = new UserRegistrationService(registrationRepository);
+
+// ===== Services =====
+const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
+const loginService = new UserLoginService(
+  loginRepository,
+  refreshTokenService
+);
+const registrationService = new UserRegistrationService(
+  registrationRepository
+);
+
+// ===== Controllers =====
+const loginController = new UserLoginController(loginService);
+const refreshTokenController = new RefreshTokenController(
+  refreshTokenService
+);
 const registrationController = new UserRegistrationController(
   registrationService
 );
 
-// =======================
-// 6️⃣ Routes
-// =======================
+// ===== Routes =====
 app.use("/api", userLoginRoute(loginController));
+app.use("/api", refreshTokenRoute(refreshTokenController));
 app.use("/api", userRegistrationRoute(registrationController));
 
-// =======================
-// 7️⃣ Healthcheck
-// =======================
+// ===== Health =====
 app.get("/", (_req, res) => {
   res.json({ status: "Backend running" });
 });
 
-// =======================
-// 8️⃣ Server
-// =======================
+// ===== Server =====
 app.listen(3000, () => {
   console.log("🚀 Server running on port 3000");
 });

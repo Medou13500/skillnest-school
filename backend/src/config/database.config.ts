@@ -13,13 +13,14 @@ const pool = new Pool({
   port: Number(process.env.DB_PORT),
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME, // ⚠️ OBLIGATOIRE
+  database: process.env.DB_NAME, //  OBLIGATOIRE
 });
 
 // Test de connexion
 pool
   .query("SELECT 1")
-  .then(() => console.log("✅ DB CONNECTED"))
-  .catch((err) => console.error("❌ DB ERROR:", err.message));
+  .then(() => console.log(" DB CONNECTED"))
+  .catch((err) => console.error(" DB ERROR:", err.message));
 
 export default pool;
+
