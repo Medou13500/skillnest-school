@@ -1,0 +1,103 @@
+ion-content {
+  --background: linear-gradient(180deg, #0f0f12, #1a1a1f);
+}
+
+/* Conteneur principal */
+.forgot-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px;
+}
+
+/* Carte formulaire */
+form {
+  width: 50%;
+  background: #000000;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* -----------------------------
+   Champ Email (design unifié)
+-------------------------------- */
+
+/* Ion-item neutre */
+ion-item.email-item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  --border-width: 0;
+  margin-bottom: 20px;
+}
+
+/* Label */
+ion-item.email-item ion-label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+/* Input Email */
+ion-input.email-input {
+  background: #1c1c1e;
+  color: #ffffff;
+  border-radius: 14px;
+  border: 1px solid #4b5563;
+  margin: 1% 0%;
+}
+
+/* Focus */
+ion-input.email-input.ion-focused::part(native) {
+  border-color: #8b5cf6;
+}
+
+/* -----------------------------
+   Bouton principal
+-------------------------------- */
+
+ion-button[type="submit"] {
+  --background: #8b5cf6;
+  --background-activated: #6a4fe0;
+  --border-radius: 14px;
+  height: 50px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 20px;
+}
+
+/* -----------------------------
+   Zone des liens
+-------------------------------- */
+
+.links {
+  margin-top: 16px;
+  text-align: center;
+}
+
+.links ion-button {
+  --color: rgba(255, 255, 255, 0.7);
+  font-size: 0.85rem;
+}
+
+/* -----------------------------
+   Titres
+-------------------------------- */
+
+.forgot-title {
+  margin: 0 0 8px;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.forgot-subtitle {
+  margin: 0 0 24px;
+  text-align: center;
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.65);
+}
