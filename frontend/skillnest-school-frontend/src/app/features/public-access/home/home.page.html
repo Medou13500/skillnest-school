@@ -1,20 +1,35 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="home-page">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="home-card">
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+    <!-- Logo -->
+    <img ngSrc="assets/icon/skillnest-logo.png" alt="Skillnest" class="logo" width="120" height="120" />
+
+    <!-- Texte de bienvenue -->
+    <p class="welcome">Bienvenue sur Skillnest</p>
+    <p class="subtitle">Choisissez votre profil</p>
+
+    <!-- Boutons profil -->
+    <div class="profile-buttons">
+
+      <ion-button
+        fill="clear"
+        class="profile-button student"
+        (click)="goToLogin('student')">
+        <img ngSrc="assets/icon/student.png" alt="Étudiant" width="64" height="64" />
+        <span>Étudiant</span>
+      </ion-button>
+
+      <ion-button
+        fill="clear"
+        class="profile-button parent"
+        (click)="goToLogin('parent')">
+        <img ngSrc="assets/icon/parent.png" alt="Parent" width="64" height="64" />
+        <span>Parent</span>
+      </ion-button>
+
+    </div>
+
   </div>
+
 </ion-content>

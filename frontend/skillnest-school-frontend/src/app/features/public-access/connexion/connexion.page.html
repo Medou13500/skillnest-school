@@ -1,0 +1,78 @@
+<ion-content [fullscreen]="true">
+  <div class="login-wrapper">
+
+    <h1>
+      <ng-container *ngIf="role === 'student'">Connexion Étudiant</ng-container>
+      <ng-container *ngIf="role === 'parent'">Connexion Parent</ng-container>
+      <ng-container *ngIf="!role">Connexion</ng-container>
+    </h1>
+
+    <p class="subtitle">
+      <ng-container *ngIf="role === 'student'">
+        Connectez-vous à votre espace étudiant SkillNest
+      </ng-container>
+
+      <ng-container *ngIf="role === 'parent'">
+        Connectez-vous à votre espace parent SkillNest
+      </ng-container>
+
+      <ng-container *ngIf="!role">
+        Connectez-vous à votre compte SkillNest
+      </ng-container>
+    </p>
+
+
+    <form (ngSubmit)="onSubmit()" #loginForm="ngForm">
+
+      <!-- EMAIL -->
+      <ion-item lines="none" class="input-item email-item">
+        <ion-label position="stacked">Email</ion-label>
+        <ion-input
+          class="input-field email-input"
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="email"
+          name="email"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <!-- MOT DE PASSE -->
+      <ion-item lines="none" class="input-item password-item">
+        <ion-label position="stacked">Mot de passe</ion-label>
+        <ion-input
+          class="input-field password-input"
+          type="password"
+          placeholder="Mot de passe"
+          [(ngModel)]="password"
+          name="password"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <div class="options">
+        <div class="remember-me">
+          <ion-checkbox [(ngModel)]="rememberMe" name="rememberMe"></ion-checkbox>
+          <span>Se souvenir de moi</span>
+        </div>
+
+        <a routerLink="/mot-de-passe-oublie">Mot de passe oublié ?</a>
+      </div>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="!loginForm.form.valid"
+        class="login-button">
+        Se connecter
+      </ion-button>
+
+    </form>
+
+    <p class="signup">
+      Pas encore de compte ?
+      <a routerLink="/inscription">S'inscrire</a>
+    </p>
+
+  </div>
+</ion-content>
