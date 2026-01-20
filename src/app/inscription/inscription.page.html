@@ -7,6 +7,9 @@
 <ion-content [fullscreen]="true">
   <div class="signup-container">
 
+    <!-- Titre principal -->
+    <h1 class="page-title">Créer un compte</h1>
+
     <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
 
       <!-- Nom / Prénom -->
@@ -99,18 +102,52 @@
 
       </div>
 
+      <!-- Conditions d'utilisation -->
+      <div class="conditions">
+
+        <ion-item lines="none">
+          <ion-checkbox
+            slot="start"
+            name="acceptTerms"
+            [(ngModel)]="acceptTerms"
+            required>
+          </ion-checkbox>
+          <ion-label>
+            J'accepte les conditions générales d'utilisation
+          </ion-label>
+        </ion-item>
+
+        <ion-item lines="none">
+          <ion-checkbox
+            slot="start"
+            name="acceptPrivacy"
+            [(ngModel)]="acceptPrivacy"
+            required>
+          </ion-checkbox>
+          <ion-label>
+            J'accepte la politique de confidentialité
+          </ion-label>
+        </ion-item>
+
+      </div>
+
       <!-- Bouton -->
       <ion-button
         expand="block"
         type="submit"
-        [disabled]="!signupForm.form.valid || password !== confirmPassword">
-        S'inscrire
+        [disabled]="
+          !signupForm.form.valid ||
+          password !== confirmPassword ||
+          !acceptTerms ||
+          !acceptPrivacy
+        ">
+        Créer mon compte
       </ion-button>
 
       <!-- Lien -->
       <div class="links">
         <ion-button fill="clear" size="small" routerLink="/connexion">
-          Déjà un compte ? Connexion
+          Déjà un compte ? Se connecter
         </ion-button>
       </div>
 

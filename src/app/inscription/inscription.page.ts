@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { IonicModule } from "@ionic/angular";
-import { FormsModule } from "@angular/forms";
+import { IonicModule } from '@ionic/angular';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-inscription',
   templateUrl: './inscription.page.html',
   styleUrls: ['./inscription.page.scss'],
+  standalone: true,
   imports: [
     IonicModule,
     FormsModule,
@@ -14,46 +15,51 @@ import { FormsModule } from "@angular/forms";
   ]
 })
 export class InscriptionPage {
-  nom: string = '';       // <- Nouveau champ Nom
-  prenom: string = '';    // <- Nouveau champ Prénom
+
+  nom: string = '';
+  prenom: string = '';
   username: string = '';
   email: string = '';
-  classe: string = '';    // <- Propriété Classe
+  classe: string = '';
   password: string = '';
   confirmPassword: string = '';
+
+  // Conditions
+  acceptTerms: boolean = false;
+  acceptPrivacy: boolean = false;
 
   constructor(private router: Router) {}
 
   onSubmit() {
-    // Vérification mots de passe
+
+    // Sécurité supplémentaire (au cas où)
+    if (!this.acceptTerms || !this.acceptPrivacy) {
+      alert('Vous devez accepter les conditions d’utilisation et la politique de confidentialité.');
+      return;
+    }
+
     if (this.password !== this.confirmPassword) {
-      alert('Les mots de passe ne correspondent pas');
+      alert('Les mots de passe ne correspondent pas.');
       return;
     }
 
-    // Vérification classe
-    if (!this.classe) {
-      alert('Veuillez sélectionner votre classe');
-      return;
-    }
+    // Données prêtes à être envoyées
+    const payload = {
+      nom: this.nom,
+      prenom: this.prenom,
+      username: this.username,
+      email: this.email,
+      classe: this.classe,
+      password: this.password
+    };
 
-    // Vérification nom et prénom
-    if (!this.nom || !this.prenom) {
-      alert('Veuillez renseigner votre nom et prénom');
-      return;
-    }
+    console.log('Payload inscription :', payload);
 
-    // Ici vous pouvez envoyer les données à votre backend
-    console.log('Nom:', this.nom);
-    console.log('Prénom:', this.prenom);
-    console.log('Nom d’utilisateur:', this.username);
-    console.log('Email:', this.email);
-    console.log('Classe:', this.classe);
-    console.log('Mot de passe:', this.password);
+    // TODO : appel API backend ici
 
-    alert(`Inscription réussie pour ${this.prenom} ${this.nom} (${this.classe})`);
+    alert(`Inscription réussie pour ${this.prenom} ${this.nom}`);
 
-    // Redirection vers la page de connexion
+    // Redirection
     this.router.navigateByUrl('/connexion');
   }
 }

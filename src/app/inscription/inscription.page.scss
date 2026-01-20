@@ -2,17 +2,24 @@ ion-content {
   --background: linear-gradient(180deg, #0f0f12, #1a1a1f);
 }
 
-/* Conteneur principal */
+/* --------------------------------
+   Conteneur principal
+---------------------------------- */
 .signup-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
+  min-height: 100%;
   padding: 16px;
 }
 
-/* Carte formulaire */
+/* --------------------------------
+   Carte formulaire
+---------------------------------- */
 form {
   width: 50%;
+  max-width: 480px;
   background: #000000;
   padding: 24px;
   border-radius: 16px;
@@ -22,25 +29,22 @@ form {
 /* --------------------------------
    Layout des champs
 ---------------------------------- */
-
-/* Groupe vertical standard */
 .form-fields {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 16px;
 }
 
-/* Ligne avec deux champs (Nom / Prénom) */
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  gap: 16px;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
   form {
-    width: 90%;
+    width: 100%;
     padding: 16px;
   }
 
@@ -50,9 +54,8 @@ form {
 }
 
 /* --------------------------------
-   Inputs – design unifié
+   Inputs – Ionic friendly
 ---------------------------------- */
-
 ion-item.input-item {
   --background: transparent;
   --padding-start: 0;
@@ -62,7 +65,7 @@ ion-item.input-item {
 }
 
 ion-item.input-item ion-label {
-  font-size: 30px;
+  font-size: 14px;
   margin-bottom: 6px;
   color: #ffffff;
 }
@@ -70,17 +73,18 @@ ion-item.input-item ion-label {
 /* Input & Select */
 ion-input.input-field,
 ion-select.input-field {
-  background: #1c1c1e;
-  color: #ffffff;
-  border-radius: 14px;
-  border: 1px solid #4b5563;
-  margin: 1% 0%;
+  --background: #1c1c1e;
+  --color: #ffffff;
+  --border-radius: 14px;
+  --border-width: 1px;
+  --border-style: solid;
+  --border-color: #4b5563;
 }
 
 /* Focus */
-ion-input.input-field.ion-focused::part(native),
-ion-select.input-field.ion-focused::part(native) {
-  border-color: #8b5cf6;
+ion-input.ion-focused,
+ion-select.ion-focused {
+  --border-color: #8b5cf6;
 }
 
 /* Placeholder select */
@@ -89,15 +93,27 @@ ion-select::part(placeholder) {
 }
 
 /* --------------------------------
+   Conditions (checkbox)
+---------------------------------- */
+.conditions ion-item {
+  --background: transparent;
+  --padding-start: 0;
+}
+
+.conditions ion-label {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* --------------------------------
    Bouton principal
 ---------------------------------- */
-
-ion-button[type="submit"] {
+ion-button[type='submit'] {
   --background: #8b5cf6;
   --background-activated: #6a4fe0;
   --border-radius: 14px;
-  height: 50px;
-  font-size: 16px;
+  height: 48px;
+  font-size: 15px;
   font-weight: 600;
   margin-top: 24px;
 }
@@ -105,23 +121,32 @@ ion-button[type="submit"] {
 /* --------------------------------
    Liens
 ---------------------------------- */
-
 .links {
-  margin-top: 16px;
+  margin-top: 12px;
   text-align: center;
 }
 
 .links ion-button {
   --color: rgba(255, 255, 255, 0.7);
-  font-size: 0.85rem;
+  font-size: 13px;
 }
 
 /* --------------------------------
    Header
 ---------------------------------- */
-
 ion-header ion-title {
   color: #ffffff;
   font-weight: 600;
   text-align: center;
+}
+
+/* --------------------------------
+   Titre page
+---------------------------------- */
+.page-title {
+  text-align: center;
+  font-size: 22px;
+  font-weight: 600;
+  color: #ffffff;
+  margin-bottom: 24px;
 }
