@@ -21,5 +21,17 @@ export const routes: Routes = [
     path: 'connexion',
     loadComponent: () => import('./connexion/connexion.page').then( m => m.ConnexionPage)
   },
+  {
+    path: 'liste-matiere',
+    loadComponent: () => import('./liste-matiere/liste-matiere.page').then( m => m.ListeMatierePage)
+  },
+  {
+    path: 'menu-navigation',
+    loadComponent: () => import('./menu-navigation/menu-navigation.page').then( m => m.MenuNavigationPage)
+  },
+  {
+    path: 'contenu-matiere',
+    loadComponent: () => import('./contenu-matiere/contenu-matiere.page').then( m => m.ContenuMatierePage)
+  },
 
 ];

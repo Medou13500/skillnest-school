@@ -1,0 +1,71 @@
+ion-content {
+  --background: #000;
+}
+.icon img {
+  height: 200px;
+  object-fit: contain;
+}
+
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.card {
+  border-radius: 16px;
+  padding-top: 12px;
+  color: #fff;
+  min-height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.icon {
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 8px;
+}
+.content{
+  background-color: #ffffff;
+  padding: 2%;
+}
+
+.content h3 {
+  margin: 0;
+  font-size: 25px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.content p {
+  margin: 4px 0;
+  font-size: 15px;
+  color: #000000;
+  font-weight: bold;
+}
+
+.progress-text {
+  font-weight: 500;
+}
+
+ion-progress-bar {
+  margin-top: 8px;
+  height: 15px;
+  border-radius: 4px;
+
+  /* Couleur de la barre vide */
+  --background: rgba(255, 255, 255, 0.3);
+
+  /* Couleur de la barre remplie */
+  --progress-background: #8242F0;
+
+  /* Bordure autour de la barre */
+  --border-width: 1px;       /* largeur de la bordure */
+  --border-color: #ffffff;    /* couleur de la bordure */
+  --border-style: solid;      /* style de la bordure */
+}
+
+

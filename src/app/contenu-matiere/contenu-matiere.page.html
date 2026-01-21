@@ -1,0 +1,81 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>Terminale &gt; Lorem ipsum</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="page">
+
+  <section class="objectifs">
+    <h3>Objectifs</h3>
+    <ul>
+      <li>Lorem ipsum dolor sit amet.</li>
+      <li>Lorem ipsum dolor sit amet.</li>
+      <li>Lorem ipsum dolor sit amet.</li>
+    </ul>
+  </section>
+
+  <ion-searchbar placeholder="Rechercher un titre"></ion-searchbar>
+
+  <section class="themes">
+    <article class="theme" *ngFor="let theme of themes">
+
+      <!-- HEADER DU THÈME -->
+      <header
+        class="theme-header"
+        (click)="toggle(theme)">
+
+        <div>
+          <h4>{{ theme.title }}</h4>
+          <p>{{ theme.subtitle }}</p>
+        </div>
+
+        <ion-icon
+          [name]="theme.open ? 'chevron-down-outline' : 'chevron-forward-outline'">
+        </ion-icon>
+      </header>
+
+      <!-- CONTENU DU THÈME -->
+      <div
+        class="theme-content"
+        [class.open]="theme.open">
+
+      <!-- ITEMS -->
+        <div
+          class="item"
+          *ngFor="let item of theme.items"
+          (click)="goTo(item)">
+
+          <div class="left">
+            <span class="type">{{ item.type }}</span>
+            <strong>{{ item.title }}</strong>
+          </div>
+
+          <div class="right">
+            <ion-icon
+              *ngIf="item.done"
+              name="checkmark-circle"
+              color="success">
+            </ion-icon>
+
+            <!-- Stop propagation pour éviter le clic parent -->
+            <ion-button
+              size="small"
+              (click)="$event.stopPropagation(); goTo(item)">
+              Commencer
+            </ion-button>
+          </div>
+
+        </div>
+
+        <!-- SI THÈME VIDE -->
+        <div class="item empty" *ngIf="theme.items.length === 0">
+          <em>Aucun contenu disponible pour ce thème</em>
+        </div>
+
+      </div>
+
+    </article>
+  </section>
+
+</ion-content>

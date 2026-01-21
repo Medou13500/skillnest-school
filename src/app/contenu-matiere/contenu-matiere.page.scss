@@ -1,0 +1,114 @@
+.page {
+  --background: #0f1115;
+  color: #ffffff;
+}
+
+/* OBJECTIFS */
+.objectifs {
+  background: #1b1e24;
+  margin: 16px;
+  padding: 16px;
+  border-radius: 12px;
+}
+
+.objectifs h3 {
+  margin-top: 0;
+}
+
+/* SEARCHBAR */
+ion-searchbar {
+  margin: 0 16px 16px;
+  width: calc(100% - 32px);
+  --background: #1b1e24;
+  --color: #ffffff;
+  --placeholder-color: #999;
+  --icon-color: #666;
+  --bar-border-radius: 8px;
+  --border-radius: 12px;
+}
+
+/* THÈMES */
+.theme {
+  margin: 0 16px 16px;
+  background: #1b1e24;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* HEADER DU THÈME */
+.theme-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+}
+
+.theme-header h4 {
+  margin: 0;
+}
+
+.theme-header p {
+  margin: 0;
+  font-size: 12px;
+  color: #a0a0a0;
+}
+
+/* ANIMATION DE LA FLÈCHE */
+.theme-header ion-icon {
+  font-size: 20px;
+  transition: transform 200ms ease;
+  color: #ffffff;
+}
+
+/* CONTENU DU THÈME (TRANSITION) */
+.theme-content {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    max-height 300ms ease,
+    opacity 200ms ease,
+    transform 200ms ease;
+}
+
+.theme-content.open {
+  max-height: 1000px;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+
+/* ITEMS */
+.item {
+  background: #f1f1f1;
+  color: #000000;
+  border-radius: 12px;
+  margin: 8px 16px 16px;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item .type {
+  font-size: 12px;
+  color: #666666;
+  display: block;
+}
+
+/* ITEM VIDE */
+.item.empty {
+  background: transparent;
+  color: #999;
+  text-align: center;
+  justify-content: center;
+}
+
+/* BOUTON */
+.item ion-button {
+  --background: #7c5cff;
+  --border-radius: 20px;
+}
