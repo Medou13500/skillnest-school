@@ -7,9 +7,10 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'page_quiz',
     pathMatch: 'full',
-  },  {
+  },
+  {
     path: 'inscription',
     loadComponent: () => import('./inscription/inscription.page').then( m => m.InscriptionPage)
   },
@@ -21,5 +22,9 @@ export const routes: Routes = [
     path: 'connexion',
     loadComponent: () => import('./connexion/connexion.page').then( m => m.ConnexionPage)
   },
+  {
+    path: 'page_quiz',
+    loadComponent: () => import('./page-quiz/page-quiz.component').then( m => m.PageQuizComponent)
+  }
 
 ];
