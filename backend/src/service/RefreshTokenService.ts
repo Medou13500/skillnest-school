@@ -42,10 +42,10 @@ export default class RefreshTokenService {
       throw new Error("INVALID_REFRESH_TOKEN");
     }
 
-    // 🔥 ROTATION : on supprime l'ancien
+    //  ROTATION : on supprime l'ancien
     await this.repo.deleteByHash(tokenHash);
 
-    // 🔐 Nouveau access token
+    //  Nouveau access token
     const accessToken = JwtService.generate({
       userId: stored.user_id,
       role: "USER",

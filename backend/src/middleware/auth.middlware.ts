@@ -30,8 +30,6 @@ export function authMiddleware(
 
   try {
     const decoded = JwtService.verify(token);
-
-   
     req.user = decoded;
 
     next();
