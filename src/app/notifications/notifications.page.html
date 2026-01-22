@@ -1,0 +1,56 @@
+<ion-content class="notifications-content">
+  <div class="main-container">
+
+    <div class="header-section">
+      <h2 class="page-title">Gérez vos notifications</h2>
+      <p class="subtitle">Ajustez comment et quand vous souhaitez être averti(e).</p>
+    </div>
+
+    <div class="settings-list">
+
+      <div class="setting-card">
+        <div class="setting-icon">
+          <img src="assets/icon/book.png" alt="Cours">
+        </div>
+        <div class="setting-info">
+          <span class="setting-title">Nouveau cours</span>
+          <span class="setting-desc">Averti lorsqu'un nouveau cours est publié</span>
+        </div>
+        <ion-toggle slot="end" color="custom-purple" [checked]="true"></ion-toggle>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-icon">
+          <img src="assets/icon/quiz.png" alt="Quiz">
+        </div>
+        <div class="setting-info">
+          <span class="setting-title">Nouveaux quiz</span>
+          <span class="setting-desc">Averti quand un nouveau quiz est ajouté</span>
+        </div>
+        <ion-toggle slot="end" color="custom-purple" [checked]="false"></ion-toggle>
+      </div>
+
+      <div class="setting-card">
+        <div class="setting-icon">
+          <img src="assets/icon/megaphone.png" alt="Annonces">
+        </div>
+        <div class="setting-info">
+          <span class="setting-title">Annonces</span>
+          <span class="setting-desc">Nouveautés de la plateforme, événements</span>
+        </div>
+        <ion-toggle slot="end" color="custom-purple" [checked]="true"></ion-toggle>
+      </div>
+
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="tab-bar">
+      <ion-icon name="book-outline" class="tab-icon" (click)="router.navigate(['/liste-matiere'])"></ion-icon>
+      <ion-icon name="ribbon-outline" class="tab-icon"></ion-icon>
+      <ion-icon name="person-outline" class="tab-icon active"></ion-icon>
+    </div>
+  </ion-toolbar>
+</ion-footer>
