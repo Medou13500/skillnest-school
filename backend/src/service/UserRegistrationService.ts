@@ -30,7 +30,7 @@ class UserRegistrationService {
       "USER"
     );
 
-    // retour clean (jamais de hash)
+   // retour clean (jamais de hash)
     return {
       id: user.id,
       email: user.email,

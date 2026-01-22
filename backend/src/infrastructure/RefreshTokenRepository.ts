@@ -39,6 +39,7 @@ export default class RefreshTokenRepository {
       [userId]
     );
   }
+
   async deleteByHash(tokenHash: string): Promise<void> {
     await this.pool.query(
       `
@@ -48,7 +49,7 @@ export default class RefreshTokenRepository {
       [tokenHash]
     );
   }
-  
+
   async deleteByToken(tokenHash: string) {
     await this.pool.query(
       `
@@ -58,4 +59,5 @@ export default class RefreshTokenRepository {
       [tokenHash]
     );
   }
+  
 }
