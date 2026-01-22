@@ -1,13 +1,26 @@
 import { Component } from '@angular/core';
-import {IonicModule} from "@ionic/angular";
-import {NgForOf, NgIf} from "@angular/common";
+import { IonicModule } from "@ionic/angular";
+import { NgForOf, NgIf } from "@angular/common";
 import { Router } from '@angular/router';
 
+// Importez addIcons et toutes les icônes nécessaires (contenu + footer)
+import { addIcons } from 'ionicons';
+import {
+  bookOutline,
+  readerOutline,
+  checkmarkCircle,
+  ellipseOutline,
+  chevronDownOutline,
+  chevronForwardOutline,
+  ribbonOutline, // Icône pour la couronne/premium
+  personOutline  // Icône pour le compte
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-contenu-matiere',
   templateUrl: './contenu-matiere.page.html',
   styleUrls: ['./contenu-matiere.page.scss'],
+  standalone: true,
   imports: [
     IonicModule,
     NgIf,
@@ -15,10 +28,6 @@ import { Router } from '@angular/router';
   ]
 })
 export class ContenuMatierePage {
-
-
-  constructor(private router: Router) {}
-
 
   themes = [
     {
@@ -47,11 +56,23 @@ export class ContenuMatierePage {
     },
   ];
 
+  // Le router est mis en "public" pour être accessible depuis le fichier HTML
+  constructor(public router: Router) {
+    addIcons({
+      'book-outline': bookOutline,
+      'reader-outline': readerOutline,
+      'checkmark-circle': checkmarkCircle,
+      'ellipse-outline': ellipseOutline,
+      'chevron-down-outline': chevronDownOutline,
+      'chevron-forward-outline': chevronForwardOutline,
+      'ribbon-outline': ribbonOutline,
+      'person-outline': personOutline
+    });
+  }
 
   toggle(theme: any): void {
     theme.open = !theme.open;
   }
-
 
   goTo(item: any): void {
     this.router.navigate([item.route]);

@@ -1,10 +1,15 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { NgForOf } from '@angular/common';
+import { Router } from '@angular/router'; // Import du Router
+
+// Imports pour les icônes du menu
+import { addIcons } from 'ionicons';
+import { bookOutline, ribbonOutline, personOutline } from 'ionicons/icons';
 
 interface Matiere {
   nom: string;
-  icon: string; // chemin vers l'image dans assets
+  icon: string;
   leconsFaites: number;
   leconsTotal: number;
   quizFaits: number;
@@ -17,6 +22,7 @@ interface Matiere {
   selector: 'app-liste-matiere',
   templateUrl: './liste-matiere.page.html',
   styleUrls: ['./liste-matiere.page.scss'],
+  standalone: true, // Recommandé pour utiliser les imports directs
   imports: [
     IonicModule,
     NgForOf
@@ -27,7 +33,7 @@ export class ListeMatierePage {
   matieres: Matiere[] = [
     {
       nom: 'Géographie',
-      icon: 'assets/icon/globe-terrestre.png', // corrigé
+      icon: 'assets/icon/globe-terrestre.png',
       leconsFaites: 8,
       leconsTotal: 10,
       quizFaits: 8,
@@ -37,7 +43,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Maths',
-      icon: 'assets/icon/calculator.png', // corrigé
+      icon: 'assets/icon/calculator.png',
       leconsFaites: 0,
       leconsTotal: 15,
       quizFaits: 0,
@@ -47,7 +53,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Anglais',
-      icon: 'assets/icon/book.png', // corrigé
+      icon: 'assets/icon/book.png',
       leconsFaites: 8,
       leconsTotal: 16,
       quizFaits: 14,
@@ -57,7 +63,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Français',
-      icon: 'assets/icon/flag.png', // corrigé
+      icon: 'assets/icon/flag.png',
       leconsFaites: 8,
       leconsTotal: 8,
       quizFaits: 8,
@@ -67,7 +73,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Physique-Chimie',
-      icon: 'assets/icon/flask.png', // corrigé
+      icon: 'assets/icon/flask.png',
       leconsFaites: 0,
       leconsTotal: 14,
       quizFaits: 0,
@@ -77,7 +83,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'SVT',
-      icon: 'assets/icon/leaf.png', // corrigé
+      icon: 'assets/icon/leaf.png',
       leconsFaites: 2,
       leconsTotal: 9,
       quizFaits: 2,
@@ -86,5 +92,15 @@ export class ListeMatierePage {
       couleur: '#66BB6A'
     }
   ];
+
+  // Le router est en "public" pour être utilisé dans le HTML (click)
+  constructor(public router: Router) {
+    // Enregistrement des icônes du footer
+    addIcons({
+      'book-outline': bookOutline,
+      'ribbon-outline': ribbonOutline,
+      'person-outline': personOutline
+    });
+  }
 
 }

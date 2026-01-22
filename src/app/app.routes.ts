@@ -33,5 +33,13 @@ export const routes: Routes = [
     path: 'contenu-matiere',
     loadComponent: () => import('./contenu-matiere/contenu-matiere.page').then( m => m.ContenuMatierePage)
   },
+  {
+    path: 'compte',
+    loadComponent: () => import('./compte/compte.page').then( m => m.ComptePage)
+  },
+  {
+    path: 'notifications',
+    loadComponent: () => import('./notifications/notifications.page').then( m => m.NotificationsPage)
+  },
 
 ];

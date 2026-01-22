@@ -1,21 +1,29 @@
 .page {
-  --background: #0f1115;
+  --background: #121418; // Fond sombre de l'application
   color: #ffffff;
 }
 
-/* OBJECTIFS */
+/* --- OBJECTIFS --- */
 .objectifs {
   background: #1b1e24;
   margin: 16px;
   padding: 16px;
   border-radius: 12px;
+
+  h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    color: #ffffff;
+  }
+
+  ul {
+    margin: 8px 0 0 16px;
+    padding: 0;
+    color: #a0a0a0;
+  }
 }
 
-.objectifs h3 {
-  margin-top: 0;
-}
-
-/* SEARCHBAR */
+/* --- SEARCHBAR --- */
 ion-searchbar {
   margin: 0 16px 16px;
   width: calc(100% - 32px);
@@ -23,92 +31,177 @@ ion-searchbar {
   --color: #ffffff;
   --placeholder-color: #999;
   --icon-color: #666;
-  --bar-border-radius: 8px;
   --border-radius: 12px;
 }
 
-/* THÈMES */
+/* --- THÈMES --- */
 .theme {
-  margin: 0 16px 16px;
-  background: #1b1e24;
-  border-radius: 12px;
-  overflow: hidden;
+  margin: 0 16px 24px;
 }
 
-/* HEADER DU THÈME */
 .theme-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid #333; // Trait de séparation horizontal
   cursor: pointer;
+
+  h4 {
+    margin: 0;
+    font-size: 1.1rem;
+    font-weight: bold;
+  }
+
+  p {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #ffffff; // Sous-titre en blanc comme sur l'image
+    font-weight: 500;
+  }
+
+  ion-icon {
+    font-size: 20px;
+    transition: transform 200ms ease;
+    color: #ffffff;
+  }
 }
 
-.theme-header h4 {
-  margin: 0;
-}
-
-.theme-header p {
-  margin: 0;
-  font-size: 12px;
-  color: #a0a0a0;
-}
-
-/* ANIMATION DE LA FLÈCHE */
-.theme-header ion-icon {
-  font-size: 20px;
-  transition: transform 200ms ease;
-  color: #ffffff;
-}
-
-/* CONTENU DU THÈME (TRANSITION) */
+/* --- CONTENU DU THÈME (ACCORDÉON) --- */
 .theme-content {
   overflow: hidden;
   max-height: 0;
   opacity: 0;
-  transform: translateY(-4px);
-  transition:
-    max-height 300ms ease,
-    opacity 200ms ease,
-    transform 200ms ease;
+  transition: max-height 300ms ease, opacity 200ms ease;
+
+  &.open {
+    max-height: 2000px;
+    opacity: 1;
+    margin-top: 10px;
+  }
 }
 
-.theme-content.open {
-  max-height: 1000px;
-  opacity: 1;
-  transform: translateY(0);
-}
-
-
-
-/* ITEMS */
+/* --- ITEMS (CARTES GRISES) --- */
 .item {
-  background: #f1f1f1;
+  background: #d1d1d1; // Gris clair identique à l'image
   color: #000000;
-  border-radius: 12px;
-  margin: 8px 16px 16px;
-  padding: 12px;
+  border-radius: 15px;
+  margin: 12px 0;
+  padding: 16px;
   display: flex;
-  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  border: 2px solid transparent; // Préparation pour la bordure active
+  min-height: 100px;
+
+  // Classe pour l'item avec la bordure bleue (ex: Leçon 1)
+  &.active-border {
+    border: 2px solid transparent ;
+  }
+
+  /* Zone de l'icône à gauche (Livre/Quiz) */
+  .icon-type-container {
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    height: 100%;
+
+    .main-type-icon {
+      font-size: 44px;
+      color: #3e828a; // Couleur bleu canard des icônes
+    }
+  }
+
+  /* Zone de texte centrale */
+  .center-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .type-label {
+      font-size: 13px;
+      color: #666;
+      margin-bottom: 2px;
+    }
+
+    .item-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #000;
+    }
+  }
+
+  /* Zone de droite (Coche et Bouton) */
+  .right-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    height: 100%;
+
+    .status-icon {
+      font-size: 26px;
+      margin-bottom: 8px;
+
+      // Couleur grise si l'item n'est pas fait (ellipse)
+      &[name="ellipse-outline"] {
+        color: #333;
+      }
+    }
+
+    .btn-commencer {
+      --background: #804cfa; // Violet de l'image
+      --color: #ffffff;
+      --border-radius: 10px;
+      --padding-start: 15px;
+      --padding-end: 15px;
+      font-size: 12px;
+      height: 32px;
+      margin: 0;
+      text-transform: none; // Évite le tout en majuscule
+    }
+  }
+
+  /* État vide */
+  &.empty {
+    background: transparent;
+    color: #666;
+    border: 1px dashed #444;
+    justify-content: center;
+    min-height: auto;
+  }
+}
+/* ... tout ton css précédent ... */
+
+/* --- FOOTER (MENU DU BAS) --- */
+ion-footer {
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.5); // Petite ombre vers le haut
+
+  ion-toolbar {
+    --border-width: 0; // Enlève la bordure par défaut d'ionic
+  }
+}
+
+.tab-bar {
+  display: flex;
+  justify-content: space-around;
   align-items: center;
-}
+  padding: 10px 0;
 
-.item .type {
-  font-size: 12px;
-  color: #666666;
-  display: block;
-}
+  .tab-icon {
+    font-size: 28px;
+    color: #666666; // Couleur grise pour les inactifs
+    transition: color 0.2s;
+    cursor: pointer;
 
-/* ITEM VIDE */
-.item.empty {
-  background: transparent;
-  color: #999;
-  text-align: center;
-  justify-content: center;
-}
+    &.active {
+      color: #666666; // Blanc pour l'onglet actif
+      font-weight: bold;
+      transform: scale(1.1); // Légèrement plus gros
+    }
 
-/* BOUTON */
-.item ion-button {
-  --background: #7c5cff;
-  --border-radius: 20px;
+    &:active {
+      transform: scale(0.9); // Petit effet de clic
+    }
+  }
 }

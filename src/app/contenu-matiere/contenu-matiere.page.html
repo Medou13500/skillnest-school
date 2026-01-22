@@ -5,7 +5,6 @@
 </ion-header>
 
 <ion-content class="page">
-
   <section class="objectifs">
     <h3>Objectifs</h3>
     <ul>
@@ -19,63 +18,44 @@
 
   <section class="themes">
     <article class="theme" *ngFor="let theme of themes">
-
-      <!-- HEADER DU THÈME -->
-      <header
-        class="theme-header"
-        (click)="toggle(theme)">
-
+      <header class="theme-header" (click)="toggle(theme)">
         <div>
           <h4>{{ theme.title }}</h4>
           <p>{{ theme.subtitle }}</p>
         </div>
-
-        <ion-icon
-          [name]="theme.open ? 'chevron-down-outline' : 'chevron-forward-outline'">
-        </ion-icon>
+        <ion-icon [name]="theme.open ? 'chevron-down-outline' : 'chevron-forward-outline'"></ion-icon>
       </header>
 
-      <!-- CONTENU DU THÈME -->
-      <div
-        class="theme-content"
-        [class.open]="theme.open">
-
-      <!-- ITEMS -->
-        <div
-          class="item"
-          *ngFor="let item of theme.items"
-          (click)="goTo(item)">
-
-          <div class="left">
-            <span class="type">{{ item.type }}</span>
-            <strong>{{ item.title }}</strong>
+      <div class="theme-content" [class.open]="theme.open">
+        <div class="item" *ngFor="let item of theme.items" [class.active-border]="item.type === 'Leçon' && item.id === 1" (click)="goTo(item)">
+          <div class="icon-type-container">
+            <ion-icon [name]="item.type === 'Leçon' ? 'book-outline' : 'reader-outline'" class="main-type-icon"></ion-icon>
           </div>
-
-          <div class="right">
-            <ion-icon
-              *ngIf="item.done"
-              name="checkmark-circle"
-              color="success">
-            </ion-icon>
-
-            <!-- Stop propagation pour éviter le clic parent -->
-            <ion-button
-              size="small"
-              (click)="$event.stopPropagation(); goTo(item)">
-              Commencer
-            </ion-button>
+          <div class="center-content">
+            <span class="type-label">{{ item.type }}</span>
+            <strong class="item-title">{{ item.title }}</strong>
           </div>
-
+          <div class="right-content">
+            <ion-icon [name]="item.done ? 'checkmark-circle' : 'ellipse-outline'" [color]="item.done ? 'success' : 'dark'" class="status-icon"></ion-icon>
+            <ion-button size="small" class="btn-commencer" (click)="$event.stopPropagation(); goTo(item)">Commencer</ion-button>
+          </div>
         </div>
-
-        <!-- SI THÈME VIDE -->
         <div class="item empty" *ngIf="theme.items.length === 0">
           <em>Aucun contenu disponible pour ce thème</em>
         </div>
-
       </div>
-
     </article>
   </section>
 
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="dark"> <div class="tab-bar">
+    <ion-icon name="book-outline" class="tab-icon active"></ion-icon>
+
+    <ion-icon name="ribbon-outline" class="tab-icon"></ion-icon>
+
+    <ion-icon name="person-outline" class="tab-icon" (click)="router.navigate(['/compte'])"></ion-icon>
+  </div>
+  </ion-toolbar>
+</ion-footer>

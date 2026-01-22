@@ -1,16 +1,13 @@
 ion-content {
   --background: #000;
 }
-.icon img {
-  height: 200px;
-  object-fit: contain;
-}
 
-
+/* --- GRILLE ET CARTES --- */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 16px;
+  padding-bottom: 20px; // Espace pour ne pas coller au footer
 }
 
 .card {
@@ -21,51 +18,82 @@ ion-content {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden; // Pour que le contenu blanc ne dépasse pas des arrondis
 }
 
 .icon {
-  font-size: 48px;
   text-align: center;
   margin-bottom: 8px;
+
+  img {
+    height: 200px; // Taille ajustée pour tenir dans la petite carte
+    width: 200px;
+    object-fit: contain;
+  }
 }
-.content{
+
+/* --- ZONE BLANCHE SOUS L'ICONE --- */
+.content {
   background-color: #ffffff;
-  padding: 2%;
+  padding: 10px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px; // Un peu plus petit pour le mobile
+    font-weight: 700;
+    color: #000000;
+  }
+
+  p {
+    margin: 4px 0;
+    font-size: 12px;
+    color: #333333;
+    font-weight: bold;
+  }
+
+  .progress-text {
+    font-weight: 500;
+    font-size: 11px;
+    color: #666;
+  }
 }
 
-.content h3 {
-  margin: 0;
-  font-size: 25px;
-  font-weight: 600;
-  color: #000000;
-}
-
-.content p {
-  margin: 4px 0;
-  font-size: 15px;
-  color: #000000;
-  font-weight: bold;
-}
-
-.progress-text {
-  font-weight: 500;
-}
-
+/* --- BARRE DE PROGRESSION --- */
 ion-progress-bar {
   margin-top: 8px;
-  height: 15px;
-  border-radius: 4px;
-
-  /* Couleur de la barre vide */
-  --background: rgba(255, 255, 255, 0.3);
-
-  /* Couleur de la barre remplie */
+  height: 10px;
+  border-radius: 10px;
+  --background: #e0e0e0;
   --progress-background: #8242F0;
-
-  /* Bordure autour de la barre */
-  --border-width: 1px;       /* largeur de la bordure */
-  --border-color: #ffffff;    /* couleur de la bordure */
-  --border-style: solid;      /* style de la bordure */
 }
 
+/* --- FOOTER (MENU DU BAS) --- */
+ion-footer {
+  ion-toolbar {
+    --background: #1b1e24; // Gris très foncé
+    --border-width: 0;
+  }
+}
 
+.tab-bar {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px 0;
+
+  .tab-icon {
+    font-size: 28px;
+    color: #666666; // Gris pour les inactifs
+    cursor: pointer;
+    transition: 0.2s;
+
+    &.active {
+      color: #666666; // Blanc pour l'actif
+      transform: scale(1.1);
+    }
+
+    &:active {
+      opacity: 0.7;
+    }
+  }
+}

@@ -1,42 +1,48 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="dark">
     <ion-title>Terminale</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding">
-
+<ion-content class="ion-padding page-matieres">
   <div class="grid">
     <div
       class="card"
       *ngFor="let matiere of matieres"
       [style.background]="matiere.couleur"
     >
-
       <div class="icon">
-        <!-- Remplacement de ion-icon par img -->
         <img [src]="matiere.icon" alt="{{ matiere.nom }}" class="matiere-icon" />
       </div>
 
       <div class="content">
         <h3>{{ matiere.nom }}</h3>
-
         <p>
           {{ matiere.leconsFaites }}/{{ matiere.leconsTotal }} leçons
           •
           {{ matiere.quizFaits }}/{{ matiere.quizTotal }} quiz
         </p>
-
         <p class="progress-text">
           Progression : {{ matiere.progression }} %
         </p>
-
-        <ion-progress-bar
-          [value]="matiere.progression / 100">
-        </ion-progress-bar>
+        <ion-progress-bar [value]="matiere.progression / 100"></ion-progress-bar>
       </div>
-
     </div>
   </div>
-
 </ion-content>
+
+<ion-footer>
+  <ion-toolbar color="dark">
+    <div class="tab-bar">
+      <ion-icon name="book-outline" class="tab-icon active"></ion-icon>
+
+      <ion-icon name="ribbon-outline" class="tab-icon"></ion-icon>
+
+      <ion-icon
+        name="person-outline"
+        class="tab-icon"
+        (click)="router.navigate(['/compte'])">
+      </ion-icon>
+    </div>
+  </ion-toolbar>
+</ion-footer>
