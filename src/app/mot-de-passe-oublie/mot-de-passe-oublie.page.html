@@ -1,0 +1,51 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Mot de passe oublié</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="forgot-container">
+
+    <form (ngSubmit)="onSubmit()" #forgotForm="ngForm">
+
+      <!-- Titre -->
+      <h1 class="forgot-title">Mot de passe oublié</h1>
+
+      <!-- Sous-titre -->
+      <p class="forgot-subtitle">
+        Entrez votre email pour recevoir un lien de réinitialisation
+      </p>
+
+      <ion-item>
+        <ion-label position="floating">Email</ion-label>
+        <ion-input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          required>
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="!forgotForm.form.valid"
+        class="ion-margin-top">
+        Envoyer
+      </ion-button>
+
+      <!-- Lien secondaire -->
+      <div class="links">
+        <ion-button
+          fill="clear"
+          size="small"
+          routerLink="/connexion">
+          Revenir à la page de connexion
+        </ion-button>
+      </div>
+
+    </form>
+
+  </div>
+</ion-content>

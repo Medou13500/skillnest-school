@@ -1,0 +1,121 @@
+ion-content {
+  --background: #000000;
+}
+
+/* Layout principal */
+.login-wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 24px;
+  color: #ffffff;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.subtitle {
+  text-align: center;
+  color: #cccccc;
+  margin-bottom: 32px;
+}
+
+/* Champs */
+.input-item {
+  --background: transparent;
+  --padding-start: 0;
+  --inner-padding-end: 0;
+  margin-bottom: 20px;
+}
+
+ion-label {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: #ffffff;
+}
+
+/* Champ générique (host ion-input) */
+ion-input.input-field {
+  background: #1c1c1e;
+  color: #ffffff;
+  /*height: 48px;
+  padding: 1%; ne marche pas*/
+  border-radius: 14px;
+  border: 1px solid #4b5563;
+  margin: 1% 0%;
+
+}
+
+
+
+/* Focus générique */
+ion-input.input-field.ion-focused::part(native) {
+  border-color: #8b5cf6;
+}
+
+/* Email spécifique (extensible) */
+ion-input.email-input {
+  border-color: #4b5563;
+}
+
+/* Mot de passe spécifique (extensible) */
+ion-input.password-input {
+  border-color: #4b5563;
+}
+
+/* Options */
+.options {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+}
+
+.options span {
+  margin-left: 8px;
+}
+
+.options a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+/* Checkbox */
+ion-checkbox {
+  --size: 16px;
+  --background-checked: #8b5cf6;
+  --border-color-checked: #8b5cf6;
+}
+
+/* Bouton */
+.login-button {
+  --background: #8b5cf6;
+  --border-radius: 14px;
+  height: 50px;
+  font-size: 16px;
+  margin-top: 8px;
+}
+
+/* Inscription */
+.signup {
+  text-align: center;
+  margin-top: 24px;
+  font-size: 14px;
+}
+
+.signup a {
+  color: #ffffff;
+  font-weight: 500;
+  text-decoration: underline;
+}

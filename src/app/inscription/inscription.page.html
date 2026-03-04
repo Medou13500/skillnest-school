@@ -1,0 +1,120 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Inscription</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="signup-container">
+
+    <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+
+      <!-- Nom / Prénom -->
+      <div class="form-row">
+        <ion-item class="input-item">
+          <ion-label position="stacked">Nom</ion-label>
+          <ion-input
+            type="text"
+            name="nom"
+            class="input-field"
+            [(ngModel)]="nom"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Prénom</ion-label>
+          <ion-input
+            type="text"
+            name="prenom"
+            class="input-field"
+            [(ngModel)]="prenom"
+            required>
+          </ion-input>
+        </ion-item>
+      </div>
+
+      <!-- Autres champs -->
+      <div class="form-fields">
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Nom d'utilisateur</ion-label>
+          <ion-input
+            type="text"
+            name="username"
+            class="input-field"
+            [(ngModel)]="username"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Email</ion-label>
+          <ion-input
+            type="email"
+            name="email"
+            class="input-field"
+            [(ngModel)]="email"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Classe</ion-label>
+          <ion-select
+            name="classe"
+            class="input-field"
+            [(ngModel)]="classe"
+            placeholder="Sélectionnez votre classe"
+            interface="popover"
+            required>
+            <ion-select-option value="classe1">Classe 1</ion-select-option>
+            <ion-select-option value="classe2">Classe 2</ion-select-option>
+            <ion-select-option value="classe3">Classe 3</ion-select-option>
+            <ion-select-option value="classe4">Classe 4</ion-select-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Mot de passe</ion-label>
+          <ion-input
+            type="password"
+            name="password"
+            class="input-field"
+            [(ngModel)]="password"
+            required>
+          </ion-input>
+        </ion-item>
+
+        <ion-item class="input-item">
+          <ion-label position="stacked">Confirmer le mot de passe</ion-label>
+          <ion-input
+            type="password"
+            name="confirmPassword"
+            class="input-field"
+            [(ngModel)]="confirmPassword"
+            required>
+          </ion-input>
+        </ion-item>
+
+      </div>
+
+      <!-- Bouton -->
+      <ion-button
+        expand="block"
+        type="submit"
+        [disabled]="!signupForm.form.valid || password !== confirmPassword">
+        S'inscrire
+      </ion-button>
+
+      <!-- Lien -->
+      <div class="links">
+        <ion-button fill="clear" size="small" routerLink="/connexion">
+          Déjà un compte ? Connexion
+        </ion-button>
+      </div>
+
+    </form>
+
+  </div>
+</ion-content>
