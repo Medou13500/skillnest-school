@@ -2,120 +2,112 @@ ion-content {
   --background: #000000;
 }
 
-/* Layout principal */
 .login-wrapper {
-  height: 100%;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 24px;
-  color: #ffffff;
+  min-height: 100%;
 }
 
-h1 {
+.header-section {
   text-align: center;
-  margin-bottom: 8px;
-  font-size: 28px;
-  font-weight: 600;
+  margin-bottom: 40px;
+
+  h1 {
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: #cccccc;
+    font-size: 14px;
+    margin: 0;
+  }
 }
 
-.subtitle {
-  text-align: center;
-  color: #cccccc;
-  margin-bottom: 32px;
+.input-group {
+  margin-bottom: 25px;
+
+  label {
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 8px;
+    padding-left: 5px;
+  }
 }
 
-/* Champs */
-.input-item {
-  --background: transparent;
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  margin-bottom: 20px;
+/* Style de l'encadré avec bordure dorée */
+.custom-input {
+  --background: #1b1e24;
+  --color: #ffffff;
+  --padding-start: 15px;
+  --placeholder-color: #666;
+
+  border: 1px solid #4a4226; // Ta bordure dorée
+  border-radius: 12px;
+  height: 52px;
+
+  // Supprime les ombres et lignes par défaut d'Ionic
+  --box-shadow: none;
+  --highlight-height: 0;
+  --inner-padding-end: 15px;
 }
 
-ion-label {
-  font-size: 14px;
-  margin-bottom: 6px;
-  color: #ffffff;
-}
-
-/* Champ générique (host ion-input) */
-ion-input.input-field {
-  background: #1c1c1e;
-  color: #ffffff;
-  /*height: 48px;
-  padding: 1%; ne marche pas*/
-  border-radius: 14px;
-  border: 1px solid #4b5563;
-  margin: 1% 0%;
-
-}
-
-
-
-/* Focus générique */
-ion-input.input-field.ion-focused::part(native) {
-  border-color: #8b5cf6;
-}
-
-/* Email spécifique (extensible) */
-ion-input.email-input {
-  border-color: #4b5563;
-}
-
-/* Mot de passe spécifique (extensible) */
-ion-input.password-input {
-  border-color: #4b5563;
-}
-
-/* Options */
 .options {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  margin: 16px 0;
-  font-size: 14px;
-}
-
-.remember-me {
-  display: flex;
   align-items: center;
+  margin: 20px 0 35px;
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    ion-checkbox {
+      --size: 18px;
+      --border-color: #ffffff;
+      --checkbox-background-checked: #660033;
+    }
+
+    ion-label {
+      color: #ffffff;
+      font-size: 13px;
+      margin: 0;
+    }
+  }
+
+  a {
+    color: #ffffff;
+    font-size: 13px;
+    text-decoration: none;
+  }
 }
 
-.options span {
-  margin-left: 8px;
-}
-
-.options a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-/* Checkbox */
-ion-checkbox {
-  --size: 16px;
-  --background-checked: #8b5cf6;
-  --border-color-checked: #8b5cf6;
-}
-
-/* Bouton */
 .login-button {
-  --background: #8b5cf6;
-  --border-radius: 14px;
-  height: 50px;
+  --background: #660033; // Le bordeaux de ton bouton
+  --border-radius: 12px;
+  --color: #ffffff;
+  height: 55px;
+  font-weight: bold;
   font-size: 16px;
-  margin-top: 8px;
+  text-transform: none;
 }
 
-/* Inscription */
 .signup {
   text-align: center;
-  margin-top: 24px;
-  font-size: 14px;
-}
-
-.signup a {
   color: #ffffff;
-  font-weight: 500;
-  text-decoration: underline;
+  margin-top: 30px;
+  font-size: 14px;
+
+  a {
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 5px;
+    border-bottom: 1px solid #ffffff;
+  }
 }

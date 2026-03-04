@@ -9,7 +9,8 @@ export const routes: Routes = [
     path: '',
     redirectTo: 'home',
     pathMatch: 'full',
-  },  {
+  },
+  {
     path: 'inscription',
     loadComponent: () => import('./inscription/inscription.page').then( m => m.InscriptionPage)
   },
@@ -41,5 +42,16 @@ export const routes: Routes = [
     path: 'notifications',
     loadComponent: () => import('./notifications/notifications.page').then( m => m.NotificationsPage)
   },
-
+  {
+    path: 'abonnement',
+    loadComponent: () => import('./abonnement/abonnement.page').then( m => m.AbonnementPage)
+  },
+  {
+    path: 'modif-info-perso',
+    loadComponent: () => import('./modif-info-perso/modif-info-perso.page').then( m => m.ModifInfoPersoPage)
+  },
+  {
+    path: 'modif-mdp',
+    loadComponent: () => import('./modif-mdp/modif-mdp.page').then( m => m.ModifMdpPage)
+  },
 ];

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router'; // On ne garde que Router
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import {NgIf} from "@angular/common";
+import { NgIf } from "@angular/common";
 
 @Component({
   selector: 'app-connexion',
@@ -12,52 +12,61 @@ import {NgIf} from "@angular/common";
   imports: [
     IonicModule,
     FormsModule,
-    RouterLink,
+    // RouterLink a été supprimé d'ici
     NgIf
   ]
 })
 export class ConnexionPage {
+  // ... (le reste du code reste identique)
 
   email: string = '';
   password: string = '';
   rememberMe: boolean = false;
 
-  // 🔹 Profil reçu depuis la page d’accueil
+  // Profil reçu depuis la page d’accueil
   role: 'student' | 'parent' | null = null;
 
-  constructor(private router: Router) {
+  // On passe le router en "public" pour y accéder depuis le HTML si besoin
+  constructor(public router: Router) {
     const navigation = this.router.getCurrentNavigation();
-    this.role = navigation?.extras.state?.['role'] || null;
+    if (navigation?.extras.state) {
+      this.role = navigation.extras.state['role'];
+    }
 
     console.log('Profil détecté :', this.role);
   }
 
+  // Fonctions de navigation pour remplacer les routerLink si tu préfères le TS
+  goToForgot() {
+    this.router.navigate(['/mot-de-passe-oublie']);
+  }
+
+  goToRegister() {
+    this.router.navigate(['/inscription']);
+  }
+
   onSubmit(): void {
     if (!this.email || !this.password) {
-      alert('Veuillez remplir tous les champs');
+      // Conseil : Utilise ion-toast pour un rendu plus mobile/moderne qu'un alert()
+      console.error('Champs manquants');
       return;
     }
 
-    console.log('Connexion', {
+    console.log('Tentative de connexion', {
       role: this.role,
       email: this.email,
       password: this.password,
       rememberMe: this.rememberMe
     });
 
+    // Logique de redirection selon le rôle
     if (this.role === 'student') {
-      alert(`Connexion Étudiant réussie pour ${this.email}`);
-      // this.router.navigateByUrl('/dashboard-student');
-    }
-
-    if (this.role === 'parent') {
-      alert(`Connexion Parent réussie pour ${this.email}`);
-      // this.router.navigateByUrl('/dashboard-parent');
-    }
-
-    if (!this.role) {
-      alert(`Connexion réussie pour ${this.email}`);
-      // fallback si accès direct à /connexion
+      this.router.navigate(['/liste-matiere']); // Redirection vers ta page de cours
+    } else if (this.role === 'parent') {
+      this.router.navigate(['/dashboard-parent']);
+    } else {
+      // Si pas de rôle (accès direct), redirection par défaut
+      this.router.navigate(['/liste-matiere']);
     }
   }
 }
