@@ -1,0 +1,35 @@
+<ion-content [fullscreen]="true" class="home-page">
+
+  <div class="home-card">
+
+    <!-- Logo -->
+    <img ngSrc="assets/icon/skillnest-logo.png" alt="Skillnest" class="logo" width="120" height="120" />
+
+    <!-- Texte de bienvenue -->
+    <p class="welcome">Bienvenue sur Skillnest</p>
+    <p class="subtitle">Choisissez votre profil</p>
+
+    <!-- Boutons profil -->
+    <div class="profile-buttons">
+
+      <ion-button
+        fill="clear"
+        class="profile-button student"
+        (click)="goToLogin('student')">
+        <img ngSrc="assets/icon/student.png" alt="Étudiant" width="64" height="64" />
+        <span>Étudiant</span>
+      </ion-button>
+
+      <ion-button
+        fill="clear"
+        class="profile-button parent"
+        (click)="goToLogin('parent')">
+        <img ngSrc="assets/icon/parent.png" alt="Parent" width="64" height="64" />
+        <span>Parent</span>
+      </ion-button>
+
+    </div>
+
+  </div>
+
+</ion-content>

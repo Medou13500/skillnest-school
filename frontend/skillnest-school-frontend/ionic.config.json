@@ -1,0 +1,7 @@
+{
+  "name": "skillnest-school-frontend",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
