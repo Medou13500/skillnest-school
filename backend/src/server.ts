@@ -1,68 +1,56 @@
-// =======================
-// 1️⃣ Env
-// =======================
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
 
-// =======================
-// 2️⃣ Imports globaux
-// =======================
 import express from "express";
 import pool from "./config/database.config";
 
-// =======================
-// 3️⃣ Swagger
-// =======================
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.config";
 
-// =======================
-// 4️⃣ LOGIN
-// =======================
+// ===================== IMPORTS =====================
+
+// Auth
 import UserLoginRepository from "./infrastructure/UserLoginRepository";
 import UserLoginService from "./service/UserLoginService";
 import UserLoginController from "./controllers/UserLoginController";
 import userLoginRoute from "./routes/UserLoginRoute";
 
-// =======================
-// 5️⃣ REFRESH TOKEN
-// =======================
 import RefreshTokenRepository from "./infrastructure/RefreshTokenRepository";
 import RefreshTokenService from "./service/RefreshTokenService";
 import RefreshTokenController from "./controllers/RefreshTokenController";
 import refreshTokenRoute from "./routes/RefreshTokenRoute";
 
-// =======================
-// 6️⃣ REGISTER
-// =======================
 import UserRegistrationRepository from "./infrastructure/UserRegistrationRepository";
 import UserRegistrationService from "./service/UserRegistrationService";
 import UserRegistrationController from "./controllers/UserRegistrationController";
 import userRegistrationRoute from "./routes/UserRegistrationRoute";
 
-// =======================
-// 7️⃣ App Express
-// =======================
+// Reset password
+import AskResetPasswordRepository from "./infrastructure/AskResetPasswordRepository";
+import AskResetPasswordService from "./service/askResetPasswordService";
+import AskResetPasswordController from "./controllers/AskResetPasswordController";
+import AskResetPaswordRoute from "./routes/AskResetPasswordRoute";
+import EmailService from "./service/emailService";
+import UserRepository from "./infrastructure/UserRepository";
+
+// ===================== APP INIT =====================
+
 const app = express();
 app.use(express.json());
 
-// =======================
-// 8️⃣ Swagger route
-// =======================
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// =======================
-// 9️⃣ Repositories
-// =======================
+// ===================== REPOSITORIES =====================
+
 const loginRepository = new UserLoginRepository(pool);
+const userRepository = new UserRepository(pool); // ✅ FIX ICI
 const refreshTokenRepository = new RefreshTokenRepository(pool);
 const registrationRepository = new UserRegistrationRepository();
+const askResetPasswordRepository = new AskResetPasswordRepository(pool);
 
-// =======================
-// 🔟 Services
-// =======================
-const refreshTokenService = new RefreshTokenService(
-  refreshTokenRepository
-);
+// ===================== SERVICES =====================
+
+const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
 
 const loginService = new UserLoginService(
   loginRepository,
@@ -73,34 +61,45 @@ const registrationService = new UserRegistrationService(
   registrationRepository
 );
 
-// =======================
-// 1️⃣1️⃣ Controllers
-// =======================
+const emailServiceInstance = new EmailService();
+
+const askResetPasswordService = new AskResetPasswordService(
+  askResetPasswordRepository,
+  userRepository, 
+  emailServiceInstance
+);
+
+// ===================== CONTROLLERS =====================
+
 const loginController = new UserLoginController(loginService);
+
 const refreshTokenController = new RefreshTokenController(
   refreshTokenService
 );
+
 const registrationController = new UserRegistrationController(
   registrationService
 );
 
-// =======================
-// 1️⃣2️⃣ Routes
-// =======================
+const askResetPasswordController = new AskResetPasswordController(
+  askResetPasswordService
+);
+
+// ===================== ROUTES =====================
+
 app.use("/api", userLoginRoute(loginController));
 app.use("/api", refreshTokenRoute(refreshTokenController));
 app.use("/api", userRegistrationRoute(registrationController));
+app.use("/api", AskResetPaswordRoute(askResetPasswordController));
 
-// =======================
-// 1️⃣3️⃣ Healthcheck
-// =======================
+// ===================== HEALTH =====================
+
 app.get("/", (_req, res) => {
   res.json({ status: "Backend running" });
 });
 
-// =======================
-// 1️⃣4️⃣ Server
-// =======================
+// ===================== SERVER =====================
+
 app.listen(3000, () => {
   console.log("🚀 Server running on port 3000");
   console.log("📚 Swagger available on http://localhost:3000/api/docs");
