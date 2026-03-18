@@ -1,0 +1,103 @@
+ion-content {
+  --background: #000000;
+}
+
+.stats-overview {
+  display: flex;
+  justify-content: space-around;
+  padding: 20px;
+  background: #1b1e24;
+  margin: 15px;
+  border-radius: 15px;
+  border: 1px solid #4a4226;
+
+  .stat-box {
+    text-align: center;
+    .value {
+      display: block;
+      font-size: 24px;
+      font-weight: bold;
+      color: #ffffff;
+    }
+    .label {
+      font-size: 12px;
+      color: #aaaaaa;
+    }
+  }
+}
+
+.list-container {
+  padding: 0 15px;
+
+  .section-title {
+    color: #ffffff;
+    font-size: 18px;
+    margin: 20px 5px;
+  }
+}
+
+.quiz-card {
+  margin: 0 0 15px 0;
+  background: #1b1e24;
+  border: 1px solid #4a4226;
+  border-radius: 12px;
+  box-shadow: none;
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .info {
+      h3 {
+        margin: 5px 0;
+        color: #ffffff;
+        font-size: 16px;
+      }
+      .category {
+        font-size: 11px;
+        text-transform: uppercase;
+        color: #4a4226; // Couleur dorée
+        font-weight: bold;
+      }
+      .date {
+        font-size: 12px;
+        color: #777;
+      }
+    }
+
+    .score-badge {
+      background: rgba(255, 68, 68, 0.1);
+      border: 1px solid #ff4444;
+      padding: 8px 12px;
+      border-radius: 10px;
+
+      .points {
+        color: #ff4444;
+        font-weight: bold;
+      }
+
+      &.success {
+        background: rgba(0, 199, 100, 0.1);
+        border-color: #00c764;
+        .points { color: #00c764; }
+      }
+    }
+  }
+}
+
+/* Barre de progression simplifiée */
+.progress-container {
+  margin-top: 15px;
+  .progress-bar {
+    background: #333;
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    .fill {
+      height: 100%;
+      background: #00c764;
+      &.red { background: #ff4444; }
+    }
+  }
+}

@@ -54,4 +54,20 @@ export const routes: Routes = [
     path: 'modif-mdp',
     loadComponent: () => import('./modif-mdp/modif-mdp.page').then( m => m.ModifMdpPage)
   },
+  {
+    path: 'historique-etudiant',
+    loadComponent: () => import('./historique-etudiant/historique-etudiant.page').then( m => m.HistoriqueEtudiantPage)
+  },
+  {
+    path: 'dashboard',
+    loadComponent: () => import('./dashboard/dashboard.page').then( m => m.DashboardPage)
+  },
+  {
+    path: 'notions',
+    loadComponent: () => import('./notions/notions.page').then( m => m.NotionsPage)
+  },
+  {
+    path: 'historique-dashboard',
+    loadComponent: () => import('./historique-dashboard/historique-dashboard.page').then( m => m.HistoriqueDashboardPage)
+  },
 ];

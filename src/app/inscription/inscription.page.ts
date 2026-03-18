@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router'; // On garde Router pour la navigation TS
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-inscription',
@@ -11,7 +12,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     IonicModule,
     FormsModule,
-    RouterLink
+    CommonModule
+    // RouterLink a été supprimé ici pour enlever le warning
   ]
 })
 export class InscriptionPage {
@@ -24,26 +26,21 @@ export class InscriptionPage {
   password: string = '';
   confirmPassword: string = '';
 
-  // Conditions
   acceptTerms: boolean = false;
   acceptPrivacy: boolean = false;
 
   constructor(private router: Router) {}
 
+  goToLogin() {
+    this.router.navigate(['/connexion']);
+  }
+
   onSubmit() {
-
-    // Sécurité supplémentaire (au cas où)
-    if (!this.acceptTerms || !this.acceptPrivacy) {
-      alert('Vous devez accepter les conditions d’utilisation et la politique de confidentialité.');
-      return;
-    }
-
     if (this.password !== this.confirmPassword) {
       alert('Les mots de passe ne correspondent pas.');
       return;
     }
 
-    // Données prêtes à être envoyées
     const payload = {
       nom: this.nom,
       prenom: this.prenom,
@@ -53,13 +50,9 @@ export class InscriptionPage {
       password: this.password
     };
 
-    console.log('Payload inscription :', payload);
+    console.log('Inscription :', payload);
 
-    // TODO : appel API backend ici
-
-    alert(`Inscription réussie pour ${this.prenom} ${this.nom}`);
-
-    // Redirection
+    // Une fois l'inscription réussie :
     this.router.navigateByUrl('/connexion');
   }
 }

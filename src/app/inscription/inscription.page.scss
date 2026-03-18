@@ -1,152 +1,103 @@
 ion-content {
-  --background: linear-gradient(180deg, #0f0f12, #1a1a1f);
+  --background: #000000;
 }
 
-/* --------------------------------
-   Conteneur principal
----------------------------------- */
 .signup-container {
+  padding: 30px 20px;
+  color: #ffffff;
+
+  .page-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
+}
+
+/* Alignement Nom et Prénom sur la même ligne */
+.name-row {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
-  padding: 16px;
-}
+  gap: 15px;
+  margin-bottom: 5px;
 
-/* --------------------------------
-   Carte formulaire
----------------------------------- */
-form {
-  width: 50%;
-  max-width: 480px;
-  background: #000000;
-  padding: 24px;
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-}
-
-/* --------------------------------
-   Layout des champs
----------------------------------- */
-.form-fields {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  form {
-    width: 100%;
-    padding: 16px;
-  }
-
-  .form-row {
-    grid-template-columns: 1fr;
+  .input-group {
+    flex: 1;
   }
 }
 
-/* --------------------------------
-   Inputs – Ionic friendly
----------------------------------- */
-ion-item.input-item {
-  --background: transparent;
-  --padding-start: 0;
-  --inner-padding-end: 0;
-  --border-width: 0;
-  margin: 0;
+.input-group {
+  margin-bottom: 18px;
+
+  label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #ffffff;
+    padding-left: 2px;
+  }
 }
 
-ion-item.input-item ion-label {
-  font-size: 14px;
-  margin-bottom: 6px;
-  color: #ffffff;
-}
-
-/* Input & Select */
-ion-input.input-field,
-ion-select.input-field {
-  --background: #1c1c1e;
+/* Style des champs (fond sombre + bordure dorée) */
+.custom-input {
+  --background: #1b1e24;
   --color: #ffffff;
-  --border-radius: 14px;
-  --border-width: 1px;
-  --border-style: solid;
-  --border-color: #4b5563;
-}
-
-/* Focus */
-ion-input.ion-focused,
-ion-select.ion-focused {
-  --border-color: #8b5cf6;
-}
-
-/* Placeholder select */
-ion-select::part(placeholder) {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-/* --------------------------------
-   Conditions (checkbox)
----------------------------------- */
-.conditions ion-item {
-  --background: transparent;
-  --padding-start: 0;
-}
-
-.conditions ion-label {
-  font-size: 13px;
-  color: rgba(255, 255, 255, 0.85);
-}
-
-/* --------------------------------
-   Bouton principal
----------------------------------- */
-ion-button[type='submit'] {
-  --background: #8b5cf6;
-  --background-activated: #6a4fe0;
-  --border-radius: 14px;
+  --padding-start: 12px;
+  border: 1px solid #4a4226; // Couleur dorée
+  border-radius: 10px;
   height: 48px;
-  font-size: 15px;
-  font-weight: 600;
-  margin-top: 24px;
+  --highlight-height: 0;
+
+  ion-select {
+    width: 100%;
+    --placeholder-color: #777;
+    --placeholder-opacity: 1;
+  }
 }
 
-/* --------------------------------
-   Liens
----------------------------------- */
-.links {
-  margin-top: 12px;
+.conditions {
+  margin: 25px 0;
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+
+    ion-checkbox {
+      --size: 20px;
+      --border-color: #ffffff;
+      --checkbox-background-checked: #3e2e7c; // Violet
+      --border-color-checked: #3e2e7c;
+    }
+
+    span {
+      font-size: 13px;
+      color: #ffffff;
+    }
+  }
+}
+
+/* Bouton Créer mon compte */
+.submit-button {
+  --background: #3e2e7c; // Ton violet/bleu du design
+  --background-activated: #2a1f56;
+  --border-radius: 10px;
+  --color: #ffffff;
+  height: 55px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-top: 20px;
+}
+
+.footer-link {
   text-align: center;
-}
+  margin-top: 25px;
 
-.links ion-button {
-  --color: rgba(255, 255, 255, 0.7);
-  font-size: 13px;
-}
-
-/* --------------------------------
-   Header
----------------------------------- */
-ion-header ion-title {
-  color: #ffffff;
-  font-weight: 600;
-  text-align: center;
-}
-
-/* --------------------------------
-   Titre page
----------------------------------- */
-.page-title {
-  text-align: center;
-  font-size: 22px;
-  font-weight: 600;
-  color: #ffffff;
-  margin-bottom: 24px;
+  a {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
 }
