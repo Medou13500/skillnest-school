@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 export const routes: Routes = [
   {
     path: 'home',
-    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+    loadComponent: () => import('./features/public_access/home/home.page').then((m) => m.HomePage),
   },
   {
     path: '',
@@ -12,55 +12,55 @@ export const routes: Routes = [
   },
   {
     path: 'inscription',
-    loadComponent: () => import('./inscription/inscription.page').then( m => m.InscriptionPage)
+    loadComponent: () => import('./features/public_access/inscription/inscription.page').then(m => m.InscriptionPage)
   },
   {
     path: 'mot-de-passe-oublie',
-    loadComponent: () => import('./mot-de-passe-oublie/mot-de-passe-oublie.page').then( m => m.MotDePasseOubliePage)
+    loadComponent: () => import('./features/public_access/mot-de-passe-oublie/mot-de-passe-oublie.page').then(m => m.MotDePasseOubliePage)
   },
   {
     path: 'connexion',
-    loadComponent: () => import('./connexion/connexion.page').then( m => m.ConnexionPage)
+    loadComponent: () => import('./features/public_access/connexion/connexion.page').then(m => m.ConnexionPage)
   },
   {
     path: 'liste-matiere',
-    loadComponent: () => import('./liste-matiere/liste-matiere.page').then( m => m.ListeMatierePage)
+    loadComponent: () => import('./features/public_access/liste-matiere/liste-matiere.page').then(m => m.ListeMatierePage)
   },
   {
     path: 'menu-navigation',
-    loadComponent: () => import('./menu-navigation/menu-navigation.page').then( m => m.MenuNavigationPage)
+    loadComponent: () => import('./features/public_access/menu-navigation/menu-navigation.page').then(m => m.MenuNavigationPage)
   },
   {
     path: 'contenu-matiere',
-    loadComponent: () => import('./contenu-matiere/contenu-matiere.page').then( m => m.ContenuMatierePage)
+    loadComponent: () => import('./features/public_access/contenu-matiere/contenu-matiere.page').then(m => m.ContenuMatierePage)
   },
   {
     path: 'compte',
-    loadComponent: () => import('./compte/compte.page').then( m => m.ComptePage)
+    loadComponent: () => import('./features/public_access/compte/compte.page').then(m => m.ComptePage)
   },
   {
     path: 'notifications',
-    loadComponent: () => import('./notifications/notifications.page').then( m => m.NotificationsPage)
+    loadComponent: () => import('./features/public_access/notifications/notifications.page').then(m => m.NotificationsPage)
   },
   {
     path: 'abonnement',
-    loadComponent: () => import('./abonnement/abonnement.page').then( m => m.AbonnementPage)
+    loadComponent: () => import('./features/public_access/abonnement/abonnement.page').then(m => m.AbonnementPage)
   },
   {
     path: 'modif-info-perso',
-    loadComponent: () => import('./modif-info-perso/modif-info-perso.page').then( m => m.ModifInfoPersoPage)
+    loadComponent: () => import('./features/public_access/modif-info-perso/modif-info-perso.page').then(m => m.ModifInfoPersoPage)
   },
   {
     path: 'modif-mdp',
-    loadComponent: () => import('./modif-mdp/modif-mdp.page').then( m => m.ModifMdpPage)
+    loadComponent: () => import('./features/public_access/modif-mdp/modif-mdp.page').then(m => m.ModifMdpPage)
   },
   {
     path: 'historique-etudiant',
-    loadComponent: () => import('./historique-etudiant/historique-etudiant.page').then( m => m.HistoriqueEtudiantPage)
+    loadComponent: () => import('./features/public_access/historique-etudiant/historique-etudiant.page').then(m => m.HistoriqueEtudiantPage)
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./dashboard/dashboard.page').then( m => m.DashboardPage)
+    loadComponent: () => import('./features/public_access/dashboard/dashboard.page').then(m => m.DashboardPage)
   },
   {
     path: 'notions',
@@ -68,6 +68,6 @@ export const routes: Routes = [
   },
   {
     path: 'historique-dashboard',
-    loadComponent: () => import('./historique-dashboard/historique-dashboard.page').then( m => m.HistoriqueDashboardPage)
+    loadComponent: () => import('./features/public_access/historique-dashboard/historique-dashboard.page').then(m => m.HistoriqueDashboardPage)
   },
 ];
