@@ -13,7 +13,7 @@ export default class UserLoginService {
     //  Récupérer l'utilisateur
     const user = await this.userRepository.findByEmail(email);
 
-    if (!user) {
+    if (user) {
       throw new Error("USER_NOT_FOUND");
     }
 

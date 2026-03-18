@@ -16,7 +16,7 @@ const pool = new Pool({
   database: process.env.DB_NAME, //  OBLIGATOIRE
 });
 
-// Test de connexion
+// Test de connexiona la base de donnée
 pool
   .query("SELECT 1")
   .then(() => console.log(" DB CONNECTED"))

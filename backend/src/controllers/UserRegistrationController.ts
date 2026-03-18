@@ -17,7 +17,7 @@ export default class UserRegistrationController {
         role: user.role,
       });
     } catch (error: any) {
-      return res.status(400).json({
+      return res.status(409).json({
         error: error.message,
       });
     }
