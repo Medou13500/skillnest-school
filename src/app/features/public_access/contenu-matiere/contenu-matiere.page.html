@@ -1,0 +1,61 @@
+<ion-header>
+  <ion-toolbar color="dark">
+    <ion-title>Terminale &gt; Lorem ipsum</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="page">
+  <section class="objectifs">
+    <h3>Objectifs</h3>
+    <ul>
+      <li>Lorem ipsum dolor sit amet.</li>
+      <li>Lorem ipsum dolor sit amet.</li>
+      <li>Lorem ipsum dolor sit amet.</li>
+    </ul>
+  </section>
+
+  <ion-searchbar placeholder="Rechercher un titre"></ion-searchbar>
+
+  <section class="themes">
+    <article class="theme" *ngFor="let theme of themes">
+      <header class="theme-header" (click)="toggle(theme)">
+        <div>
+          <h4>{{ theme.title }}</h4>
+          <p>{{ theme.subtitle }}</p>
+        </div>
+        <ion-icon [name]="theme.open ? 'chevron-down-outline' : 'chevron-forward-outline'"></ion-icon>
+      </header>
+
+      <div class="theme-content" [class.open]="theme.open">
+        <div class="item" *ngFor="let item of theme.items" [class.active-border]="item.type === 'Leçon' && item.id === 1" (click)="goTo(item)">
+          <div class="icon-type-container">
+            <ion-icon [name]="item.type === 'Leçon' ? 'book-outline' : 'reader-outline'" class="main-type-icon"></ion-icon>
+          </div>
+          <div class="center-content">
+            <span class="type-label">{{ item.type }}</span>
+            <strong class="item-title">{{ item.title }}</strong>
+          </div>
+          <div class="right-content">
+            <ion-icon [name]="item.done ? 'checkmark-circle' : 'ellipse-outline'" [color]="item.done ? 'success' : 'dark'" class="status-icon"></ion-icon>
+            <ion-button size="small" class="btn-commencer" (click)="$event.stopPropagation(); goTo(item)">Commencer</ion-button>
+          </div>
+        </div>
+        <div class="item empty" *ngIf="theme.items.length === 0">
+          <em>Aucun contenu disponible pour ce thème</em>
+        </div>
+      </div>
+    </article>
+  </section>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar color="dark"> <div class="tab-bar">
+    <ion-icon name="book-outline" class="tab-icon active"></ion-icon>
+
+    <ion-icon name="ribbon-outline" class="tab-icon"></ion-icon>
+
+    <ion-icon name="person-outline" class="tab-icon" (click)="router.navigate(['/compte'])"></ion-icon>
+  </div>
+  </ion-toolbar>
+</ion-footer>

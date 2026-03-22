@@ -1,0 +1,113 @@
+ion-content {
+  --background: #000000;
+}
+
+.login-wrapper {
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.header-section {
+  text-align: center;
+  margin-bottom: 40px;
+
+  h1 {
+    color: #ffffff;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    color: #cccccc;
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+.input-group {
+  margin-bottom: 25px;
+
+  label {
+    display: block;
+    color: #ffffff;
+    font-size: 14px;
+    margin-bottom: 8px;
+    padding-left: 5px;
+  }
+}
+
+/* Style de l'encadré avec bordure dorée */
+.custom-input {
+  --background: #1b1e24;
+  --color: #ffffff;
+  --padding-start: 15px;
+  --placeholder-color: #666;
+
+  border: 1px solid #4a4226; // Ta bordure dorée
+  border-radius: 12px;
+  height: 52px;
+
+  // Supprime les ombres et lignes par défaut d'Ionic
+  --box-shadow: none;
+  --highlight-height: 0;
+  --inner-padding-end: 15px;
+}
+
+.options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 20px 0 35px;
+
+  .remember-me {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    ion-checkbox {
+      --size: 18px;
+      --border-color: #ffffff;
+      --checkbox-background-checked: #660033;
+    }
+
+    ion-label {
+      color: #ffffff;
+      font-size: 13px;
+      margin: 0;
+    }
+  }
+
+  a {
+    color: #ffffff;
+    font-size: 13px;
+    text-decoration: none;
+  }
+}
+
+.login-button {
+  --background: #660033; // Le bordeaux de ton bouton
+  --border-radius: 12px;
+  --color: #ffffff;
+  height: 55px;
+  font-weight: bold;
+  font-size: 16px;
+  text-transform: none;
+}
+
+.signup {
+  text-align: center;
+  color: #ffffff;
+  margin-top: 30px;
+  font-size: 14px;
+
+  a {
+    font-weight: bold;
+    text-decoration: none;
+    margin-left: 5px;
+    border-bottom: 1px solid #ffffff;
+  }
+}

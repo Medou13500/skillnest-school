@@ -1,0 +1,89 @@
+<ion-content [fullscreen]="true">
+  <div class="signup-container">
+
+    <h1 class="page-title">Créer un compte</h1>
+
+    <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
+
+      <div class="name-row">
+        <div class="input-group">
+          <label>Nom</label>
+          <ion-item lines="none" class="custom-input">
+            <ion-input type="text" name="nom" [(ngModel)]="nom" required></ion-input>
+          </ion-item>
+        </div>
+
+        <div class="input-group">
+          <label>Prénom</label>
+          <ion-item lines="none" class="custom-input">
+            <ion-input type="text" name="prenom" [(ngModel)]="prenom" required></ion-input>
+          </ion-item>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Nom d'utilisateur</label>
+        <ion-item lines="none" class="custom-input">
+          <ion-input type="text" name="username" [(ngModel)]="username" required></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="input-group">
+        <label>Email</label>
+        <ion-item lines="none" class="custom-input">
+          <ion-input type="email" name="email" [(ngModel)]="email" required></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="input-group">
+        <label>Classe</label>
+        <ion-item lines="none" class="custom-input">
+          <ion-select name="classe" [(ngModel)]="classe" placeholder="Sélectionnez votre classe" interface="action-sheet" required>
+            <ion-select-option value="classe1">Classe 1</ion-select-option>
+            <ion-select-option value="classe2">Classe 2</ion-select-option>
+            <ion-select-option value="classe3">Classe 3</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </div>
+
+      <div class="input-group">
+        <label>Mot de passe</label>
+        <ion-item lines="none" class="custom-input">
+          <ion-input type="password" name="password" [(ngModel)]="password" required></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="input-group">
+        <label>Confirmer le mot de passe</label>
+        <ion-item lines="none" class="custom-input">
+          <ion-input type="password" name="confirmPassword" [(ngModel)]="confirmPassword" required></ion-input>
+        </ion-item>
+      </div>
+
+      <div class="conditions">
+        <div class="checkbox-item">
+          <ion-checkbox name="acceptTerms" [(ngModel)]="acceptTerms" required></ion-checkbox>
+          <span>J'accepte les conditions générales d'utilisation</span>
+        </div>
+
+        <div class="checkbox-item">
+          <ion-checkbox name="acceptPrivacy" [(ngModel)]="acceptPrivacy" required></ion-checkbox>
+          <span>J'accepte la politique de confidentialité</span>
+        </div>
+      </div>
+
+      <ion-button
+        expand="block"
+        type="submit"
+        class="submit-button"
+        [disabled]="!signupForm.form.valid || password !== confirmPassword || !acceptTerms || !acceptPrivacy">
+        CRÉER MON COMPTE
+      </ion-button>
+
+      <div class="footer-link">
+        <a (click)="goToLogin()">DÉJÀ UN COMPTE ? SE CONNECTER</a>
+      </div>
+
+    </form>
+  </div>
+</ion-content>

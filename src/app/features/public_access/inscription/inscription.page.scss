@@ -1,0 +1,103 @@
+ion-content {
+  --background: #000000;
+}
+
+.signup-container {
+  padding: 30px 20px;
+  color: #ffffff;
+
+  .page-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 30px;
+  }
+}
+
+/* Alignement Nom et Prénom sur la même ligne */
+.name-row {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 5px;
+
+  .input-group {
+    flex: 1;
+  }
+}
+
+.input-group {
+  margin-bottom: 18px;
+
+  label {
+    display: block;
+    font-size: 13px;
+    margin-bottom: 6px;
+    color: #ffffff;
+    padding-left: 2px;
+  }
+}
+
+/* Style des champs (fond sombre + bordure dorée) */
+.custom-input {
+  --background: #1b1e24;
+  --color: #ffffff;
+  --padding-start: 12px;
+  border: 1px solid #4a4226; // Couleur dorée
+  border-radius: 10px;
+  height: 48px;
+  --highlight-height: 0;
+
+  ion-select {
+    width: 100%;
+    --placeholder-color: #777;
+    --placeholder-opacity: 1;
+  }
+}
+
+.conditions {
+  margin: 25px 0;
+
+  .checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+
+    ion-checkbox {
+      --size: 20px;
+      --border-color: #ffffff;
+      --checkbox-background-checked: #3e2e7c; // Violet
+      --border-color-checked: #3e2e7c;
+    }
+
+    span {
+      font-size: 13px;
+      color: #ffffff;
+    }
+  }
+}
+
+/* Bouton Créer mon compte */
+.submit-button {
+  --background: #3e2e7c; // Ton violet/bleu du design
+  --background-activated: #2a1f56;
+  --border-radius: 10px;
+  --color: #ffffff;
+  height: 55px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-top: 20px;
+}
+
+.footer-link {
+  text-align: center;
+  margin-top: 25px;
+
+  a {
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: bold;
+    text-decoration: none;
+    letter-spacing: 1px;
+  }
+}

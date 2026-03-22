@@ -1,0 +1,31 @@
+<ion-content class="mon-compte-content">
+
+  <div class="main-container">
+    <h2 class="page-title">Mon Compte</h2>
+
+    <div class="gold-border-container">
+
+      <div
+        class="menu-item"
+        *ngFor="let item of menuItems"
+        (click)="goTo(item.route)">
+
+        <span class="label">{{ item.label }}</span>
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+
+      </div>
+
+    </div>
+  </div>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="tab-bar">
+      <ion-icon name="book-outline" class="tab-icon"></ion-icon>
+      <ion-icon name="ribbon-outline" class="tab-icon"></ion-icon>
+      <ion-icon name="person-outline" class="tab-icon active"></ion-icon>
+    </div>
+  </ion-toolbar>
+</ion-footer>
