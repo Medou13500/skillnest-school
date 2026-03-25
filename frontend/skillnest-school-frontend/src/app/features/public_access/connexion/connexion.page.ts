@@ -3,6 +3,16 @@ import { Router } from '@angular/router'; // On ne garde que Router
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from "@angular/common";
+import { addIcons } from 'ionicons';
+import {
+  arrowBackOutline,
+  arrowForwardOutline,
+  eyeOutline,
+  lockClosedOutline,
+  mailOutline,
+  personOutline,
+  sparklesOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-connexion',
@@ -28,6 +38,16 @@ export class ConnexionPage {
 
   // On passe le router en "public" pour y accéder depuis le HTML si besoin
   constructor(public router: Router) {
+    addIcons({
+      'arrow-back-outline': arrowBackOutline,
+      'arrow-forward-outline': arrowForwardOutline,
+      'eye-outline': eyeOutline,
+      'lock-closed-outline': lockClosedOutline,
+      'mail-outline': mailOutline,
+      'person-outline': personOutline,
+      'sparkles-outline': sparklesOutline
+    });
+
     const navigation = this.router.getCurrentNavigation();
     if (navigation?.extras.state) {
       this.role = navigation.extras.state['role'];

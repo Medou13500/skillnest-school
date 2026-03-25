@@ -4,10 +4,12 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
+  arrowBackOutline,
+  arrowForwardOutline,
   bookOutline,
-  ribbonOutline,
+  checkmarkOutline,
   personOutline,
-  checkmarkOutline
+  ribbonOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -18,19 +20,20 @@ import {
   imports: [IonicModule, CommonModule]
 })
 export class AbonnementPage {
-  // État du segment (Mensuel par défaut)
-  typeAbonnement: string = 'mensuel';
+  typeAbonnement = 'mensuel';
 
   constructor(public router: Router) {
     addIcons({
+      'arrow-back-outline': arrowBackOutline,
+      'arrow-forward-outline': arrowForwardOutline,
       'book-outline': bookOutline,
-      'ribbon-outline': ribbonOutline,
+      'checkmark-outline': checkmarkOutline,
       'person-outline': personOutline,
-      'checkmark-outline': checkmarkOutline
+      'ribbon-outline': ribbonOutline
     });
   }
 
-  segmentChanged(ev: any) {
+  segmentChanged(ev: any): void {
     this.typeAbonnement = ev.detail.value;
   }
 }

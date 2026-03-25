@@ -64,7 +64,7 @@ export const routes: Routes = [
   },
   {
     path: 'notions',
-    loadComponent: () => import('./notions/notions.page').then( m => m.NotionsPage)
+    loadComponent: () => import('./features/public_access/notions/notions.page').then(m => m.NotionsPage)
   },
   {
     path: 'historique-dashboard',

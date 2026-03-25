@@ -3,6 +3,15 @@ import { Router } from '@angular/router'; // On garde Router pour la navigation 
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { addIcons } from 'ionicons';
+import {
+  arrowBackOutline,
+  arrowForwardOutline,
+  atOutline,
+  eyeOutline,
+  personAddOutline,
+  sparklesOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-inscription',
@@ -29,7 +38,16 @@ export class InscriptionPage {
   acceptTerms: boolean = false;
   acceptPrivacy: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(public router: Router) {
+    addIcons({
+      'arrow-back-outline': arrowBackOutline,
+      'arrow-forward-outline': arrowForwardOutline,
+      'at-outline': atOutline,
+      'eye-outline': eyeOutline,
+      'person-add-outline': personAddOutline,
+      'sparkles-outline': sparklesOutline
+    });
+  }
 
   goToLogin() {
     this.router.navigate(['/connexion']);

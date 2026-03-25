@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
-import { IonicModule } from "@ionic/angular";
-import { NgForOf, NgIf } from "@angular/common";
+import { IonicModule } from '@ionic/angular';
+import { NgForOf, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
-
-// Importez addIcons et toutes les icônes nécessaires (contenu + footer)
 import { addIcons } from 'ionicons';
 import {
+  arrowBackOutline,
+  arrowForwardOutline,
   bookOutline,
-  readerOutline,
   checkmarkCircle,
-  ellipseOutline,
   chevronDownOutline,
   chevronForwardOutline,
-  ribbonOutline, // Icône pour la couronne/premium
-  personOutline  // Icône pour le compte
+  createOutline,
+  ellipseOutline,
+  filterOutline,
+  locateOutline,
+  searchOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -28,45 +29,46 @@ import {
   ]
 })
 export class ContenuMatierePage {
-
   themes = [
     {
-      title: 'Thème 1',
-      subtitle: 'Lorem ipsum',
+      title: 'Theme 1',
+      subtitle: 'Variables & Types',
+      progress: '1/2',
       open: true,
       items: [
-        { id: 1, type: 'Leçon', title: 'Titre leçon 1', done: true, route: '/lesson/1' },
-        { id: 1, type: 'Quizz', title: 'Titre quizz 1', done: false, route: '/quiz/1' },
-      ],
+        { id: 1, type: 'Lecon', title: 'Introduction...', done: true, route: '/lesson/1' },
+        { id: 2, type: 'Quizz', title: 'Quiz ...', done: false, route: '/quiz/1' }
+      ]
     },
     {
-      title: 'Thème 2',
-      subtitle: 'Lorem ipsum',
-      open: true,
-      items: [
-        { id: 2, type: 'Leçon', title: 'Titre leçon 2', done: false, route: '/lesson/2' },
-        { id: 2, type: 'Quizz', title: 'Titre quizz 2', done: true, route: '/quiz/2' },
-      ],
-    },
-    {
-      title: 'Thème 3',
-      subtitle: 'Lorem ipsum',
+      title: 'Theme 2',
+      subtitle: 'Conditions & Boucles',
+      progress: '1/2',
       open: false,
-      items: [],
+      items: []
     },
+    {
+      title: 'Theme 3',
+      subtitle: 'Fonctions & Tableaux',
+      progress: '0/2',
+      open: false,
+      items: []
+    }
   ];
 
-  // Le router est mis en "public" pour être accessible depuis le fichier HTML
   constructor(public router: Router) {
     addIcons({
+      'arrow-back-outline': arrowBackOutline,
+      'arrow-forward-outline': arrowForwardOutline,
       'book-outline': bookOutline,
-      'reader-outline': readerOutline,
       'checkmark-circle': checkmarkCircle,
-      'ellipse-outline': ellipseOutline,
       'chevron-down-outline': chevronDownOutline,
       'chevron-forward-outline': chevronForwardOutline,
-      'ribbon-outline': ribbonOutline,
-      'person-outline': personOutline
+      'create-outline': createOutline,
+      'ellipse-outline': ellipseOutline,
+      'filter-outline': filterOutline,
+      'locate-outline': locateOutline,
+      'search-outline': searchOutline
     });
   }
 

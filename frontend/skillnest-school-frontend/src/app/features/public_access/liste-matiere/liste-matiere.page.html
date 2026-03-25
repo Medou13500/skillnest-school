@@ -1,48 +1,83 @@
-<ion-header>
-  <ion-toolbar color="dark">
-    <ion-title>Terminale</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="subjects-content" [fullscreen]="true">
+  <div class="subjects-page">
+    <div class="subjects-card">
+      <section class="topbar">
+        <button class="back-button" type="button" (click)="router.navigate(['/accueil'])">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </button>
 
-<ion-content class="ion-padding page-matieres">
-  <div class="grid">
-    <div
-      class="card"
-      *ngFor="let matiere of matieres"
-      [style.background]="matiere.couleur"
-    >
-      <div class="icon">
-        <img [src]="matiere.icon" alt="{{ matiere.nom }}" class="matiere-icon" />
-      </div>
+        <div class="title-block">
+          <h1>Terminale <span>&rsaquo;</span></h1>
+          <p>6 matieres disponibles</p>
+        </div>
 
-      <div class="content">
-        <h3>{{ matiere.nom }}</h3>
-        <p>
-          {{ matiere.leconsFaites }}/{{ matiere.leconsTotal }} leçons
-          •
-          {{ matiere.quizFaits }}/{{ matiere.quizTotal }} quiz
-        </p>
-        <p class="progress-text">
-          Progression : {{ matiere.progression }} %
-        </p>
-        <ion-progress-bar [value]="matiere.progression / 100"></ion-progress-bar>
-      </div>
+        <div class="level-badge">
+          <ion-icon name="medal-outline"></ion-icon>
+          <span>Niveau 3</span>
+        </div>
+      </section>
+
+      <section class="grid">
+        @for (matiere of matieres; track matiere) {
+          <article
+            class="subject-tile"
+            (click)="openMatiere(matiere)">
+
+            <div class="tile-cover" [style.background]="matiere.couleur">
+              <img [src]="matiere.icon" [alt]="matiere.nom" class="matiere-icon" />
+              <span class="cover-bubble"></span>
+
+              @if (matiere.progression === 100) {
+                <span class="subject-badge">
+                  <ion-icon name="checkmark-outline"></ion-icon>
+                  100%
+                </span>
+              }
+            </div>
+
+            <div class="tile-content">
+              <h2>{{ matiere.nom }}</h2>
+
+              <div class="stats-row">
+                <span>{{ matiere.leconsFaites }}/{{ matiere.leconsTotal }} lecons</span>
+                <span>{{ matiere.quizFaits }}/{{ matiere.quizTotal }} quizz</span>
+              </div>
+
+              <p class="progress-label">Progression : {{ matiere.progression }}%</p>
+
+              <div class="progress-track">
+                <span
+                  class="progress-fill"
+                  [style.width.%]="matiere.progression"
+                  [style.background]="matiere.progressColor">
+                </span>
+              </div>
+            </div>
+
+          </article>
+        }
+      </section>
     </div>
   </div>
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar color="dark">
+<ion-footer class="subjects-footer">
+  <ion-toolbar>
     <div class="tab-bar">
-      <ion-icon name="book-outline" class="tab-icon active"></ion-icon>
+      <button class="tab-item active" type="button">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
 
-      <ion-icon name="ribbon-outline" class="tab-icon"></ion-icon>
+      <button class="tab-item" type="button" (click)="router.navigate(['/abonnement'])">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
 
-      <ion-icon
-        name="person-outline"
-        class="tab-icon"
-        (click)="router.navigate(['/compte'])">
-      </ion-icon>
+      <button class="tab-item" type="button" (click)="router.navigate(['/compte'])">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
     </div>
   </ion-toolbar>
 </ion-footer>

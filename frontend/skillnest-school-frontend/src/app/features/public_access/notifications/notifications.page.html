@@ -1,56 +1,61 @@
-<ion-content class="notifications-content">
-  <div class="main-container">
+<ion-content class="notifications-content" [fullscreen]="true">
+  <div class="notifications-page">
+    <div class="notifications-card">
+      <section class="hero-section">
+        <button class="back-button" type="button" (click)="router.navigate(['/compte'])">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Retour</span>
+        </button>
 
-    <div class="header-section">
-      <h2 class="page-title">Gérez vos notifications</h2>
-      <p class="subtitle">Ajustez comment et quand vous souhaitez être averti(e).</p>
-    </div>
+        <div class="hero-icon">
+          <ion-icon name="notifications-outline"></ion-icon>
+        </div>
 
-    <div class="settings-list">
+        <h1>Gerez vos notifications</h1>
+        <p>Ajustez comment et quand vous souhaitez etre averti(e).</p>
+      </section>
 
-      <div class="setting-card">
-        <div class="setting-icon">
-          <img src="assets/icon/book.png" alt="Cours">
-        </div>
-        <div class="setting-info">
-          <span class="setting-title">Nouveau cours</span>
-          <span class="setting-desc">Averti lorsqu'un nouveau cours est publié</span>
-        </div>
-        <ion-toggle slot="end" color="custom-purple" [checked]="true"></ion-toggle>
-      </div>
+      <section class="settings-section">
+        <h2>PREFERENCES DE NOTIFICATION</h2>
 
-      <div class="setting-card">
-        <div class="setting-icon">
-          <img src="assets/icon/quiz.png" alt="Quiz">
+        <div class="setting-card">
+          <div class="setting-icon">
+            <ion-icon name="book-outline"></ion-icon>
+          </div>
+          <div class="setting-info">
+            <span class="setting-title">Nouveau cours</span>
+            <span class="setting-desc">Averti lorsqu'un nouveau cours est publie</span>
+          </div>
+          <ion-toggle [checked]="true"></ion-toggle>
         </div>
-        <div class="setting-info">
-          <span class="setting-title">Nouveaux quiz</span>
-          <span class="setting-desc">Averti quand un nouveau quiz est ajouté</span>
-        </div>
-        <ion-toggle slot="end" color="custom-purple" [checked]="false"></ion-toggle>
-      </div>
 
-      <div class="setting-card">
-        <div class="setting-icon">
-          <img src="assets/icon/megaphone.png" alt="Annonces">
+        <div class="setting-card">
+          <div class="setting-icon">
+            <ion-icon name="help-circle-outline"></ion-icon>
+          </div>
+          <div class="setting-info">
+            <span class="setting-title">Nouveaux quiz</span>
+            <span class="setting-desc">Averti quand un nouveau quiz est ajoute</span>
+          </div>
+          <ion-toggle [checked]="false"></ion-toggle>
         </div>
-        <div class="setting-info">
-          <span class="setting-title">Annonces</span>
-          <span class="setting-desc">Nouveautés de la plateforme, événements</span>
-        </div>
-        <ion-toggle slot="end" color="custom-purple" [checked]="true"></ion-toggle>
-      </div>
 
+        <div class="setting-card">
+          <div class="setting-icon">
+            <ion-icon name="megaphone-outline"></ion-icon>
+          </div>
+          <div class="setting-info">
+            <span class="setting-title">Annonces</span>
+            <span class="setting-desc">Nouveautes de la plateforme, evenements</span>
+          </div>
+          <ion-toggle [checked]="true"></ion-toggle>
+        </div>
+
+        <ion-button expand="block" class="save-button">
+          <ion-icon name="checkmark-outline"></ion-icon>
+          <span>Enregistrer les preferences</span>
+        </ion-button>
+      </section>
     </div>
   </div>
 </ion-content>
-
-<ion-footer>
-  <ion-toolbar>
-    <div class="tab-bar">
-      <ion-icon name="book-outline" class="tab-icon" (click)="router.navigate(['/liste-matiere'])"></ion-icon>
-      <ion-icon name="ribbon-outline" class="tab-icon"></ion-icon>
-      <ion-icon name="person-outline" class="tab-icon active"></ion-icon>
-    </div>
-  </ion-toolbar>
-</ion-footer>
