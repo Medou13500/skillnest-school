@@ -13,16 +13,16 @@ import {
 @Component({
   selector: 'app-compte', // J'ai remis le sélecteur standard
   templateUrl: './compte.page.html', // Correction ici : pointe vers compte.page.html
-  styleUrls: ['./compte.page.scss'], // Correction ici : pointe vers compte.page.scss
+  styleUrl: './compte.page.scss', // Correction ici : pointe vers compte.page.scss
   standalone: true,
   imports: [IonicModule, CommonModule]
 })
 export class ComptePage { // Correction ici : Nom de la classe remis à ComptePage
 
   menuItems = [
-    { label: 'Informations personnelles', route: '/info-perso' },
-    { label: 'Changer le mot de passe', route: '/change-password' },
-    { label: 'Voir les abonnements', route: '/subscriptions' },
+    { label: 'Informations personnelles', route: '/modif-info-perso' },
+    { label: 'Changer le mot de passe', route: '/modif-mdp' },
+    { label: 'Voir les abonnements', route: '/abonnement' },
     { label: 'Gérer les notifications', route: '/notifications' },
     { label: 'Supprimer le compte', route: '/delete-account' },
   ];
@@ -38,6 +38,6 @@ export class ComptePage { // Correction ici : Nom de la classe remis à ComptePa
 
   goTo(route: string) {
     console.log('Navigation vers :', route);
-    // this.router.navigate([route]);
+    this.router.navigate([route]);
   }
 }
