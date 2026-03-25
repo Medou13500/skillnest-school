@@ -1,0 +1,94 @@
+$bg-cream: #fdf5e9;
+$blue-grad: linear-gradient(135deg, #2e5bff 0%, #7894ff 100%);
+.main-content {
+  padding: 0 15px 30px;
+  color: #1a1a1a; // Force le texte en noir/gris très foncé
+
+  h3, h4 {
+    color: #1a1a1a; // Force les titres
+  }
+
+  p {
+    color: #666; // Gris pour les sous-titres et détails
+  }
+}
+ion-content { --background: #{$bg-cream}; }
+
+.header-gradient {
+  background: $blue-grad;
+  padding: 40px 20px 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  color: white;
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    .avatar {
+      width: 60px; height: 60px; background: #ffb800;
+      border: 3px solid rgba(255,255,255,0.3); border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: bold; font-size: 20px;
+    }
+    h2 { font-size: 22px; margin: 0; font-weight: 700; }
+    .badge-row {
+      display: flex; align-items: center; gap: 10px; margin-top: 5px;
+      .level-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px; }
+      .user-email { font-size: 12px; opacity: 0.8; }
+    }
+  }
+}
+
+.mini-stats {
+  display: flex; justify-content: space-between; margin-top: 25px;
+  background: rgba(255,255,255,0.1); padding: 15px; border-radius: 20px;
+  .m-stat { text-align: center; flex: 1; strong { display: block; font-size: 18px; } span { font-size: 10px; opacity: 0.7; } }
+}
+
+.main-content { padding: 0 15px; }
+
+.custom-tabs {
+  display: flex; background: white; margin: -20px 0 20px; border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  .tab {
+    flex: 1; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: 600; color: #888;
+    &.active { color: #ff6b00; border-bottom: 3px solid #ff6b00; background: #fff9f5; }
+  }
+}
+
+.section-header {
+  display: flex; align-items: center; gap: 10px; margin: 25px 0 15px;
+  .icon-bg { background: #feeccd; padding: 5px; border-radius: 8px; }
+  h3 { margin: 0; font-size: 18px; font-weight: 800; color: #1a1a1a; }
+  &.performance { justify-content: space-between; .moyenne-text { font-size: 12px; color: #666; font-weight: 600; } }
+}
+
+.stat-card {
+  background: white; border-radius: 20px; padding: 20px; margin: 5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  .card-icon { width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px;
+    &.blue-icon { background: #eef2ff; } &.green-icon { background: #ecfdf5; } &.purple-icon { background: #f5f3ff; } &.orange-icon { background: #fff7ed; }
+  }
+  .card-value { font-size: 22px; font-weight: 800; color: #4b49ac; }
+  .card-label { font-size: 12px; color: #666; }
+}
+
+.chart-card {
+  background: white; border-radius: 20px; padding: 20px; margin-bottom: 20px;
+  .toggle-container {
+    display: flex; background: #f5f5f5; padding: 5px; border-radius: 15px; width: fit-content; margin-bottom: 15px;
+    .toggle-btn { padding: 6px 12px; border-radius: 10px; font-size: 12px; &.active { background: #ff823a; color: white; } }
+  }
+  .canvas-container { height: 180px; position: relative; }
+}
+
+.session-card {
+  background: white; border-radius: 20px; padding: 15px; display: flex; align-items: center; gap: 15px;
+  margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  .session-icon { width: 50px; height: 50px; background: #ecfdf5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+  .session-info { flex: 1; h4 { margin: 0; font-size: 15px; font-weight: 700; } p { margin: 2px 0 8px; font-size: 11px; color: #888; }
+    .progress-bar { height: 6px; background: #eee; border-radius: 3px; .fill { height: 100%; background: #ff823a; border-radius: 3px; } }
+  }
+  .session-score { text-align: right; .score { display: block; font-size: 16px; font-weight: 800; color: #42b883; } .percent { font-size: 11px; color: #999; } }
+}

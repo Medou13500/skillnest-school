@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Page de quiz</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="signup-container">
+
+    <form>
+
+      <ion-item class="input-item">
+        <ion-label position="stacked">Temps restant</ion-label>
+        <p class="response_text">10:00</p>
+        <ion-progress-bar [value]="progress"></ion-progress-bar>
+      </ion-item>
+
+      <div class="form-fields">
+
+        <p style="color: white">Question X sur X</p>
+
+        <p style="color: white">Lorem ipsum dolor sit amet consectetur adipiscing elit quisque faucibus ex sapien vitae pellentesque sem placerat in id cursus mi.</p>
+
+      <ion-item *ngFor="let border of borders; trackBy:trackBorders" class="border">
+        <ion-checkbox [(ngModel)]="borders" slot="start"></ion-checkbox>
+        <ion-label>{{ border.value }}</ion-label>
+      </ion-item>
+
+      </div>
+
+      <ion-button
+        expand="block"
+        type="submit">
+       Valider
+      </ion-button>
+
+    </form>
+
+  </div>
+</ion-content>
