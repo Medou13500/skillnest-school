@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { NgForOf } from '@angular/common';
-import { Router } from '@angular/router'; // Import du Router
-
-// Imports pour les icônes du menu
+import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { bookOutline, ribbonOutline, personOutline } from 'ionicons/icons';
+import {
+  arrowBackOutline,
+  bookOutline,
+  checkmarkOutline,
+  medalOutline,
+  personOutline,
+  ribbonOutline
+} from 'ionicons/icons';
 
 interface Matiere {
   nom: string;
@@ -16,30 +21,30 @@ interface Matiere {
   quizTotal: number;
   progression: number;
   couleur: string;
+  progressColor: string;
 }
 
 @Component({
   selector: 'app-liste-matiere',
   templateUrl: './liste-matiere.page.html',
   styleUrls: ['./liste-matiere.page.scss'],
-  standalone: true, // Recommandé pour utiliser les imports directs
+  standalone: true,
   imports: [
-    IonicModule,
-    NgForOf
+    IonicModule
   ]
 })
 export class ListeMatierePage {
-
   matieres: Matiere[] = [
     {
-      nom: 'Géographie',
+      nom: 'Geographie',
       icon: 'assets/icon/globe-terrestre.png',
       leconsFaites: 8,
       leconsTotal: 10,
       quizFaits: 8,
       quizTotal: 10,
       progression: 80,
-      couleur: '#4CAF50'
+      couleur: '#4caf50',
+      progressColor: '#ef8431'
     },
     {
       nom: 'Maths',
@@ -49,7 +54,8 @@ export class ListeMatierePage {
       quizFaits: 0,
       quizTotal: 15,
       progression: 0,
-      couleur: '#FF7043'
+      couleur: '#ef8431',
+      progressColor: '#d8c5b1'
     },
     {
       nom: 'Anglais',
@@ -59,48 +65,58 @@ export class ListeMatierePage {
       quizFaits: 14,
       quizTotal: 16,
       progression: 50,
-      couleur: '#42A5F5'
+      couleur: '#2f8be6',
+      progressColor: '#ef8431'
     },
     {
-      nom: 'Français',
+      nom: 'Francais',
       icon: 'assets/icon/flag.png',
       leconsFaites: 8,
       leconsTotal: 8,
       quizFaits: 8,
       quizTotal: 8,
       progression: 100,
-      couleur: '#3F51B5'
+      couleur: '#4950b7',
+      progressColor: '#26b85f'
     },
     {
-      nom: 'Physique-Chimie',
+      nom: 'Sciences',
       icon: 'assets/icon/flask.png',
       leconsFaites: 0,
       leconsTotal: 14,
       quizFaits: 0,
       quizTotal: 14,
       progression: 0,
-      couleur: '#0097A7'
+      couleur: '#0f9bb0',
+      progressColor: '#d8c5b1'
     },
     {
       nom: 'SVT',
-      icon: 'assets/icon/leaf.png',
+      icon: 'assets/icon/globe-terrestre.png',
       leconsFaites: 2,
       leconsTotal: 9,
       quizFaits: 2,
       quizTotal: 9,
       progression: 20,
-      couleur: '#66BB6A'
+      couleur: '#73c56d',
+      progressColor: '#f0b020'
     }
   ];
 
-  // Le router est en "public" pour être utilisé dans le HTML (click)
   constructor(public router: Router) {
-    // Enregistrement des icônes du footer
     addIcons({
+      'arrow-back-outline': arrowBackOutline,
       'book-outline': bookOutline,
-      'ribbon-outline': ribbonOutline,
-      'person-outline': personOutline
+      'checkmark-outline': checkmarkOutline,
+      'medal-outline': medalOutline,
+      'person-outline': personOutline,
+      'ribbon-outline': ribbonOutline
     });
   }
 
+  openMatiere(matiere: Matiere): void {
+    this.router.navigate(['/contenu-matiere'], {
+      state: { matiere: matiere.nom }
+    });
+  }
 }

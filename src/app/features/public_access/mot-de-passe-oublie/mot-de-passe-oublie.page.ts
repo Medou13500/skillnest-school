@@ -2,6 +2,13 @@ import { Component } from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {IonicModule} from "@ionic/angular";
 import {FormsModule} from "@angular/forms";
+import { addIcons } from 'ionicons';
+import {
+  arrowBackOutline,
+  arrowForwardOutline,
+  keyOutline,
+  mailOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-mot-de-passe-oublie',
@@ -16,7 +23,14 @@ import {FormsModule} from "@angular/forms";
 export class MotDePasseOubliePage {
   email: string = '';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router) {
+    addIcons({
+      'arrow-back-outline': arrowBackOutline,
+      'arrow-forward-outline': arrowForwardOutline,
+      'key-outline': keyOutline,
+      'mail-outline': mailOutline
+    });
+  }
 
   onSubmit() {
     if (!this.email) {

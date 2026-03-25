@@ -5,39 +5,70 @@ import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
   chevronForwardOutline,
-  bookOutline,
+  lockClosedOutline,
+  notificationsOutline,
   personOutline,
-  ribbonOutline
+  ribbonOutline,
+  trashOutline
 } from 'ionicons/icons';
 
+interface AccountMenuItem {
+  label: string;
+  route: string;
+  icon: string;
+  danger?: boolean;
+}
+
+interface AccountSection {
+  title: string;
+  danger?: boolean;
+  items: AccountMenuItem[];
+}
+
 @Component({
-  selector: 'app-compte', // J'ai remis le sélecteur standard
-  templateUrl: './compte.page.html', // Correction ici : pointe vers compte.page.html
-  styleUrl: './compte.page.scss', // Correction ici : pointe vers compte.page.scss
+  selector: 'app-compte',
+  templateUrl: './compte.page.html',
+  styleUrls: ['./compte.page.scss'],
   standalone: true,
   imports: [IonicModule, CommonModule]
 })
-export class ComptePage { // Correction ici : Nom de la classe remis à ComptePage
-
-  menuItems = [
-    { label: 'Informations personnelles', route: '/modif-info-perso' },
-    { label: 'Changer le mot de passe', route: '/modif-mdp' },
-    { label: 'Voir les abonnements', route: '/abonnement' },
-    { label: 'Gérer les notifications', route: '/notifications' },
-    { label: 'Supprimer le compte', route: '/delete-account' },
+export class ComptePage {
+  sections: AccountSection[] = [
+    {
+      title: 'Compte',
+      items: [
+        { label: 'Informations personnelles', route: '/modif-info-perso', icon: 'person-outline' },
+        { label: 'Changer le mot de passe', route: '/modif-mdp', icon: 'lock-closed-outline' }
+      ]
+    },
+    {
+      title: 'Abonnement & Preferences',
+      items: [
+        { label: 'Voir les abonnements', route: '/abonnement', icon: 'ribbon-outline' },
+        { label: 'Gerer les notifications', route: '/notifications', icon: 'notifications-outline' }
+      ]
+    },
+    {
+      title: 'Zone dangereuse',
+      danger: true,
+      items: [
+        { label: 'Supprimer le compte', route: '/compte', icon: 'trash-outline', danger: true }
+      ]
+    }
   ];
 
   constructor(private router: Router) {
     addIcons({
       'chevron-forward-outline': chevronForwardOutline,
-      'book-outline': bookOutline,
+      'lock-closed-outline': lockClosedOutline,
+      'notifications-outline': notificationsOutline,
+      'person-outline': personOutline,
       'ribbon-outline': ribbonOutline,
-      'person-outline': personOutline
+      'trash-outline': trashOutline
     });
   }
 
-  goTo(route: string) {
-    console.log('Navigation vers :', route);
+  goTo(route: string): void {
     this.router.navigate([route]);
   }
 }

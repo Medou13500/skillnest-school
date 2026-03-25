@@ -70,4 +70,14 @@ export const routes: Routes = [
     path: 'historique-dashboard',
     loadComponent: () => import('./features/public_access/historique-dashboard/historique-dashboard.page').then(m => m.HistoriqueDashboardPage)
   },
+  {
+    path: 'reset-mot-de-passe',
+    loadComponent: () => import('./features/public_access/reset-mot-de-passe/reset-mot-de-passe.page').then(m => m.ResetMotDePassePage)
+  },
+  {
+    path: 'suppression-compte',
+    loadComponent: () => import('./features/public_access/suppression-compte/suppression-compte.page').then(m => m.SuppressionComptePage)
+  },
+
+
 ];

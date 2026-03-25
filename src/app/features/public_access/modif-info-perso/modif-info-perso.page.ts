@@ -4,7 +4,13 @@ import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
-import { bookOutline, ribbonOutline, personOutline } from 'ionicons/icons';
+import {
+  addOutline,
+  arrowBackOutline,
+  arrowForwardOutline,
+  documentTextOutline,
+  schoolOutline
+} from 'ionicons/icons';
 
 @Component({
   selector: 'app-infos-perso',
@@ -25,9 +31,11 @@ export class ModifInfoPersoPage {
 
   constructor(public router: Router) {
     addIcons({
-      'book-outline': bookOutline,
-      'ribbon-outline': ribbonOutline,
-      'person-outline': personOutline
+      'add-outline': addOutline,
+      'arrow-back-outline': arrowBackOutline,
+      'arrow-forward-outline': arrowForwardOutline,
+      'document-text-outline': documentTextOutline,
+      'school-outline': schoolOutline
     });
   }
 

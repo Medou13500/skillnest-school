@@ -1,35 +1,60 @@
 <ion-content [fullscreen]="true" class="home-page">
+  <div class="home-shell">
+    <div class="home-card">
+      <div class="decor decor-left"></div>
+      <div class="decor decor-right"></div>
 
-  <div class="home-card">
+      <section class="brand-section">
+        <div class="logo-ring">
+          <img src="../../../../assets/icon/skillnest-logo.png" alt="SkillNest" class="logo" />
+        </div>
 
-    <!-- Logo -->
-    <img src="../../../../assets/icon/skillnest-logo.png" alt="Skillnest" class="logo" />
+        <h1 class="brand-title">SKILL<span>NEST</span></h1>
+        <div class="brand-badge">SCHOOL</div>
 
-    <!-- Texte de bienvenue -->
-    <p class="welcome">Bienvenue sur Skillnest</p>
-    <p class="subtitle">Choisissez votre profil</p>
+        <p class="welcome">Bienvenue sur <strong>SkillNest</strong></p>
+      </section>
 
-    <!-- Boutons profil -->
-    <div class="profile-buttons">
+      <div class="divider"></div>
 
-      <ion-button
-        fill="clear"
-        class="profile-button student"
-        (click)="goToLogin('student')">
-        <img src="../../../../assets/icon/student.png" alt="Étudiant" />
-        <span>Étudiant</span>
-      </ion-button>
+      <section class="profiles-section">
+        <h2>CHOISISSEZ VOTRE PROFIL</h2>
 
-      <ion-button
-        fill="clear"
-        class="profile-button parent"
-        (click)="goToLogin('parent')">
-        <img src="../../../../assets/icon/parent.png" alt="Parent" />
-        <span>Parent</span>
-      </ion-button>
+        <button class="profile-card student" type="button" (click)="goToLogin('student')">
+          <div class="profile-visual">
+            <img src="../../../../assets/icon/student.png" alt="Etudiant" />
+          </div>
 
+          <div class="profile-content">
+            <h3>Etudiant</h3>
+            <p>Accede a tes cours, quiz et suivi de progression</p>
+          </div>
+
+          <div class="profile-arrow">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </div>
+        </button>
+
+        <button class="profile-card parent" type="button" (click)="goToLogin('parent')">
+          <div class="profile-visual">
+            <img src="../../../../assets/icon/parent.png" alt="Parent" />
+          </div>
+
+          <div class="profile-content">
+            <h3>Parent</h3>
+            <p>Suis les progres et resultats de ton enfant</p>
+          </div>
+
+          <div class="profile-arrow">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </div>
+        </button>
+      </section>
+
+      <div class="footer-badge">
+        <ion-icon name="sparkles-outline"></ion-icon>
+        <span>Moteur pedagogique explicable</span>
+      </div>
     </div>
-
   </div>
-
 </ion-content>
