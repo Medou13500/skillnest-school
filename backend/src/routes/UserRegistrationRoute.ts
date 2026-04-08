@@ -8,7 +8,7 @@ export default function userRegistrationRoute(
 
   /**
    * @swagger
-   * /api/register:
+   * /api/auth/register:
    *   post:
    *     summary: Inscription utilisateur
    *     description: |
