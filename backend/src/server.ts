@@ -99,12 +99,12 @@ const resetPasswordController = new ResetPasswordController(
 
 // ===================== ROUTES =====================
 
-app.use("/api", userLoginRoute(loginController));
-app.use("/api", refreshTokenRoute(refreshTokenController));
-app.use("/api", userRegistrationRoute(registrationController));
+app.use("/api/auth", userLoginRoute(loginController))
+app.use("/api/auth", refreshTokenRoute(refreshTokenController));
+app.use("/api/auth", userRegistrationRoute(registrationController));
 
-app.use("/api", AskResetPaswordRoute(askResetPasswordController));
-app.use("/api", resetPasswordRoute(resetPasswordController));
+app.use("/api/auth", AskResetPaswordRoute(askResetPasswordController));
+app.use("/api/auth", resetPasswordRoute(resetPasswordController));
 
 // ===================== HEALTH =====================
 
