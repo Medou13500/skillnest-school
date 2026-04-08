@@ -64,18 +64,5 @@ export default function AskResetPaswordRoute(
  */
  router.post("/auth/forgot-password", controller.AskResetPassword.bind(controller));
 
-
-
-
-
-
-
-
-
-
-
-
-
-
   return router;
 }
