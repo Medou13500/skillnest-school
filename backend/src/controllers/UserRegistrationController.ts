@@ -8,6 +8,11 @@ export default class UserRegistrationController {
   async register(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({
+          error: "EMAIL_AND_PASSWORD_REQUIRED",
+        });
+      }
 
       const user = await this.service.register(email, password);
 
@@ -17,8 +22,20 @@ export default class UserRegistrationController {
         role: user.role,
       });
     } catch (error: any) {
-      return res.status(409).json({
-        error: error.message,
+      if (error.message === "USER_ALREADY_EXISTS") {
+        return res.status(409).json({
+          error: error.message,
+        });
+      }
+
+      if (error.message === "EMAIL_AND_PASSWORD_REQUIRED") {
+        return res.status(400).json({
+          error: error.message,
+        });
+      }
+
+      return res.status(500).json({
+        error: "INTERNAL_SERVER_ERROR",
       });
     }
   }

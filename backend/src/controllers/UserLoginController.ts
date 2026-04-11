@@ -9,6 +9,11 @@ export default class UserLoginController {
   async login(req: Request, res: Response) {
     try {
       const { email, password } = req.body;
+      if (!email || !password) {
+        return res.status(400).json({
+          error: "EMAIL_AND_PASSWORD_REQUIRED",
+        });
+      }
 
       const result = await this.service.login(email, password);
 

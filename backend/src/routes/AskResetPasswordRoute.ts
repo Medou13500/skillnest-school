@@ -62,7 +62,16 @@ export default function AskResetPaswordRoute(
  *       500:
  *         description: Erreur interne du serveur
  */
- router.post("/auth/forgot-password", controller.AskResetPassword.bind(controller));
+ router.post(
+  "/auth/reset-password/request",
+  controller.AskResetPassword.bind(controller)
+ );
+
+ // Backward compatibility for existing clients
+ router.post(
+  "/auth/forgot-password",
+  controller.AskResetPassword.bind(controller)
+ );
 
 
 
