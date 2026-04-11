@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
@@ -48,9 +49,15 @@ export class DashboardPage implements OnInit, AfterViewInit {
     icon: '🧮'
   };
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private toastController: ToastController
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.showLoginSuccessToastIfNeeded();
+  }
 
   ngAfterViewInit() {
     setTimeout(() => {
@@ -109,5 +116,31 @@ export class DashboardPage implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+  private showLoginSuccessToastIfNeeded(): void {
+    const notification = this.route.snapshot.queryParamMap.get('notification');
+    if (notification !== 'login-success') {
+      return;
+    }
+
+    void this.presentToast('Connexion reussie. Bienvenue sur votre compte.');
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { notification: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
+  }
+
+  private async presentToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color: 'success',
+      position: 'top',
+      cssClass: 'centered-toast'
+    });
+    await toast.present();
   }
 }

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { NgForOf } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
   arrowBackOutline,
@@ -103,7 +103,11 @@ export class ListeMatierePage {
     }
   ];
 
-  constructor(public router: Router) {
+  constructor(
+    public router: Router,
+    private route: ActivatedRoute,
+    private toastController: ToastController
+  ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
       'book-outline': bookOutline,
@@ -112,6 +116,34 @@ export class ListeMatierePage {
       'person-outline': personOutline,
       'ribbon-outline': ribbonOutline
     });
+
+    this.showLoginSuccessToastIfNeeded();
+  }
+
+  private showLoginSuccessToastIfNeeded(): void {
+    const notification = this.route.snapshot.queryParamMap.get('notification');
+    if (notification !== 'login-success') {
+      return;
+    }
+
+    void this.presentToast('Connexion réussie. Bienvenue sur votre compte.');
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { notification: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
+  }
+
+  private async presentToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color: 'success',
+      position: 'top',
+      cssClass: 'centered-toast'
+    });
+    await toast.present();
   }
 
   openMatiere(matiere: Matiere): void {

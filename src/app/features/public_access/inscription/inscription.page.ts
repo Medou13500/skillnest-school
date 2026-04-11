@@ -71,6 +71,8 @@ export class InscriptionPage {
     console.log('Inscription :', payload);
 
     // Une fois l'inscription réussie :
-    this.router.navigateByUrl('/connexion');
+    this.router.navigate(['/connexion'], {
+      queryParams: { notification: 'account-created' }
+    });
   }
 }

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router'; // On ne garde que Router
-import { IonicModule } from '@ionic/angular';
+import { ActivatedRoute, Router } from '@angular/router';
+import { IonicModule, ToastController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
-import { NgIf } from "@angular/common";
+import { NgIf } from '@angular/common';
 import { addIcons } from 'ionicons';
 import {
   arrowBackOutline,
@@ -19,25 +19,20 @@ import {
   templateUrl: './connexion.page.html',
   styleUrls: ['./connexion.page.scss'],
   standalone: true,
-  imports: [
-    IonicModule,
-    FormsModule,
-    // RouterLink a été supprimé d'ici
-    NgIf
-  ]
+  imports: [IonicModule, FormsModule, NgIf]
 })
 export class ConnexionPage {
-  // ... (le reste du code reste identique)
-
   email: string = '';
   password: string = '';
   rememberMe: boolean = false;
 
-  // Profil reçu depuis la page d’accueil
   role: 'student' | 'parent' | null = null;
 
-  // On passe le router en "public" pour y accéder depuis le HTML si besoin
-  constructor(public router: Router) {
+  constructor(
+    public router: Router,
+    private route: ActivatedRoute,
+    private toastController: ToastController
+  ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
       'arrow-forward-outline': arrowForwardOutline,
@@ -53,10 +48,9 @@ export class ConnexionPage {
       this.role = navigation.extras.state['role'];
     }
 
-    console.log('Profil détecté :', this.role);
+    this.showAccountCreatedToastIfNeeded();
   }
 
-  // Fonctions de navigation pour remplacer les routerLink si tu préfères le TS
   goToForgot() {
     this.router.navigate(['/mot-de-passe-oublie']);
   }
@@ -65,28 +59,50 @@ export class ConnexionPage {
     this.router.navigate(['/inscription']);
   }
 
+  private showAccountCreatedToastIfNeeded(): void {
+    const notification = this.route.snapshot.queryParamMap.get('notification');
+    if (notification !== 'account-created') {
+      return;
+    }
+
+    void this.presentToast('Compte crée avec succés. Vous pouvez maintenant vous connecter.');
+    void this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { notification: null },
+      queryParamsHandling: 'merge',
+      replaceUrl: true
+    });
+  }
+
+  private async presentToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2500,
+      color: 'success',
+      position: 'top',
+      cssClass: 'centered-toast'
+    });
+    await toast.present();
+  }
+
   onSubmit(): void {
     if (!this.email || !this.password) {
-      // Conseil : Utilise ion-toast pour un rendu plus mobile/moderne qu'un alert()
       console.error('Champs manquants');
       return;
     }
 
-    console.log('Tentative de connexion', {
-      role: this.role,
-      email: this.email,
-      password: this.password,
-      rememberMe: this.rememberMe
-    });
-
-    // Logique de redirection selon le rôle
     if (this.role === 'student') {
-      this.router.navigate(['/liste-matiere']); // Redirection vers ta page de cours
+      this.router.navigate(['/liste-matiere'], {
+        queryParams: { notification: 'login-success' }
+      });
     } else if (this.role === 'parent') {
-      this.router.navigate(['/dashboard-parent']);
+      this.router.navigate(['/dashboard'], {
+        queryParams: { notification: 'login-success' }
+      });
     } else {
-      // Si pas de rôle (accès direct), redirection par défaut
-      this.router.navigate(['/liste-matiere']);
+      this.router.navigate(['/liste-matiere'], {
+        queryParams: { notification: 'login-success' }
+      });
     }
   }
 }
