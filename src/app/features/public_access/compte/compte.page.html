@@ -31,3 +31,24 @@
     </div>
   </div>
 </ion-content>
+
+<ion-footer class="subjects-footer">
+  <ion-toolbar>
+    <div class="tab-bar">
+      <button class="tab-item" type="button" (click)="goTo('/liste-matiere')">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="goTo('/abonnement')">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
+
+      <button class="tab-item active" type="button">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

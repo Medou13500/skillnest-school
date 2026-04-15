@@ -49,6 +49,10 @@ export class InscriptionPage {
     });
   }
 
+  goBack() {
+    this.router.navigate(['/home']);
+  }
+
   goToLogin() {
     this.router.navigate(['/connexion']);
   }

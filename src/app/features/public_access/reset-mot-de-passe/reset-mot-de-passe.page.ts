@@ -33,6 +33,10 @@ export class ResetMotDePassePage {
     });
   }
 
+  goBack(): void {
+    this.router.navigate(['/connexion']);
+  }
+
   onSubmit(): void {
     if (!this.newPassword || !this.confirmPassword) {
       alert('Veuillez remplir les deux champs.');

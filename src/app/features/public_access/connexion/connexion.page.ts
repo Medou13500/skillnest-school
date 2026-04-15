@@ -55,6 +55,10 @@ export class ConnexionPage {
     this.router.navigate(['/mot-de-passe-oublie']);
   }
 
+  goBack() {
+    this.router.navigate(['/home']);
+  }
+
   goToRegister() {
     this.router.navigate(['/inscription']);
   }
