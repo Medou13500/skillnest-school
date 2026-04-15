@@ -178,6 +178,26 @@
   border-radius: inherit;
 }
 
+.quiz-button {
+  margin-top: 10px;
+  width: 100%;
+  border: 1px solid rgba(239, 132, 49, 0.2);
+  background: rgba(239, 132, 49, 0.08);
+  color: #ef8431;
+  border-radius: 12px;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  font-weight: 800;
+
+  ion-icon {
+    font-size: 0.95rem;
+  }
+}
+
 .subjects-footer {
   ion-toolbar {
     --background: rgba(255, 249, 242, 0.96);

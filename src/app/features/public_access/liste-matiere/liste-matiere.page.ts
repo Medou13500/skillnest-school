@@ -7,6 +7,7 @@ import {
   arrowBackOutline,
   bookOutline,
   checkmarkOutline,
+  createOutline,
   medalOutline,
   personOutline,
   ribbonOutline
@@ -23,6 +24,8 @@ interface Matiere {
   couleur: string;
   progressColor: string;
 }
+
+type MatiereQuizKey = 'geographie' | 'maths' | 'anglais' | 'francais' | 'sciences' | 'svt';
 
 @Component({
   selector: 'app-liste-matiere',
@@ -112,6 +115,7 @@ export class ListeMatierePage {
       'arrow-back-outline': arrowBackOutline,
       'book-outline': bookOutline,
       'checkmark-outline': checkmarkOutline,
+      'create-outline': createOutline,
       'medal-outline': medalOutline,
       'person-outline': personOutline,
       'ribbon-outline': ribbonOutline
@@ -150,5 +154,32 @@ export class ListeMatierePage {
     this.router.navigate(['/contenu-matiere'], {
       state: { matiere: matiere.nom }
     });
+  }
+
+  openQuiz(matiere: Matiere): void {
+    this.router.navigate(['/quiz'], {
+      queryParams: { matiere: this.getQuizKey(matiere.nom) }
+    });
+  }
+
+  private getQuizKey(matiere: string): MatiereQuizKey {
+    switch (matiere.toLowerCase()) {
+      case 'geographie':
+      case 'géographie':
+        return 'geographie';
+      case 'maths':
+        return 'maths';
+      case 'anglais':
+        return 'anglais';
+      case 'francais':
+      case 'français':
+        return 'francais';
+      case 'sciences':
+        return 'sciences';
+      case 'svt':
+        return 'svt';
+      default:
+        return 'maths';
+    }
   }
 }

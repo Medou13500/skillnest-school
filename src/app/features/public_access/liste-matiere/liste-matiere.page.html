@@ -52,6 +52,11 @@
                   [style.background]="matiere.progressColor">
                 </span>
               </div>
+
+              <button class="quiz-button" type="button" (click)="$event.stopPropagation(); openQuiz(matiere)">
+                <ion-icon name="create-outline"></ion-icon>
+                <span>Quiz</span>
+              </button>
             </div>
 
           </article>

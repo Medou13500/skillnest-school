@@ -78,6 +78,10 @@ export const routes: Routes = [
     path: 'suppression-compte',
     loadComponent: () => import('./features/public_access/suppression-compte/suppression-compte.page').then(m => m.SuppressionComptePage)
   },
+  {
+    path: 'quiz',
+    loadComponent: () => import('./features/public_access/quiz/quiz.page').then( m => m.QuizPage)
+  },
 
 
 ];
