@@ -8,7 +8,7 @@ export default class UserRepository {
       `
       SELECT * FROM users WHERE id = $1;
       `,
-      [id]
+      [id],
     );
 
     return result.rows[0] ?? null;
@@ -19,9 +19,20 @@ export default class UserRepository {
       `
       SELECT * FROM users WHERE email = $1;
       `,
-      [email]
+      [email],
     );
 
     return result.rows[0] ?? null;
+  }
+
+  async updatePassword(user_Id: number, passwordHash: string) {
+    await this.pool.query(
+      `
+    UPDATE users
+    SET password_hash = $1
+    WHERE id = $2
+    `,
+      [passwordHash, user_Id],
+    );
   }
 }

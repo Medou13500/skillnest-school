@@ -8,7 +8,7 @@ export default function AskResetPaswordRoute(
 
 /**
  * @swagger
- * /auth/reset-password/request:
+ * api/auth/reset-password/request:
  *   post:
  *     summary: Demande de réinitialisation de mot de passe
  *     description: |
@@ -72,19 +72,6 @@ export default function AskResetPaswordRoute(
   "/auth/forgot-password",
   controller.AskResetPassword.bind(controller)
  );
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return router;
 }

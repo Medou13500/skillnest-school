@@ -7,7 +7,7 @@ export default function userLoginRoute(controller: UserLoginController) {
 
   /**
    * @swagger
-   * /api/login:
+   * /api/auth/login:
    *   post:
    *     summary: Connexion utilisateur
    *     description: |
@@ -63,31 +63,6 @@ export default function userLoginRoute(controller: UserLoginController) {
    */
   router.post("/login", controller.login.bind(controller));
 
-  /**
-   * @swagger
-   * /api/login:
-   *   get:
-   *     summary: Information sur la route login
-   *     description: |
-   *       Route pédagogique indiquant comment utiliser l’endpoint de connexion.
-   *     tags:
-   *       - Auth
-   *     responses:
-   *       200:
-   *         description: Message informatif
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   */
-  router.get("/login", (_req, res) => {
-    res.json({
-      message: "Use POST /api/login with email and password",
-    });
-  });
 
   /**
    * @swagger

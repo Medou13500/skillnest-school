@@ -55,6 +55,54 @@ export default function refreshTokenRoute(
    *   post:
    *     summary: Déconnexion utilisateur
    *     description: |
+   *       Déconnecte l’utilisateur en invalidant le refresh token.
+   *
+   *       🔐 Fonctionnement :
+   *       - Le refresh token est récupéré depuis un **cookie HTTPOnly**
+   *       - Le backend supprime le token en base de données
+   *       - Le cookie est supprimé côté client
+   *
+   *       📌 Après logout :
+   *       - Impossible de refresh le token
+   *       - L’utilisateur doit se reconnecter
+   *
+   *     tags:
+   *       - Auth
+   *
+   *     responses:
+   *       200:
+   *         description: Déconnexion réussie
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 message:
+   *                   type: string
+   *                   example: Logged out
+   *
+   *       401:
+   *         description: Aucun refresh token fourni
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 error:
+   *                   type: string
+   *                   example: NO_REFRESH_TOKEN
+   *
+   *       500:
+   *         description: Erreur interne
+   */
+  router.post("/auth/logout", controller.logout.bind(controller));
+
+  /**
+   * @swagger
+   * /api/auth/logout:
+   *   post:
+   *     summary: Déconnexion utilisateur
+   *     description: |
    *       Invalide le **refresh token** en base de données.
    *
    *       🔐 Après cette action :
