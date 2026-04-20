@@ -7,6 +7,12 @@ import pool from "./config/database.config";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.config";
 
+// QUESTION
+import QuestionRepository from "./infrastructure/QuestionRepository";
+import QuestionService from "./service/QuestionService";
+import QuestionController from "./controllers/QuestionController";
+import questionRoute from "./routes/QuestionRoute";
+
 // AUTH LOGIN
 import UserLoginRepository from "./infrastructure/UserLoginRepository";
 import UserLoginService from "./service/UserLoginService";
@@ -25,13 +31,13 @@ import UserRegistrationService from "./service/UserRegistrationService";
 import UserRegistrationController from "./controllers/UserRegistrationController";
 import userRegistrationRoute from "./routes/UserRegistrationRoute";
 
-// FORGOT PASSWORD (DEMANDE)
+// FORGOT PASSWORD
 import AskResetPasswordRepository from "./infrastructure/AskResetPasswordRepository";
 import AskResetPasswordService from "./service/askResetPasswordService";
 import AskResetPasswordController from "./controllers/AskResetPasswordController";
 import AskResetPaswordRoute from "./routes/AskResetPasswordRoute";
 
-// RESET PASSWORD (CONFIRM)
+// RESET PASSWORD
 import ResetPasswordRepository from "./infrastructure/ResetPasswordRepository";
 import ResetPasswordService from "./service/resetPasswordService";
 import ResetPasswordController from "./controllers/resetPasswordController";
@@ -58,12 +64,13 @@ const registrationRepository = new UserRegistrationRepository();
 const askResetPasswordRepository = new AskResetPasswordRepository(pool);
 const resetPasswordRepository = new ResetPasswordRepository(pool);
 
+//  QUESTION
+const questionRepository = new QuestionRepository(pool);
+
 // ===================== SERVICES =====================
 
 const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
-
 const loginService = new UserLoginService(loginRepository, refreshTokenService);
-
 const registrationService = new UserRegistrationService(registrationRepository);
 
 const emailServiceInstance = new EmailService();
@@ -79,15 +86,14 @@ const resetPasswordService = new ResetPasswordService(
   userRepository,
 );
 
+//  QUESTION
+const questionService = new QuestionService(questionRepository);
+
 // ===================== CONTROLLERS =====================
 
 const loginController = new UserLoginController(loginService);
-
 const refreshTokenController = new RefreshTokenController(refreshTokenService);
-
-const registrationController = new UserRegistrationController(
-  registrationService,
-);
+const registrationController = new UserRegistrationController(registrationService);
 
 const askResetPasswordController = new AskResetPasswordController(
   askResetPasswordService,
@@ -97,14 +103,20 @@ const resetPasswordController = new ResetPasswordController(
   resetPasswordService,
 );
 
+// QUESTION
+const questionController = new QuestionController(questionService);
+
 // ===================== ROUTES =====================
 
-app.use("/api/auth", userLoginRoute(loginController))
+app.use("/api/auth", userLoginRoute(loginController));
 app.use("/api/auth", refreshTokenRoute(refreshTokenController));
 app.use("/api/auth", userRegistrationRoute(registrationController));
 
 app.use("/api/auth", AskResetPaswordRoute(askResetPasswordController));
 app.use("/api/auth", resetPasswordRoute(resetPasswordController));
+
+// QUESTION ROUTE
+app.use("/api", questionRoute(questionController));
 
 // ===================== HEALTH =====================
 
