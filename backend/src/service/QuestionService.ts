@@ -31,4 +31,12 @@ export default class QuestionService {
       updatedAt: question.updated_at,
     };
   }
+async getAllQuestions() {
+  return await this.repo.findAll();
+}
+async getQuestionById(id: number) {
+  if (!id) throw new Error("ID requis");
+
+  return this.repo.findById(id);
+}
 }
