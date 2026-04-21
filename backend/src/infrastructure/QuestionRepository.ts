@@ -25,4 +25,17 @@ export default class QuestionRepository {
 
     return result.rows[0];
   }
+
+  async findAll() {
+  const result = await this.pool.query("SELECT * FROM questions");
+  return result.rows;
+}
+async findById(id: number) {
+  const result = await this.pool.query(
+    "SELECT * FROM questions WHERE id = $1",
+    [id]
+  );
+
+  return result.rows[0] || null;
+}
 }
