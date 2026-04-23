@@ -24,7 +24,7 @@
   </div>
 
   <div class="main-content">
-    <div class="custom-tabs">
+    <div class="custom-tabs" (click)="onTabClick($event)">
       <div class="tab">📊 Aperçu</div>
       <div class="tab">🧠 Notions</div>
       <div class="tab active">📋 Historique</div>
@@ -66,11 +66,12 @@
       </div>
     </div>
 
+    <div class="monthly-summary-title">
+      <ion-icon name="calendar-outline"></ion-icon>
+      <h4>Ce mois-ci</h4>
+    </div>
+
     <div class="monthly-summary-card">
-      <div class="card-title">
-        <ion-icon name="calendar-outline"></ion-icon>
-        <h4>Ce mois-ci</h4>
-      </div>
       <div class="summary-grid">
         <div class="s-item"><strong>24</strong><span>Quiz</span></div>
         <div class="s-item"><strong>72%</strong><span>Moy.</span></div>

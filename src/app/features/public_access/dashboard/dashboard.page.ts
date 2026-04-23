@@ -118,6 +118,32 @@ export class DashboardPage implements OnInit, AfterViewInit {
     });
   }
 
+  onTabClick(event: Event): void {
+    const target = (event.target as HTMLElement)?.closest('.tab');
+    if (!target) {
+      return;
+    }
+
+    const tabElements = Array.from(target.parentElement?.querySelectorAll('.tab') ?? []);
+    const clickedIndex = tabElements.indexOf(target);
+
+    switch (clickedIndex) {
+      case 0:
+        return;
+      case 1:
+        void this.router.navigate(['/notions']);
+        return;
+      case 2:
+        void this.router.navigate(['/historique-dashboard']);
+        return;
+      case 3:
+        void this.presentToast('La page badges sera disponible bientot.');
+        return;
+      default:
+        return;
+    }
+  }
+
   private showLoginSuccessToastIfNeeded(): void {
     const notification = this.route.snapshot.queryParamMap.get('notification');
     if (notification !== 'login-success') {

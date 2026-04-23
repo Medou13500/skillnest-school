@@ -41,7 +41,7 @@ ion-content { --background: #{$bg-cream}; }
     h2 { font-size: 20px; margin: 0; font-weight: 700; }
     .badge-row {
       display: flex; align-items: center; gap: 8px; margin-top: 4px;
-      .level-badge { background: #ff823a; padding: 2px 10px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+      .level-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px;background: #ff823a; }
       .user-email { font-size: 11px; opacity: 0.8; }
     }
   }
@@ -60,7 +60,7 @@ ion-content { --background: #{$bg-cream}; }
   display: flex; background: white; margin: -20px 0 20px; border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   .tab {
-    flex: 1; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: 600; color: #888;
+    flex: 1; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: 600; color: #888; cursor: pointer;
     &.active { color: #ff6b00; border-bottom: 3px solid #ff6b00; background: #fff9f5; }
   }
 }
@@ -78,6 +78,38 @@ ion-content { --background: #{$bg-cream}; }
   background: white; border-radius: 20px; padding: 15px; margin-bottom: 15px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.02); border: 1px solid #f0f0f0;
 
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .notion-main {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .notion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 6px;
+
+    h4 {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.2;
+    }
+  }
+
+  .percentage {
+    font-size: 14px;
+    font-weight: 800;
+    white-space: nowrap;
+    line-height: 1;
+  }
+
   .notion-icon-bg { width: 42px; height: 42px; background: #ecfdf5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
   .status-badge { display: inline-block; padding: 3px 10px; border-radius: 8px; font-size: 10px; font-weight: 700;
     &.status-mastered { background: #ecfdf5; color: #42b883; }
@@ -92,7 +124,30 @@ ion-content { --background: #{$bg-cream}; }
       background: #fafafa; border: 1px solid #f0f0f0; border-radius: 10px; padding: 6px; text-align: center;
       span {font-size: 12px !important; color: #999 !important; display: block; text-transform: capitalize; margin-top: 2px;}
       strong { font-size: 13px; display: block; } span { font-size: 8px; color: #999; }
-      &.next-step { text-align: left; padding-left: 10px; .step-label { color: #42b883; font-weight: 700; margin: 0; font-size: 12px; } .step-text { font-size: 12px; margin: 0; } }
+      &.next-step {
+        text-align: center;
+        padding: 8px 10px;
+        justify-content: center;
+        align-items: center;
+        gap: 2px;
+
+        .step-label {
+          margin: 0;
+          font-size: 11px;
+          font-weight: 700;
+          color: #7b8794;
+          text-transform: uppercase;
+          letter-spacing: 0.02em;
+          line-height: 1.1;
+        }
+
+        .step-text {
+          margin: 0;
+          font-size: 13px;
+          font-weight: 700;
+          line-height: 1.2;
+        }
+      }
     }
   }
 }

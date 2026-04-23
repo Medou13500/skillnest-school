@@ -3,6 +3,8 @@ dotenv.config();
 
 import express from "express";
 import pool from "./config/database.config";
+import { initializeDatabaseSchema } from "./config/database.schema";
+import { seedTestAccount } from "./config/database.seed";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.config";
@@ -46,6 +48,31 @@ import UserRepository from "./infrastructure/UserRepository";
 const app = express();
 app.use(express.json());
 
+const allowedOrigins = (process.env.CORS_ORIGINS ??
+  "http://localhost:8100,http://localhost:4200,http://127.0.0.1:8100,http://127.0.0.1:4200")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Vary", "Origin");
+    res.header("Access-Control-Allow-Credentials", "true");
+  }
+
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // ===================== REPOSITORIES =====================
@@ -71,12 +98,12 @@ const emailServiceInstance = new EmailService();
 const askResetPasswordService = new AskResetPasswordService(
   askResetPasswordRepository,
   userRepository,
-  emailServiceInstance,
+  emailServiceInstance
 );
 
 const resetPasswordService = new ResetPasswordService(
   resetPasswordRepository,
-  userRepository,
+  userRepository
 );
 
 // ===================== CONTROLLERS =====================
@@ -86,20 +113,20 @@ const loginController = new UserLoginController(loginService);
 const refreshTokenController = new RefreshTokenController(refreshTokenService);
 
 const registrationController = new UserRegistrationController(
-  registrationService,
+  registrationService
 );
 
 const askResetPasswordController = new AskResetPasswordController(
-  askResetPasswordService,
+  askResetPasswordService
 );
 
 const resetPasswordController = new ResetPasswordController(
-  resetPasswordService,
+  resetPasswordService
 );
 
 // ===================== ROUTES =====================
 
-app.use("/api/auth", userLoginRoute(loginController))
+app.use("/api/auth", userLoginRoute(loginController));
 app.use("/api/auth", refreshTokenRoute(refreshTokenController));
 app.use("/api/auth", userRegistrationRoute(registrationController));
 
@@ -114,7 +141,20 @@ app.get("/", (_req, res) => {
 
 // ===================== SERVER =====================
 
-app.listen(3000, () => {
-  console.log("🚀 Server running on port 3000");
-  console.log("📚 Swagger available on http://localhost:3000/api/docs");
-});
+async function startServer(): Promise<void> {
+  try {
+    await initializeDatabaseSchema(pool);
+    console.log(" DB SCHEMA READY");
+    await seedTestAccount(pool);
+
+    app.listen(3000, () => {
+      console.log("🚀 Server running on port 3000");
+      console.log("📚 Swagger available on http://localhost:3000/api/docs");
+    });
+  } catch (error) {
+    console.error(" Failed to initialize database schema:", error);
+    process.exit(1);
+  }
+}
+
+void startServer();

@@ -4,6 +4,7 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
+  arrowBackOutline,
   bookOutline,
   chevronForwardOutline,
   lockClosedOutline,
@@ -60,6 +61,7 @@ export class ComptePage {
 
   constructor(private router: Router) {
     addIcons({
+      'arrow-back-outline': arrowBackOutline,
       'book-outline': bookOutline,
       'chevron-forward-outline': chevronForwardOutline,
       'lock-closed-outline': lockClosedOutline,

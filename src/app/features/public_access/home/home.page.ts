@@ -27,4 +27,8 @@ export class HomePage {
       state: { role }
     });
   }
+
+  goToDashboardDebug() {
+    this.router.navigate(['/dashboard']);
+  }
 }

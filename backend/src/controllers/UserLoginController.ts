@@ -15,7 +15,7 @@ export default class UserLoginController {
         });
       }
 
-      const { accessToken, refreshToken } =
+      const { accessToken, refreshToken, user } =
         await this.loginService.login(email, password);
 
       // COOKIE refresh token
@@ -28,7 +28,8 @@ export default class UserLoginController {
       });
 
       return res.json({
-        access_token: accessToken
+        access_token: accessToken,
+        user
       });
 
     } catch (error: any) {

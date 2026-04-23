@@ -34,7 +34,7 @@ ion-content { --background: #{$bg-cream}; }
     h2 { font-size: 22px; margin: 0; font-weight: 700; }
     .badge-row {
       display: flex; align-items: center; gap: 10px; margin-top: 5px;
-      .level-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px; }
+      .level-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px;background: #ff823a; }
       .user-email { font-size: 12px; opacity: 0.8; }
     }
   }
@@ -52,7 +52,7 @@ ion-content { --background: #{$bg-cream}; }
   display: flex; background: white; margin: -20px 0 20px; border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   .tab {
-    flex: 1; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: 600; color: #888;
+    flex: 1; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: 600; color: #888; cursor: pointer;
     &.active { color: #ff6b00; border-bottom: 3px solid #ff6b00; background: #fff9f5; }
   }
 }

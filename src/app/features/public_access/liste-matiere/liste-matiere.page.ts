@@ -151,4 +151,14 @@ export class ListeMatierePage {
       state: { matiere: matiere.nom }
     });
   }
+
+  logout(): void {
+    sessionStorage.clear();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rememberMe');
+
+    void this.router.navigate(['/connexion'], { replaceUrl: true });
+  }
 }
