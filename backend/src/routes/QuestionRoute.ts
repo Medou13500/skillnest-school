@@ -1,81 +1,46 @@
-import express from "express";
+import { Router } from "express";
 import QuestionController from "../controllers/QuestionController";
 import { authMiddleware } from "../middleware/auth.middlware";
 import { adminOnly } from "../middleware/admin.middlware";
 
-export default function createQuestionRoutes(controller: QuestionController) {
-  const router = express.Router();
+/**
+ * @swagger
+ * tags:
+ *   name: Questions
+ *   description: Gestion des questions (admin pour modification)
+ */
 
-  /**
-   * @swagger
-   * tags:
-   *   name: Questions
-   *   description: Gestion des questions (admin uniquement)
-   */
+export default function questionRoute(controller: QuestionController) {
+  const router = Router();
 
   /**
    * @swagger
    * /api/questions:
    *   post:
    *     summary: Créer une question
-   *     description: |
-   *       Permet à un administrateur de créer une nouvelle question.
-   *
-   *       🔒 Route protégée (JWT + rôle admin requis)
-   *
-   *       📌 Une question contient :
-   *       - un contenu (question)
-   *       - une liste de réponses possibles
-   *       - une réponse correcte
-   *
    *     tags: [Questions]
    *     security:
    *       - bearerAuth: []
+   *     description: |
+   *       Crée une nouvelle question.
+   *       - type = test → test de positionnement
+   *       - type = quiz → quiz de progression
    *     requestBody:
    *       required: true
    *       content:
    *         application/json:
-   *           schema:
-   *             type: object
-   *             required:
-   *               - notionId
-   *               - content
-   *               - answers
-   *               - correctAnswer
-   *               - type
-   *               - difficulty
-   *             properties:
-   *               notionId:
-   *                 type: integer
-   *                 example: 1
-   *               content:
-   *                 type: string
-   *                 example: "2 + 2 = ?"
-   *               answers:
-   *                 type: array
-   *                 items:
-   *                   type: string
-   *                 example: ["1", "2", "3", "4"]
-   *               correctAnswer:
-   *                 type: string
-   *                 example: "4"
-   *               type:
-   *                 type: string
-   *                 enum: [test, quiz]
-   *                 example: "test"
-   *               difficulty:
-   *                 type: string
-   *                 enum: [facile, moyen, difficile]
-   *                 example: "facile"
+   *           example:
+   *             notionId: 1
+   *             content: "2 + 2 = ?"
+   *             answers: ["1", "2", "3", "4"]
+   *             correctAnswer: "4"
+   *             type: "test"
+   *             difficulty: "facile"
    *     responses:
    *       201:
    *         description: Question créée
    *       400:
    *         description: Données invalides
-   *       401:
-   *         description: Non authentifié
-   *       403:
-   *         description: Non autorisé (admin requis)
    */
   router.post(
     "/questions",
@@ -84,45 +49,69 @@ export default function createQuestionRoutes(controller: QuestionController) {
     controller.createQuestion.bind(controller)
   );
 
-  /**
-   * @swagger
-   * /api/questions:
-   *   get:
-   *     summary: Récupérer toutes les questions
-   *     description: |
-   *       Retourne la liste complète des questions.
-   *
-   *       📌 Accessible publiquement (pas besoin d'être connecté)
-   *
-   *     tags: [Questions]
-   *     responses:
-   *       200:
-   *         description: Liste des questions
-   *       500:
-   *         description: Erreur serveur
-   */
-  router.get("/questions", controller.getAllQuestions.bind(controller));
+ /**
+ * @swagger
+ * /api/questions:
+ *   get:
+ *     summary: Récupérer les questions (avec filtres)
+ *     tags: [Questions]
+ *     description: |
+ *       Récupère les questions avec filtres optionnels.
+ *
+ *        Cas d'utilisation :
+ *
+ *        type=test → questions pour le test de positionnement
+ *        type=quiz → questions pour les quiz de progression
+ *        sans type → retourne toutes les questions
+ *
+ *       💡 Exemples :
+ *
+ *       /api/questions?type=test
+ *        /api/questions?type=quiz
+ *        /api/questions?type=quiz&notionId=1
+ *
+ *     parameters:
+ *       - in: query
+ *         name: type
+ *         required: false
+ *         schema:
+ *           type: string
+ *           enum: [test, quiz]
+ *         description: |
+ *           Type de question :
+ *           `test` → test de positionnement
+ *            `quiz` → quiz de progression
+ *
+ *       - in: query
+ *         name: notionId
+ *         required: false
+ *         schema:
+ *           type: integer
+ *         description: ID de la notion pour filtrer les questions
+ *
+ *     responses:
+ *       200:
+ *         description: Liste des questions récupérée avec succès
+ *       400:
+ *         description: Paramètres invalides
+ */
+router.get(
+  "/questions",
+  controller.getAllQuestions.bind(controller)
+);
 
   /**
    * @swagger
    * /api/questions/{id}:
    *   get:
    *     summary: Récupérer une question par ID
-   *     description: |
-   *       Retourne une question spécifique à partir de son ID.
-   *
-   *       📌 Utilisation :
-   *       - afficher détail question
-   *       - debug
-   *
    *     tags: [Questions]
    *     parameters:
-   *       - in: path
+   *        in: path
    *         name: id
    *         required: true
    *         schema:
    *           type: integer
-   *         example: 5
    *     responses:
    *       200:
    *         description: Question trouvée
@@ -138,46 +127,34 @@ export default function createQuestionRoutes(controller: QuestionController) {
    * @swagger
    * /api/questions/{id}:
    *   put:
-   *     summary: Modifier une question
-   *     description: |
-   *       Permet à un admin de modifier une question existante.
-   *
-   *       🔒 Route protégée (JWT + admin)
-   *
-   *       ⚠️ Toutes les données doivent être renvoyées (update complet)
-   *
+   *     summary: Modifier une question (update partiel)
    *     tags: [Questions]
    *     security:
    *       - bearerAuth: []
+   *     description: |
+   *       Met à jour une question.
+   *       ⚠ Tous les champs sont optionnels (update partiel)
    *     parameters:
    *       - in: path
    *         name: id
    *         required: true
    *         schema:
    *           type: integer
-   *         example: 5
    *     requestBody:
-   *       required: true
+   *       required: false
    *       content:
    *         application/json:
-   *           schema:
-   *             type: object
-   *             example:
-   *               notionId: 1
-   *               content: "2 + 3 = ?"
-   *               answers: ["4", "5", "6"]
-   *               correctAnswer: "5"
-   *               type: "quiz"
-   *               difficulty: "moyen"
+   *           example:
+   *             content: "Nouvelle question"
+   *             answers: ["1", "2", "3", "4"]
+   *             correctAnswer: "4"
    *     responses:
    *       200:
-   *         description: Question modifiée
+   *         description: Question mise à jour
    *       400:
    *         description: Données invalides
    *       404:
    *         description: Question non trouvée
-   *       403:
-   *         description: Non autorisé
    */
   router.put(
     "/questions/:id",
@@ -191,11 +168,6 @@ export default function createQuestionRoutes(controller: QuestionController) {
    * /api/questions/{id}:
    *   delete:
    *     summary: Supprimer une question
-   *     description: |
-   *       Permet à un admin de supprimer une question.
-   *
-   *       🔒 Route protégée (JWT + admin)
-   *
    *     tags: [Questions]
    *     security:
    *       - bearerAuth: []
@@ -205,14 +177,11 @@ export default function createQuestionRoutes(controller: QuestionController) {
    *         required: true
    *         schema:
    *           type: integer
-   *         example: 5
    *     responses:
    *       204:
    *         description: Question supprimée
    *       404:
    *         description: Question non trouvée
-   *       403:
-   *         description: Non autorisé
    */
   router.delete(
     "/questions/:id",
