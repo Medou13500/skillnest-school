@@ -2,7 +2,7 @@ import express from "express";
 import UserRegistrationController from "../controllers/UserRegistrationController";
 
 export default function userRegistrationRoute(
-  controller: UserRegistrationController
+  controller: UserRegistrationController,
 ) {
   const router = express.Router();
 
@@ -14,9 +14,9 @@ export default function userRegistrationRoute(
    *     description: |
    *       Crée un nouvel utilisateur dans le système.
    *
-   *       🔐 Le mot de passe est hashé côté backend.
+   *       Le mot de passe est hashé côté backend
    *
-   *       ⚠️ Cette route **ne connecte pas automatiquement** l’utilisateur.
+   *        Cette route **ne connecte pas automatiquement** l’utilisateur.
    *       → Le front doit ensuite appeler **POST /api/login**.
    *
    *     tags:

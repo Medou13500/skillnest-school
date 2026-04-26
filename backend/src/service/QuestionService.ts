@@ -1,29 +1,84 @@
+// src/service/QuestionService.ts
+
 import QuestionRepository from "../infrastructure/QuestionRepository";
-import { CreateQuestionInput } from "../type/QuestionTypes";
+import { CreateQuestionInput, QuestionOutput } from "../type/QuestionTypes";
 
 export default class QuestionService {
   constructor(private repo: QuestionRepository) {}
 
-  async createQuestion(data: CreateQuestionInput) {
+  async createQuestion(data: CreateQuestionInput): Promise<QuestionOutput> {
     if (!data.notionId) throw new Error("notionId requis");
     if (!data.content) throw new Error("content requis");
     if (!data.answers?.length) throw new Error("answers requis");
 
-    if (!data.answers.includes(data.correctAnswer))
+    if (!data.answers.includes(data.correctAnswer)) {
       throw new Error("correctAnswer invalide");
+    }
 
     const question = await this.repo.createQuestion(data);
 
-    const answersParsed =
-      typeof question.answers === "string"
-        ? JSON.parse(question.answers)
-        : question.answers;
+    return this.mapToOutput(question);
+  }
 
+  async getAllQuestions(): Promise<QuestionOutput[]> {
+    const questions = await this.repo.findAll();
+
+    return questions.map((q) => this.mapToOutput(q));
+  }
+
+  async getQuestionById(id: number): Promise<QuestionOutput> {
+    const question = await this.repo.findById(id);
+
+    if (!question) {
+      throw new Error("QUESTION_NOT_FOUND");
+    }
+
+    return this.mapToOutput(question);
+  }
+
+  async updateQuestion(
+    id: number,
+    data: CreateQuestionInput,
+  ): Promise<QuestionOutput> {
+    if (!data.notionId) throw new Error("notionId requis");
+    if (!data.content) throw new Error("content requis");
+    if (!data.answers?.length) throw new Error("answers requis");
+
+    if (!data.answers.includes(data.correctAnswer)) {
+      throw new Error("correctAnswer invalide");
+    }
+
+    const existing = await this.repo.findById(id);
+    if (!existing) {
+      throw new Error("QUESTION_NOT_FOUND");
+    }
+
+    const updated = await this.repo.updateQuestion(id, data);
+
+    if (!updated) {
+      throw new Error("UPDATE_FAILED");
+    }
+
+    return this.mapToOutput(updated);
+  }
+
+  async deleteQuestion(id: number): Promise<void> {
+    const deleted = await this.repo.deleteById(id);
+
+    if (!deleted) {
+      throw new Error("QUESTION_NOT_FOUND");
+    }
+  }
+
+  private mapToOutput(question: any): QuestionOutput {
     return {
       id: question.id,
       notionId: question.notion_id,
       content: question.content,
-      answers: answersParsed,
+      answers:
+        typeof question.answers === "string"
+          ? JSON.parse(question.answers)
+          : question.answers,
       correctAnswer: question.correct_answer,
       type: question.type,
       difficulty: question.difficulty,
@@ -31,12 +86,4 @@ export default class QuestionService {
       updatedAt: question.updated_at,
     };
   }
-async getAllQuestions() {
-  return await this.repo.findAll();
-}
-async getQuestionById(id: number) {
-  if (!id) throw new Error("ID requis");
-
-  return this.repo.findById(id);
-}
 }

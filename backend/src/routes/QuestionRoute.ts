@@ -2,6 +2,7 @@ import express from "express";
 import QuestionController from "../controllers/QuestionController";
 import { authMiddleware } from "../middleware/auth.middlware";
 import { adminOnly } from "../middleware/admin.middlware";
+
 export default function createQuestionRoutes(controller: QuestionController) {
   const router = express.Router();
 
@@ -9,35 +10,27 @@ export default function createQuestionRoutes(controller: QuestionController) {
    * @swagger
    * tags:
    *   name: Questions
-   *   description: Gestion des questions (admin)
+   *   description: Gestion des questions (admin uniquement)
    */
 
   /**
    * @swagger
-   * tags:
-   *   name: Questions
-   *   description: Gestion des questions (admin)
-   */
-
-  /**
-   * @swagger
-   * tags:
-   *   name: Questions
-   *   description: Gestion des questions (admin)
-   */
-
-  /**
-   * @swagger
-   * /questions:
+   * /api/questions:
    *   post:
    *     summary: Créer une question
+   *     description: |
+   *       Permet à un administrateur de créer une nouvelle question.
+   *
+   *       🔒 Route protégée (JWT + rôle admin requis)
+   *
+   *       📌 Une question contient :
+   *       - un contenu (question)
+   *       - une liste de réponses possibles
+   *       - une réponse correcte
+   *
    *     tags: [Questions]
-   *     description: >
-   *       Permet à un admin de créer une question.
-   *       Une question appartient à une notion, elle-même liée à une matière.
-   *
-   *       ⚠️ Le champ "answers" est toujours retourné comme un tableau de chaînes.
-   *
+   *     security:
+   *       - bearerAuth: []
    *     requestBody:
    *       required: true
    *       content:
@@ -54,261 +47,179 @@ export default function createQuestionRoutes(controller: QuestionController) {
    *             properties:
    *               notionId:
    *                 type: integer
-   *                 description: ID de la notion associée
    *                 example: 1
-   *
    *               content:
    *                 type: string
-   *                 description: Texte de la question
-   *                 example: "Quel est le résultat de 5 × 3 ?"
-   *
+   *                 example: "2 + 2 = ?"
    *               answers:
    *                 type: array
-   *                 description: Liste des réponses possibles
    *                 items:
    *                   type: string
-   *                 example: ["8", "15", "10", "20"]
-   *
+   *                 example: ["1", "2", "3", "4"]
    *               correctAnswer:
    *                 type: string
-   *                 description: Doit exister dans answers
-   *                 example: "15"
-   *
+   *                 example: "4"
    *               type:
    *                 type: string
    *                 enum: [test, quiz]
-   *                 description: Type de question
    *                 example: "test"
-   *
    *               difficulty:
    *                 type: string
    *                 enum: [facile, moyen, difficile]
-   *                 description: Niveau de difficulté
    *                 example: "facile"
-   *
    *     responses:
    *       201:
-   *         description: Question créée avec succès
-   *         content:
-   *           application/json:
-   *             example:
-   *               id: 2
-   *               notionId: 1
-   *               content: "Quel est le résultat de 5 × 3 ?"
-   *               answers: ["8", "15", "10", "20"]
-   *               correctAnswer: "15"
-   *               type: "test"
-   *               difficulty: "facile"
-   *               createdAt: "2026-04-20T17:01:45.072Z"
-   *               updatedAt: "2026-04-20T17:01:45.072Z"
-   *
+   *         description: Question créée
    *       400:
-   *         description: Erreur de validation
-   *         content:
-   *           application/json:
-   *             examples:
-   *               missingField:
-   *                 summary: Champ manquant
-   *                 value:
-   *                   error: "content requis"
-   *
-   *               invalidAnswer:
-   *                 summary: Réponse invalide
-   *                 value:
-   *                   error: "correctAnswer invalide"
-   *
-   *               invalidType:
-   *                 summary: Type invalide
-   *                 value:
-   *                   error: "type invalide"
-   *
-   *               invalidDifficulty:
-   *                 summary: Difficulté invalide
-   *                 value:
-   *                   error: "difficulty invalide"
+   *         description: Données invalides
+   *       401:
+   *         description: Non authentifié
+   *       403:
+   *         description: Non autorisé (admin requis)
    */
-
-  router.post("/questions", authMiddleware, adminOnly, (req, res) =>
-    controller.createQuestion(req, res),
+  router.post(
+    "/questions",
+    authMiddleware,
+    adminOnly,
+    controller.createQuestion.bind(controller)
   );
-  /**
- * @swagger
- * /api/questions:
- *   get:
- *     summary: Récupérer toutes les questions
- *     description: |
- *       Retourne la liste complète des questions.
- *
- *       Utilisation :
- *       Affichage des questions pour quiz ou test
- *       Peut être filtré côté front (ou backend plus tard)
- *
- *        Important :
- *        Le champ "answers" est toujours retourné comme un tableau
- *       -Le champ "correctAnswer" est présent (à sécuriser côté production)
- *
- *     tags:
- *       - Questions
- *
- *     responses:
- *       200:
- *         description: Liste des questions récupérée avec succès
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     example: 5
- *
- *                   notionId:
- *                     type: integer
- *                     example: 1
- *
- *                   content:
- *                     type: string
- *                     example: "2 + 2 = ?"
- *
- *                   answers:
- *                     type: array
- *                     items:
- *                       type: string
- *                     example: ["1", "2", "3", "4"]
- *
- *                   correctAnswer:
- *                     type: string
- *                     example: "4"
- *
- *                   type:
- *                     type: string
- *                     example: "test"
- *
- *                   difficulty:
- *                     type: string
- *                     example: "facile"
- *
- *                   createdAt:
- *                     type: string
- *                     format: date-time
- *                     example: "2026-04-20T19:32:02.966Z"
- *
- *                   updatedAt:
- *                     type: string
- *                     format: date-time
- *                     example: "2026-04-20T19:32:02.966Z"
- *
- *       500:
- *         description: Erreur serveur
- *         content:
- *           application/json:
- *             example:
- *               error: "Erreur interne serveur"
- */
 
+  /**
+   * @swagger
+   * /api/questions:
+   *   get:
+   *     summary: Récupérer toutes les questions
+   *     description: |
+   *       Retourne la liste complète des questions.
+   *
+   *       📌 Accessible publiquement (pas besoin d'être connecté)
+   *
+   *     tags: [Questions]
+   *     responses:
+   *       200:
+   *         description: Liste des questions
+   *       500:
+   *         description: Erreur serveur
+   */
   router.get("/questions", controller.getAllQuestions.bind(controller));
 
-/**
- * @swagger
- * /api/questions/{id}:
- *   get:
- *     summary: Récupérer une question par ID
- *     description: |
- *       Retourne une question spécifique à partir de son ID.
- *
- *       📌 Utilisation :
- *        Voir le détail d’une question
- *       Préparer une modification (update)
- *       Debug ou affichage ciblé côté front
- *
- *       ⚠️ Important :
- *        Si l'ID n'existe pas → retourne une erreur 404
- *       Le champ "answers" est toujours un tableau
- *       Le champ "correctAnswer" est présent (à sécuriser en production)
- *
- *     tags:
- *       - Questions
- *
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID de la question
- *         example: 5
- *
- *     responses:
- *       200:
- *         description: Question trouvée
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                   example: 5
- *
- *                 notionId:
- *                   type: integer
- *                   example: 1
- *
- *                 content:
- *                   type: string
- *                   example: "2 + 2 = ?"
- *
- *                 answers:
- *                   type: array
- *                   items:
- *                     type: string
- *                   example: ["1", "2", "3", "4"]
- *
- *                 correctAnswer:
- *                   type: string
- *                   example: "4"
- *
- *                 type:
- *                   type: string
- *                   example: "test"
- *
- *                 difficulty:
- *                   type: string
- *                   example: "facile"
- *
- *                 createdAt:
- *                   type: string
- *                   format: date-time
- *                   example: "2026-04-20T19:32:02.966Z"
- *
- *                 updatedAt:
- *                   type: string
- *                   format: date-time
- *                   example: "2026-04-20T19:32:02.966Z"
- *
- *       404:
- *         description: Question non trouvée
- *         content:
- *           application/json:
- *             example:
- *               error: "QUESTION_NOT_FOUND"
- *
- *       500:
- *         description: Erreur serveur
- *         content:
- *           application/json:
- *             example:
- *               error: "Erreur interne serveur"
- */
+  /**
+   * @swagger
+   * /api/questions/{id}:
+   *   get:
+   *     summary: Récupérer une question par ID
+   *     description: |
+   *       Retourne une question spécifique à partir de son ID.
+   *
+   *       📌 Utilisation :
+   *       - afficher détail question
+   *       - debug
+   *
+   *     tags: [Questions]
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         example: 5
+   *     responses:
+   *       200:
+   *         description: Question trouvée
+   *       404:
+   *         description: Question non trouvée
+   */
+  router.get(
+    "/questions/:id",
+    controller.getQuestionById.bind(controller)
+  );
 
- router.get("/questions/:id", controller.getQuestionById.bind(controller));
+  /**
+   * @swagger
+   * /api/questions/{id}:
+   *   put:
+   *     summary: Modifier une question
+   *     description: |
+   *       Permet à un admin de modifier une question existante.
+   *
+   *       🔒 Route protégée (JWT + admin)
+   *
+   *       ⚠️ Toutes les données doivent être renvoyées (update complet)
+   *
+   *     tags: [Questions]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         example: 5
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             example:
+   *               notionId: 1
+   *               content: "2 + 3 = ?"
+   *               answers: ["4", "5", "6"]
+   *               correctAnswer: "5"
+   *               type: "quiz"
+   *               difficulty: "moyen"
+   *     responses:
+   *       200:
+   *         description: Question modifiée
+   *       400:
+   *         description: Données invalides
+   *       404:
+   *         description: Question non trouvée
+   *       403:
+   *         description: Non autorisé
+   */
+  router.put(
+    "/questions/:id",
+    authMiddleware,
+    adminOnly,
+    controller.updateQuestion.bind(controller)
+  );
 
-
-
-
+  /**
+   * @swagger
+   * /api/questions/{id}:
+   *   delete:
+   *     summary: Supprimer une question
+   *     description: |
+   *       Permet à un admin de supprimer une question.
+   *
+   *       🔒 Route protégée (JWT + admin)
+   *
+   *     tags: [Questions]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: integer
+   *         example: 5
+   *     responses:
+   *       204:
+   *         description: Question supprimée
+   *       404:
+   *         description: Question non trouvée
+   *       403:
+   *         description: Non autorisé
+   */
+  router.delete(
+    "/questions/:id",
+    authMiddleware,
+    adminOnly,
+    controller.deleteQuestion.bind(controller)
+  );
 
   return router;
-  
 }
