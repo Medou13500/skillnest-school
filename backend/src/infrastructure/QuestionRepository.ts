@@ -1,24 +1,20 @@
-// src/infrastructure/QuestionRepository.ts
-
 import { Pool } from "pg";
 import {
   CreateQuestionInput,
-  QuestionEntity,
   UpdateQuestionInput,
+  GetQuestionsFilters,
 } from "../type/QuestionTypes";
 
 export default class QuestionRepository {
   constructor(private pool: Pool) {}
 
-  
-  async createQuestion(
-    data: CreateQuestionInput
-  ): Promise<QuestionEntity> {
+  // ================= CREATE =================
+  async createQuestion(data: CreateQuestionInput) {
     const result = await this.pool.query(
       `
       INSERT INTO questions (notion_id, content, answers, correct_answer, type, difficulty)
       VALUES ($1, $2, $3, $4, $5, $6)
-      RETURNING *;
+      RETURNING *
       `,
       [
         data.notionId,
@@ -34,71 +30,90 @@ export default class QuestionRepository {
   }
 
   // ================= GET ALL =================
-  async findAll(): Promise<QuestionEntity[]> {
+  async findAll() {
     const result = await this.pool.query(`
       SELECT * FROM questions
-      ORDER BY id DESC;
+      ORDER BY id DESC
     `);
 
-    return result.rows as QuestionEntity[];
+    return result.rows;
+  }
+
+  // ================= GET WITH FILTERS =================
+  async findAllWithFilters(filters: GetQuestionsFilters) {
+    let query = "SELECT * FROM questions WHERE 1=1";
+    const values: any[] = [];
+
+    if (filters.type) {
+      values.push(filters.type);
+      query += ` AND type = $${values.length}`;
+    }
+
+    if (filters.notionId) {
+      values.push(filters.notionId);
+      query += ` AND notion_id = $${values.length}`;
+    }
+
+    query += " ORDER BY id DESC";
+
+    const result = await this.pool.query(query, values);
+
+    return result.rows;
   }
 
   // ================= GET BY ID =================
-  async findById(id: number): Promise<QuestionEntity | null> {
+  async findById(id: number) {
     const result = await this.pool.query(
-      `
-      SELECT * FROM questions
-      WHERE id = $1;
-      `,
+      `SELECT * FROM questions WHERE id = $1`,
       [id]
     );
 
-    if (result.rowCount === 0) return null;
+    return result.rows[0] || null;
+  }
+
+  // ================= UPDATE =================
+  async updateQuestion(id: number, data: UpdateQuestionInput) {
+    const result = await this.pool.query(
+      `
+      UPDATE questions
+      SET
+        notion_id = COALESCE($1, notion_id),
+        content = COALESCE($2, content),
+        answers = COALESCE($3, answers),
+        correct_answer = COALESCE($4, correct_answer),
+        type = COALESCE($5, type),
+        difficulty = COALESCE($6, difficulty),
+        updated_at = NOW()
+      WHERE id = $7
+      RETURNING *
+      `,
+      [
+        data.notionId ?? null,
+        data.content ?? null,
+        data.answers !== undefined ? JSON.stringify(data.answers) : null,
+        data.correctAnswer ?? null,
+        data.type ?? null,
+        data.difficulty ?? null,
+        id,
+      ]
+    );
+
+    if ((result.rowCount ?? 0) === 0) return null;
 
     return result.rows[0];
   }
 
-async updateQuestion(
-  id: number,
-  data: Partial<CreateQuestionInput>
-): Promise<QuestionEntity | null> {
+  // ================= DELETE =================
+  async deleteById(id: number): Promise<boolean> {
+    const result = await this.pool.query(
+      `
+      DELETE FROM questions
+      WHERE id = $1
+      RETURNING id
+      `,
+      [id]
+    );
 
-  const result = await this.pool.query(
-    `
-    UPDATE questions
-    SET
-      notion_id = COALESCE($1, notion_id),
-      content = COALESCE($2, content),
-      answers = COALESCE($3, answers),
-      correct_answer = COALESCE($4, correct_answer),
-      type = COALESCE($5, type),
-      difficulty = COALESCE($6, difficulty),
-      updated_at = NOW()
-    WHERE id = $7
-    RETURNING *
-    `,
-    [
-      data.notionId ?? null,
-      data.content ?? null,
-      data.answers ? JSON.stringify(data.answers) : null,
-      data.correctAnswer ?? null,
-      data.type ?? null,
-      data.difficulty ?? null,
-      id,
-    ]
-  );
-
-  if (result.rowCount === 0) return null;
-
-  return result.rows[0];
-}
-  
-  async deleteById(id: number) {
-  const result = await this.pool.query(
-    `DELETE FROM questions WHERE id = $1 RETURNING *`,
-    [id]
-  );
-
-  return result.rows[0] || null;
-}
+    return (result.rowCount ?? 0) > 0;
+  }
 }
