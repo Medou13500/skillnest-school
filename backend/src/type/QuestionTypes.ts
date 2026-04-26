@@ -15,7 +15,14 @@ export type CreateQuestionInput = {
   difficulty: Difficulty;
 };
 
-export type UpdateQuestionInput = CreateQuestionInput;
+export type UpdateQuestionInput = {
+  notionId?: number;
+  content?: string;
+  answers?: string[];
+  correctAnswer?: string;
+  type?: "test" | "quiz";
+  difficulty?: "facile" | "moyen" | "difficile";
+};
 
 
 // ================= OUTPUT ADMIN =================
