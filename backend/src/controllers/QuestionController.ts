@@ -47,46 +47,55 @@ export default class QuestionController {
   }
 
   async updateQuestion(req: Request, res: Response) {
-    try {
-      const id = Number(req.params.id);
+  try {
+    const id = Number(req.params.id);
 
-      if (isNaN(id)) {
-        return res.status(400).json({ error: "ID_INVALID" });
-      }
-
-      const result = await this.service.updateQuestion(id, req.body);
-
-      return res.status(200).json(result);
-    } catch (error: any) {
-      if (error.message === "QUESTION_NOT_FOUND") {
-        return res.status(404).json({ error: error.message });
-      }
-
-      if (error.message === "correctAnswer invalide") {
-        return res.status(400).json({ error: error.message });
-      }
-
-      return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "ID_INVALID" });
     }
-  }
 
-  async deleteQuestion(req: Request, res: Response) {
-    try {
-      const id = Number(req.params.id);
+    const result = await this.service.updateQuestion(id, req.body);
 
-      if (isNaN(id)) {
-        return res.status(400).json({ error: "ID_INVALID" });
-      }
+    return res.status(200).json(result);
 
-      await this.service.deleteQuestion(id);
+  } catch (error: any) {
 
-      return res.status(204).send();
-    } catch (error: any) {
-      if (error.message === "QUESTION_NOT_FOUND") {
-        return res.status(404).json({ error: error.message });
-      }
+    console.error("UPDATE QUESTION ERROR:", error);
 
-      return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+    if (error.message === "QUESTION_NOT_FOUND") {
+      return res.status(404).json({ error: error.message });
     }
+
+    if (error.message === "correctAnswer invalide") {
+      return res.status(400).json({ error: error.message });
+    }
+
+    if (error.message === "answers requis") {
+      return res.status(400).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
   }
+}
+
+async deleteQuestion(req: Request, res: Response) {
+  try {
+    const id = Number(req.params.id);
+
+    if (isNaN(id)) {
+      return res.status(400).json({ error: "ID_INVALID" });
+    }
+
+    await this.service.deleteQuestion(id);
+
+    return res.status(204).send(); // clean, pas de body
+  } catch (error: any) {
+
+    if (error.message === "QUESTION_NOT_FOUND") {
+      return res.status(404).json({ error: error.message });
+    }
+
+    return res.status(500).json({ error: "INTERNAL_SERVER_ERROR" });
+  }
+}
 }
