@@ -7,7 +7,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'page_quiz_end',
+    redirectTo: 'home',
     pathMatch: 'full',
   },
   {
@@ -24,15 +24,11 @@ export const routes: Routes = [
   },
   {
     path: 'page_quiz',
-    loadComponent: () => import('./page-quiz/page-quiz.component').then( m => m.PageQuizComponent)
-  },
-  {
-    path: 'page_quiz_start',
-    loadComponent: () => import('./page-quiz-start/page-quiz-start.component').then(m => m.PageQuizStartComponent)
+    loadComponent: () => import('./quiz-test-positionnement/quiz-test-positionnement.component').then( m => m.QuizTestPositionnementComponent)
   },
   {
     path: 'page_quiz_end',
-    loadComponent: () => import('./page-quiz-end/page-quiz-end.component').then(m => m.PageQuizEndComponent)
+    loadComponent: () => import('./test-positionnement/test-positionnement.component').then(m => m.TestPositionnementComponent)
   }
 
 ];

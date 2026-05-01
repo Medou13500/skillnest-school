@@ -1,0 +1,91 @@
+<ion-content class="bg-cream">
+  <!-- Section Bleue (Header) -->
+  <div class="header-blue">
+    <ion-button fill="clear" class="btn-retour">
+      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
+      Retour
+    </ion-button>
+
+    <div class="header-content">
+      <div class="icon-square">
+        <img src="assets/icon/target.png" alt="target" />
+      </div>
+      <div class="text-group">
+        <h1>Test de positionnement</h1>
+        <p>Évalue ton niveau en quelques minutes</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image d'illustration -->
+  <div class="image-container">
+    <img src="assets/images/student.jpg" class="hero-image" />
+  </div>
+
+  <div class="main-container">
+    <!-- Cards Stats (10 Questions / 5 min / 5 Niveaux) -->
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="4">
+          <div class="stat-card">
+            <span class="emoji">❓</span>
+            <span class="val">10</span>
+            <span class="lab">Questions</span>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="stat-card">
+            <span class="emoji">⏱️</span>
+            <span class="val">~5 min</span>
+            <span class="lab">Durée</span>
+          </div>
+        </ion-col>
+        <ion-col size="4">
+          <div class="stat-card">
+            <span class="emoji">📊</span>
+            <span class="val">5</span>
+            <span class="lab">Niveaux</span>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Description Card -->
+    <div class="description-card">
+      <p>
+        Ce test couvre les <strong>5 grands thèmes</strong> du programme : Variables, Conditions, Boucles, Fonctions et Algorithmes. Tes réponses permettront à SkillNest de <strong>personnaliser ton parcours</strong> et de te proposer des quizz adaptés à ton niveau réel.
+      </p>
+    </div>
+
+    <!-- Thèmes évalués (Badges colorés) -->
+    <h2 class="title-label">Thèmes évalués</h2>
+    <div class="themes-grid">
+      <ion-badge class="badge-var">📦 Variables</ion-badge>
+      <ion-badge class="badge-cond">🔀 Conditions</ion-badge>
+      <ion-badge class="badge-loop">🔁 Boucles</ion-badge>
+      <ion-badge class="badge-func">⚙️ Fonctions</ion-badge>
+      <ion-badge class="badge-algo">🧮 Algorithmes</ion-badge>
+    </div>
+
+    <!-- Niveaux possibles -->
+    <div class="levels-box">
+      <h3>NIVEAUX POSSIBLES</h3>
+      <ion-list lines="none" class="bg-transparent">
+        <ion-item *ngFor="let lvl of levels">
+          <span slot="start">{{ lvl.emoji }}</span>
+          <ion-label [style.color]="lvl.color">{{ lvl.name }}</ion-label>
+        </ion-item>
+      </ion-list>
+    </div>
+
+    <!-- Bouton Démarrer -->
+<ion-button expand="block" class="btn-start" routerLink="/page-quiz">
+  Démarrer le test
+  <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
+</ion-button>
+
+    <p class="footer-text">
+      Tu pourras refaire le test à tout moment depuis ton profil.
+    </p>
+  </div>
+</ion-content>

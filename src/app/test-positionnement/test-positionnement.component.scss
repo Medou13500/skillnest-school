@@ -1,0 +1,139 @@
+:host {
+  --ion-color-orange: #f2994a;
+  --bg-cream: #f9f3e9;
+}
+
+.bg-cream {
+  --background: var(--bg-cream);
+}
+
+// Header Bleu
+.header-blue {
+  background: linear-gradient(to bottom, #4a80f0, #385cdb);
+  padding: 20px 20px 60px 20px;
+  border-bottom-left-radius: 40px;
+  border-bottom-right-radius: 40px;
+  color: white;
+
+  .btn-retour {
+    --color: white;
+    font-size: 0.9rem;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    height: 36px;
+  }
+
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+
+    .icon-square {
+      background: rgba(255, 255, 255, 0.2);
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      padding: 10px;
+      img { width: 100%; }
+    }
+
+    h1 { font-size: 1.4rem; font-weight: 800; margin: 0; }
+    p { font-size: 0.85rem; margin: 0; opacity: 0.9; }
+  }
+}
+
+// Illustration
+.image-container {
+  margin-top: -40px;
+  text-align: center;
+  padding: 0 20px;
+  .hero-image {
+    width: 100%;
+    border-radius: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+}
+
+.main-container { padding: 20px; }
+
+// Stats Cards
+.stat-card {
+  background: white;
+  border-radius: 15px;
+  padding: 15px 5px;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+
+  .emoji { font-size: 1.2rem; }
+  .val { font-weight: 800; font-size: 1rem; color: #333; }
+  .lab { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+}
+
+// Description
+.description-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 20px 0;
+  color: #666;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+// Thèmes Badges
+.title-label { font-size: 0.95rem; font-weight: 800; margin-bottom: 10px; }
+.themes-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 25px;
+
+  ion-badge {
+    --padding-top: 8px; --padding-bottom: 8px;
+    --padding-start: 12px; --padding-end: 12px;
+    border-radius: 12px; font-weight: 600;
+  }
+  .badge-var { --background: #43a047; }
+  .badge-cond { --background: #ef6c00; }
+  .badge-loop { --background: #3949ab; }
+  .badge-func { --background: #8e24aa; }
+  .badge-algo { --background: #fbc02d; }
+}
+
+// Levels Box
+.levels-box {
+  background: #fdf2e3;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 30px;
+  h3 { color: #d9822b; font-size: 0.8rem; font-weight: 800; margin-bottom: 15px; }
+  ion-item { 
+    --background: transparent; font-weight: 700; font-size: 0.95rem;
+    span { margin-right: 10px; }
+  }
+}
+
+// CTA Button
+.btn-start {
+  --background: #ed943b;
+  --background-activated: #d8832a;
+  --border-radius: 25px;
+  height: 55px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  --box-shadow: 0 4px 15px rgba(237, 148, 59, 0.4);
+}
+
+.footer-text {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #888;
+  margin-top: 15px;
+}
+
+.bg-transparent { --background: transparent; }

@@ -1,0 +1,117 @@
+:host {
+  --primary-blue: #4a80f0;
+  --bg-cream: #f9f3e9;
+}
+
+.bg-cream { --background: var(--bg-cream); }
+
+.quiz-header {
+  background: linear-gradient(to bottom, #4a80f0, #385cdb);
+  padding: 40px 20px 30px 20px;
+  border-bottom-left-radius: 0; // Contrairement à la page fin, ici c'est droit ou léger
+  color: white;
+
+  // Barrettes du haut
+  .progress-segments {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 20px;
+    .segment {
+      flex: 1;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 10px;
+      &.active { background: white; }
+    }
+  }
+
+  .quiz-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+
+    .badge-topic { --background: rgba(255, 255, 255, 0.2); border: 1px solid rgba(255,255,255,0.3); }
+    .badge-difficulty { --background: #43a047; margin-left: 10px; }
+    .counter { font-weight: 800; .total { opacity: 0.6; } }
+  }
+
+  .timer-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    
+    .progress-bar-container {
+      flex: 1;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      .progress-fill { height: 100%; background: #43a047; border-radius: 10px; }
+    }
+    .timer-badge { --background: rgba(255, 255, 255, 0.2); border-radius: 15px; padding: 5px 10px; }
+  }
+}
+
+// Conteneur Question
+.question-container {
+  padding: 20px;
+  margin-top: -10px;
+
+  .question-card {
+    background: white;
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+    h2 { font-size: 1.1rem; font-weight: 700; color: #333; line-height: 1.4; }
+  }
+}
+
+// Liste des réponses
+.options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  .option-item {
+    background: white;
+    border-radius: 18px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+    transition: transform 0.1s;
+
+    &:active { transform: scale(0.98); background: #f0f0f0; }
+
+    .letter-circle {
+      width: 35px;
+      height: 35px;
+      background: #f4f5f8;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #999;
+      flex-shrink: 0;
+    }
+
+    .option-text { font-size: 0.95rem; color: #444; font-weight: 600; }
+  }
+}
+
+// Bouton Valider
+.btn-validate {
+  --background: #f2994a;
+  --background-activated: #d8832a;
+  --border-radius: 25px;
+  height: 60px;
+  font-weight: 800;
+  --box-shadow: 0 4px 15px rgba(242, 153, 74, 0.3);
+}
+
+.bg-transparent { --background: transparent; }

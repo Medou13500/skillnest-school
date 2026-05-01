@@ -1,0 +1,54 @@
+<ion-content class="bg-cream">
+  <!-- Header de Quiz (Bleu) -->
+  <div class="quiz-header">
+    <!-- Barre de progression segmentée -->
+    <div class="progress-segments">
+      <div class="segment active" *ngFor="let s of [1,2,3]"></div>
+      <div class="segment" *ngFor="let s of [1,2,3,4,5,6,7]"></div>
+    </div>
+
+    <!-- Badges et Compteur -->
+    <div class="quiz-info-row">
+      <div class="badges-group">
+        <ion-badge class="badge-topic">📦 X</ion-badge>
+        <ion-badge class="badge-difficulty">X</ion-badge>
+      </div>
+      <div class="counter">
+        <span class="current">X</span><span class="total"> / X</span>
+      </div>
+    </div>
+
+    <!-- Barre de progression continue et Timer -->
+    <div class="timer-row">
+      <div class="progress-bar-container">
+        <div class="progress-fill" style="width: 40%;"></div>
+      </div>
+      <ion-badge class="timer-badge">🟢 Xs</ion-badge>
+    </div>
+  </div>
+
+  <!-- Zone de Question -->
+  <div class="question-container">
+    <div class="question-card">
+      <h2>X</h2>
+    </div>
+
+    <!-- Options de réponse -->
+    <div class="options-list">
+      <div class="option-item" *ngFor="let opt of ['A', 'B', 'C', 'D']">
+        <div class="letter-circle">{{ opt }}</div>
+        <div class="option-text">X</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton de validation fixe en bas -->
+  <ion-footer class="ion-no-border bg-transparent">
+    <div class="ion-padding">
+      <ion-button expand="block" class="btn-validate">
+        Valider ma réponse
+        <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
+      </ion-button>
+    </div>
+  </ion-footer>
+</ion-content>
