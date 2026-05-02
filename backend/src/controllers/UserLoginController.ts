@@ -29,6 +29,7 @@ export default class UserLoginController {
 
       return res.json({
         access_token: accessToken,
+        refresh_token: refreshToken,
         user
       });
 

@@ -9,8 +9,11 @@ import {
   checkmarkOutline,
   medalOutline,
   personOutline,
-  ribbonOutline
+  ribbonOutline,
+  speedometerOutline,
+  logOutOutline
 } from 'ionicons/icons';
+import { AuthService } from '../../../core/services/AuthService';
 
 interface Matiere {
   nom: string;
@@ -106,15 +109,18 @@ export class ListeMatierePage {
   constructor(
     public router: Router,
     private route: ActivatedRoute,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private authService: AuthService
   ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
       'book-outline': bookOutline,
+      'speedometer-outline': speedometerOutline,
       'checkmark-outline': checkmarkOutline,
       'medal-outline': medalOutline,
       'person-outline': personOutline,
-      'ribbon-outline': ribbonOutline
+      'ribbon-outline': ribbonOutline,
+      'log-out-outline': logOutOutline
     });
 
     this.showLoginSuccessToastIfNeeded();
@@ -152,13 +158,7 @@ export class ListeMatierePage {
     });
   }
 
-  logout(): void {
-    sessionStorage.clear();
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('rememberMe');
-
-    void this.router.navigate(['/connexion'], { replaceUrl: true });
+  logout(): Promise<void> {
+    return this.authService.logout();
   }
 }

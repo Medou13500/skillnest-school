@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, calendarOutline } from 'ionicons/icons';
+import { arrowBackOutline, calendarOutline, bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
 
 interface Session {
   id: number;
@@ -42,13 +42,28 @@ export class HistoriqueDashboardPage implements OnInit {
   ];
 
   constructor(
-    private router: Router,
+    public router: Router,
     private toastController: ToastController
   ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
-      'calendar-outline': calendarOutline
+      'calendar-outline': calendarOutline,
+      'book-outline': bookOutline,
+      'ribbon-outline': ribbonOutline,
+      'person-outline': personOutline,
+      'log-out-outline': logOutOutline,
+      'speedometer-outline': speedometerOutline
     });
+  }
+
+  logout(): void {
+    sessionStorage.clear();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rememberMe');
+    localStorage.removeItem('refreshToken');
+    void this.router.navigate(['/connexion'], { replaceUrl: true });
   }
 
   ngOnInit() {}

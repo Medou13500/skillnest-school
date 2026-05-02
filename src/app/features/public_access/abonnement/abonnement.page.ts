@@ -8,9 +8,12 @@ import {
   arrowForwardOutline,
   bookOutline,
   checkmarkOutline,
+  speedometerOutline,
   personOutline,
-  ribbonOutline
+  ribbonOutline,
+  logOutOutline
 } from 'ionicons/icons';
+import { AuthService } from '../../../core/services/AuthService';
 
 @Component({
   selector: 'app-abonnement',
@@ -22,15 +25,21 @@ import {
 export class AbonnementPage {
   typeAbonnement = 'mensuel';
 
-  constructor(public router: Router) {
+  constructor(public router: Router, private authService: AuthService) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
       'arrow-forward-outline': arrowForwardOutline,
       'book-outline': bookOutline,
+      'speedometer-outline': speedometerOutline,
       'checkmark-outline': checkmarkOutline,
       'person-outline': personOutline,
-      'ribbon-outline': ribbonOutline
+      'ribbon-outline': ribbonOutline,
+      'log-out-outline': logOutOutline
     });
+  }
+
+  logout(): Promise<void> {
+    return this.authService.logout();
   }
 
   segmentChanged(ev: any): void {

@@ -19,6 +19,7 @@ import { environment } from '../../../../environments/environment';
 
 interface LoginResponse {
   access_token: string;
+  refresh_token?: string;
   user?: {
     id: number;
     email: string;
@@ -129,6 +130,9 @@ export class ConnexionPage {
 
       localStorage.setItem('authToken', response.access_token);
       localStorage.setItem('token', response.access_token);
+      if (response.refresh_token) {
+        localStorage.setItem('refreshToken', response.refresh_token);
+      }
       localStorage.setItem('rememberMe', String(this.rememberMe));
 
       if (response.user) {

@@ -92,3 +92,53 @@ ion-content { --background: #{$bg-cream}; }
   }
   .session-score { text-align: right; .score { display: block; font-size: 16px; font-weight: 800; color: #42b883; } .percent { font-size: 11px; color: #999; } }
 }
+
+.subjects-footer {
+  ion-toolbar {
+    --background: rgba(255, 249, 242, 0.96);
+    --border-width: 0;
+    --min-height: 82px;
+    box-shadow: 0 -8px 22px rgba(100, 78, 47, 0.08);
+  }
+}
+
+.tab-bar {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.tab-item {
+  border: 0;
+  background: transparent;
+  color: #c4b7aa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  ion-icon {
+    font-size: 1.35rem;
+  }
+
+  &.active {
+    color: #ef8431;
+  }
+}
+
+@media (max-width: 420px) {
+  .subjects-footer {
+    ion-toolbar {
+      --min-height: 70px;
+    }
+  }
+
+  .tab-bar {
+    padding: 8px 10px 10px;
+  }
+}

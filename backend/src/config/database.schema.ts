@@ -7,9 +7,25 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
       email TEXT NOT NULL UNIQUE,
       password_hash TEXT NOT NULL,
       role TEXT NOT NULL DEFAULT 'USER',
+      first_name TEXT,
+      last_name TEXT,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
+
+  // Vérifier si les colonnes first_name et last_name existent déjà
+  const columnsExist = await pool.query(`
+    SELECT column_name FROM information_schema.columns 
+    WHERE table_name = 'users' AND column_name IN ('first_name', 'last_name')
+  `);
+
+  if (columnsExist.rows.length === 0) {
+    await pool.query(`
+      ALTER TABLE public.users 
+      ADD COLUMN IF NOT EXISTS first_name TEXT,
+      ADD COLUMN IF NOT EXISTS last_name TEXT
+    `);
+  }
 
   await pool.query(`
     CREATE TABLE IF NOT EXISTS public.refresh_tokens (

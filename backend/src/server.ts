@@ -39,6 +39,16 @@ import ResetPasswordService from "./service/resetPasswordService";
 import ResetPasswordController from "./controllers/resetPasswordController";
 import resetPasswordRoute from "./routes/ResetPasswordRoute";
 
+// CHANGE PASSWORD (CONNECTED USER)
+import ChangePasswordService from "./service/ChangePasswordService";
+import ChangePasswordController from "./controllers/ChangePasswordController";
+import changePasswordRoute from "./routes/ChangePasswordRoute";
+
+// UPDATE PROFILE (CONNECTED USER)
+import UpdateProfileService from "./service/UpdateProfileService";
+import UpdateProfileController from "./controllers/UpdateProfileController";
+import updateProfileRoute from "./routes/UpdateProfileRoute";
+
 // EMAIL + USER
 import EmailService from "./service/emailService";
 import UserRepository from "./infrastructure/UserRepository";
@@ -106,6 +116,10 @@ const resetPasswordService = new ResetPasswordService(
   userRepository
 );
 
+const changePasswordService = new ChangePasswordService(userRepository);
+
+const updateProfileService = new UpdateProfileService(userRepository);
+
 // ===================== CONTROLLERS =====================
 
 const loginController = new UserLoginController(loginService);
@@ -124,6 +138,14 @@ const resetPasswordController = new ResetPasswordController(
   resetPasswordService
 );
 
+const changePasswordController = new ChangePasswordController(
+  changePasswordService
+);
+
+const updateProfileController = new UpdateProfileController(
+  updateProfileService
+);
+
 // ===================== ROUTES =====================
 
 app.use("/api/auth", userLoginRoute(loginController));
@@ -132,6 +154,8 @@ app.use("/api/auth", userRegistrationRoute(registrationController));
 
 app.use("/api/auth", AskResetPaswordRoute(askResetPasswordController));
 app.use("/api/auth", resetPasswordRoute(resetPasswordController));
+app.use("/api/auth", changePasswordRoute(changePasswordController));
+app.use("/api/auth", updateProfileRoute(updateProfileController));
 
 // ===================== HEALTH =====================
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
 
 interface Notion {
   titre: string;
@@ -31,9 +33,29 @@ export class NotionsPage implements OnInit {
   ];
 
   constructor(
-    private router: Router,
+    public router: Router,
     private toastController: ToastController
   ) {}
+
+  ngAfterContentInit() {
+    addIcons({
+      'book-outline': bookOutline,
+      'ribbon-outline': ribbonOutline,
+      'person-outline': personOutline,
+      'log-out-outline': logOutOutline,
+      'speedometer-outline': speedometerOutline
+    });
+  }
+
+  logout(): void {
+    sessionStorage.clear();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rememberMe');
+    localStorage.removeItem('refreshToken');
+    void this.router.navigate(['/connexion'], { replaceUrl: true });
+  }
 
   ngOnInit() {}
 
