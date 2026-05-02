@@ -107,7 +107,7 @@ router.get(
    *     summary: Récupérer une question par ID
    *     tags: [Questions]
    *     parameters:
-   *        in: path
+   *       - in: path
    *         name: id
    *         required: true
    *         schema:
