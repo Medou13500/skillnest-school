@@ -38,9 +38,9 @@
 
       <div class="form-grid">
         <label>
-          <span>Cours / quiz lie</span>
+          <span>Notion / quiz lie</span>
           <select [(ngModel)]="form.coursId" (ngModelChange)="onCourseQuizChange($event)">
-            <option [ngValue]="0">Choisir un cours</option>
+            <option [ngValue]="0">Choisir une notion</option>
             <option *ngFor="let courseQuiz of availableCourseQuizzes" [ngValue]="courseQuiz.id">
               {{ courseQuiz.theme }} - {{ courseQuiz.chapitre }} / {{ courseQuiz.quizTitre }}
             </option>
@@ -48,8 +48,18 @@
         </label>
 
         <label>
+          <span>ID notion</span>
+          <input
+            type="number"
+            min="1"
+            [(ngModel)]="form.coursId"
+            (ngModelChange)="onManualNotionChange($event)"
+            placeholder="Ex: 1">
+        </label>
+
+        <label>
           <span>Matiere</span>
-          <input type="text" [(ngModel)]="form.matiere" placeholder="Ex: Algorithmique" readonly>
+          <input type="text" [value]="form.matiere || 'Choisis une notion'" readonly>
         </label>
 
         <label>
@@ -76,13 +86,18 @@
       </label>
 
       <div class="answers-grid">
-        <label *ngFor="let option of form.options; let index = index">
+        <label *ngFor="let option of form.options; let index = index; trackBy: trackByAnswerIndex">
           <span>Reponse {{ index + 1 }}</span>
-          <input type="text" [(ngModel)]="form.options[index]" placeholder="Proposition">
+          <input
+            type="text"
+            [(ngModel)]="form.options[index]"
+            [name]="'answer-' + index"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Proposition">
         </label>
       </div>
 
-      <div class="bottom-form-row">
+      <div class="bottom-form-row single-row">
         <label>
           <span>Bonne reponse</span>
           <select [(ngModel)]="form.bonneReponse">
@@ -91,17 +106,12 @@
             </option>
           </select>
         </label>
-
-        <label>
-          <span>Explication</span>
-          <input type="text" [(ngModel)]="form.explication" placeholder="Correction courte">
-        </label>
       </div>
 
       <div class="form-actions">
         <button class="secondary-action" type="button" (click)="resetForm()">Annuler</button>
-        <button class="primary-action" type="button" (click)="saveQuestion()">
-          {{ isEditing ? 'Enregistrer' : 'Ajouter la question' }}
+        <button class="primary-action" type="button" (click)="saveQuestion()" [disabled]="isSaving">
+          {{ isSaving ? 'Enregistrement...' : (isEditing ? 'Enregistrer' : 'Ajouter la question') }}
         </button>
       </div>
     </section>
@@ -113,6 +123,12 @@
           <h3>Questions existantes</h3>
         </div>
         <span class="count">{{ totalQuestions }} total</span>
+      </div>
+
+      <div class="state-message" *ngIf="isLoading">Chargement des questions...</div>
+      <div class="state-message error" *ngIf="!isLoading && loadingError">{{ loadingError }}</div>
+      <div class="state-message" *ngIf="!isLoading && !loadingError && !questions.length">
+        Aucune question quiz pour le moment.
       </div>
 
       <article class="question-card" *ngFor="let question of questions; trackBy: trackByQuestionId">
@@ -132,7 +148,6 @@
               {{ index + 1 }}. {{ option }}
             </span>
           </div>
-          <p *ngIf="question.explication">{{ question.explication }}</p>
         </div>
 
         <div class="card-actions">

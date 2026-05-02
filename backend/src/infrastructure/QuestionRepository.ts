@@ -12,12 +12,13 @@ export default class QuestionRepository {
   async createQuestion(data: CreateQuestionInput) {
     const result = await this.pool.query(
       `
-      INSERT INTO questions (notion_id, content, answers, correct_answer, type, difficulty)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO questions (notion_id, matiere, content, answers, correct_answer, type, difficulty)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
       `,
       [
         data.notionId,
+        data.matiere,
         data.content,
         JSON.stringify(data.answers),
         data.correctAnswer,
@@ -78,17 +79,19 @@ export default class QuestionRepository {
       UPDATE questions
       SET
         notion_id = COALESCE($1, notion_id),
-        content = COALESCE($2, content),
-        answers = COALESCE($3, answers),
-        correct_answer = COALESCE($4, correct_answer),
-        type = COALESCE($5, type),
-        difficulty = COALESCE($6, difficulty),
+        matiere = COALESCE($2, matiere),
+        content = COALESCE($3, content),
+        answers = COALESCE($4, answers),
+        correct_answer = COALESCE($5, correct_answer),
+        type = COALESCE($6, type),
+        difficulty = COALESCE($7, difficulty),
         updated_at = NOW()
-      WHERE id = $7
+      WHERE id = $8
       RETURNING *
       `,
       [
         data.notionId ?? null,
+        data.matiere ?? null,
         data.content ?? null,
         data.answers !== undefined ? JSON.stringify(data.answers) : null,
         data.correctAnswer ?? null,

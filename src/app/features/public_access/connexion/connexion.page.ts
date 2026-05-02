@@ -139,8 +139,8 @@ export class ConnexionPage {
         localStorage.setItem('user', JSON.stringify(response.user));
       }
 
-      const effectiveRole = response.user?.role ?? this.role ?? 'student';
-      const targetRoute = effectiveRole === 'parent' ? '/dashboard' : '/liste-matiere';
+      const effectiveRole = (response.user?.role ?? this.role ?? 'student').toLowerCase();
+      const targetRoute = effectiveRole === 'admin' ? '/admin' : '/liste-matiere';
 
       await this.router.navigate([targetRoute], {
         queryParams: { notification: 'login-success' }

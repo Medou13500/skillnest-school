@@ -171,12 +171,21 @@ ion-content {
 }
 
 .form-grid {
-  grid-template-columns: 1fr 1fr 160px;
+  grid-template-columns: minmax(260px, 1.4fr) minmax(150px, 1fr) minmax(150px, 0.8fr) minmax(140px, 0.7fr);
+
+  &.single-row {
+    grid-template-columns: minmax(180px, 260px);
+    margin-top: 12px;
+  }
 }
 
 .answers-grid,
 .bottom-form-row {
   grid-template-columns: repeat(2, 1fr);
+
+  &.single-row {
+    grid-template-columns: minmax(220px, 1fr);
+  }
 }
 
 label {
@@ -276,6 +285,10 @@ textarea {
 .primary-action {
   background: $orange;
   color: white;
+
+  &:disabled {
+    opacity: 0.65;
+  }
 }
 
 .secondary-action {
@@ -292,6 +305,21 @@ textarea {
   border-radius: 16px;
   background: #fffdf9;
   margin-top: 12px;
+}
+
+.state-message {
+  margin-top: 12px;
+  border-radius: 14px;
+  background: #f7f4ef;
+  color: #6b6258;
+  padding: 13px;
+  font-size: 13px;
+  font-weight: 700;
+
+  &.error {
+    background: #fff1f2;
+    color: #b91c1c;
+  }
 }
 
 .question-main {

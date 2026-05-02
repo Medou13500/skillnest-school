@@ -57,4 +57,60 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
     CREATE INDEX IF NOT EXISTS idx_reset_password_user_id
       ON public.reset_password(user_id);
   `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS public.notions (
+      id SERIAL PRIMARY KEY,
+      title TEXT NOT NULL UNIQUE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    INSERT INTO public.notions (id, title)
+    VALUES
+      (1, 'Notion 1'),
+      (2, 'Variables & Types'),
+      (4, 'Conditions & Boucles'),
+      (6, 'Fonctions & Tableaux')
+    ON CONFLICT (id) DO NOTHING;
+  `);
+
+  await pool.query(`
+    SELECT setval(
+      pg_get_serial_sequence('public.notions', 'id'),
+      COALESCE((SELECT MAX(id) FROM public.notions), 1)
+    );
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS public.questions (
+      id SERIAL PRIMARY KEY,
+      notion_id INTEGER NOT NULL REFERENCES public.notions(id) ON DELETE CASCADE,
+      matiere TEXT NOT NULL DEFAULT 'Non renseignee',
+      content TEXT NOT NULL,
+      answers JSONB NOT NULL,
+      correct_answer TEXT NOT NULL,
+      type TEXT NOT NULL CHECK (type IN ('test', 'quiz')),
+      difficulty TEXT NOT NULL CHECK (difficulty IN ('facile', 'moyen', 'difficile')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    ALTER TABLE public.questions
+    ADD COLUMN IF NOT EXISTS matiere TEXT NOT NULL DEFAULT 'Non renseignee';
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_questions_type
+      ON public.questions(type);
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_questions_notion_id
+      ON public.questions(notion_id);
+  `);
 }

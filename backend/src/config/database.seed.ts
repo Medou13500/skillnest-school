@@ -7,10 +7,30 @@ export async function seedTestAccount(pool: Pool): Promise<void> {
     return;
   }
 
-  const email = process.env.TEST_ACCOUNT_EMAIL ?? "test@gmail.com";
-  const password = process.env.TEST_ACCOUNT_PASSWORD ?? "test1234";
-  const role = process.env.TEST_ACCOUNT_ROLE ?? "USER";
+  await seedAccount(pool, {
+    email: process.env.TEST_ACCOUNT_EMAIL ?? "test@gmail.com",
+    password: process.env.TEST_ACCOUNT_PASSWORD ?? "test1234",
+    role: process.env.TEST_ACCOUNT_ROLE ?? "USER",
+    label: "Test account",
+  });
 
+  await seedAccount(pool, {
+    email: process.env.TEST_ADMIN_EMAIL ?? "test_admin@gmail.com",
+    password: process.env.TEST_ADMIN_PASSWORD ?? "admin1234",
+    role: "admin",
+    label: "Test admin account",
+  });
+}
+
+async function seedAccount(
+  pool: Pool,
+  account: {
+    email: string;
+    password: string;
+    role: string;
+    label: string;
+  }
+): Promise<void> {
   const existing = await pool.query(
     `
     SELECT id
@@ -18,23 +38,23 @@ export async function seedTestAccount(pool: Pool): Promise<void> {
     WHERE email = $1
     LIMIT 1
     `,
-    [email]
+    [account.email]
   );
 
   if (existing.rows.length > 0) {
-    console.log(` Test account already exists: ${email}`);
+    console.log(` ${account.label} already exists: ${account.email}`);
     return;
   }
 
-  const passwordHash = await argon2.hash(password);
+  const passwordHash = await argon2.hash(account.password);
 
   await pool.query(
     `
     INSERT INTO public.users (email, password_hash, role)
     VALUES ($1, $2, $3)
     `,
-    [email, passwordHash, role]
+    [account.email, passwordHash, account.role]
   );
 
-  console.log(` Test account created: ${email}`);
+  console.log(` ${account.label} created: ${account.email}`);
 }

@@ -1,10 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, createOutline, trashOutline } from 'ionicons/icons';
+import { firstValueFrom } from 'rxjs';
+import {
+  ApiQuestion,
+  QuestionDifficulty,
+  QuestionService,
+  SaveQuestionPayload
+} from '../../../core/services/question.service';
 
 interface QuizQuestion {
   id: number;
@@ -17,7 +24,6 @@ interface QuizQuestion {
   enonce: string;
   options: string[];
   bonneReponse: number;
-  explication: string;
 }
 
 interface CourseQuizLink {
@@ -36,10 +42,22 @@ interface CourseQuizLink {
   standalone: true,
   imports: [IonicModule, CommonModule, FormsModule]
 })
-export class AdminQuizQuestionsPage {
+export class AdminQuizQuestionsPage implements OnInit {
   editingId: number | null = null;
+  isLoading = false;
+  isSaving = false;
+  loadingError = '';
+  readonly matieres = ['Geographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT', 'Algorithmique'];
 
   availableCourseQuizzes: CourseQuizLink[] = [
+    {
+      id: 1,
+      theme: 'Notion 1',
+      chapitre: 'Quiz',
+      coursTitre: 'Notion 1',
+      quizTitre: 'Quiz notion 1',
+      matiere: 'Geographie'
+    },
     {
       id: 2,
       theme: 'Theme 1',
@@ -66,46 +84,24 @@ export class AdminQuizQuestionsPage {
     }
   ];
 
-  questions: QuizQuestion[] = [
-    {
-      id: 1,
-      coursId: 2,
-      coursTitre: 'Introduction aux variables',
-      theme: 'Theme 1 - Variables & Types',
-      quiz: 'Quiz Variables & Types',
-      matiere: 'Algorithmique',
-      niveau: 'Intermediaire',
-      enonce: 'Quel mot-cle permet de declarer une variable en JavaScript moderne ?',
-      options: ['var', 'let', 'define', 'set'],
-      bonneReponse: 1,
-      explication: 'let permet de declarer une variable avec une portee de bloc.'
-    },
-    {
-      id: 2,
-      coursId: 4,
-      coursTitre: 'Conditions simples',
-      theme: 'Theme 2 - Conditions & Boucles',
-      quiz: 'Quiz Conditions',
-      matiere: 'Algorithmique',
-      niveau: 'Debutant',
-      enonce: 'Quelle structure permet de tester une condition ?',
-      options: ['if', 'for', 'return', 'class'],
-      bonneReponse: 0,
-      explication: 'if execute un bloc de code seulement si la condition est vraie.'
-    }
-  ];
+  questions: QuizQuestion[] = [];
 
   form: QuizQuestion = this.createEmptyQuestion();
 
   constructor(
     public router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private questionService: QuestionService
   ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
       'create-outline': createOutline,
       'trash-outline': trashOutline
     });
+  }
+
+  ngOnInit(): void {
+    void this.loadQuestions();
   }
 
   get totalQuestions(): number {
@@ -138,34 +134,86 @@ export class AdminQuizQuestionsPage {
     this.form.matiere = selectedCourseQuiz.matiere;
   }
 
-  saveQuestion(): void {
+  onManualNotionChange(notionId: number): void {
+    const parsedNotionId = Number(notionId);
+
+    if (!parsedNotionId || parsedNotionId < 1) {
+      this.form.coursId = 0;
+      return;
+    }
+
+    const selectedCourseQuiz = this.availableCourseQuizzes.find((courseQuiz) => courseQuiz.id === parsedNotionId);
+
+    if (selectedCourseQuiz) {
+      this.onCourseQuizChange(parsedNotionId);
+      return;
+    }
+
+    this.form.coursId = parsedNotionId;
+    this.form.coursTitre = `Notion ${parsedNotionId}`;
+    this.form.theme = `Notion ${parsedNotionId}`;
+    this.form.quiz = `Quiz notion ${parsedNotionId}`;
+    this.form.matiere = this.matieres[0];
+  }
+
+  async loadQuestions(): Promise<void> {
+    this.isLoading = true;
+    this.loadingError = '';
+
+    try {
+      const apiQuestions = await firstValueFrom(this.questionService.getQuizQuestions());
+      this.questions = apiQuestions.map((question) => this.mapApiQuestionToQuizQuestion(question));
+      this.syncAvailableCourseQuizzes();
+    } catch {
+      this.loadingError = 'Impossible de charger les questions quiz.';
+      await this.presentToast('Impossible de charger les questions quiz.', 'danger');
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async saveQuestion(): Promise<void> {
+    if (this.isSaving) {
+      return;
+    }
+
     if (!this.isFormValid()) {
       void this.presentToast('Complete la question, les 4 reponses et la bonne reponse.');
       return;
     }
 
-    const payload: QuizQuestion = {
-      ...this.form,
-      options: this.form.options.map((option) => option.trim())
+    const payload: SaveQuestionPayload = {
+      notionId: Number(this.form.coursId),
+      matiere: this.form.matiere,
+      content: this.form.enonce.trim(),
+      answers: this.form.options.map((option) => option.trim()),
+      correctAnswer: this.form.options[this.form.bonneReponse].trim(),
+      type: 'quiz',
+      difficulty: this.mapNiveauToDifficulty(this.form.niveau)
     };
 
-    if (this.editingId === null) {
-      this.questions = [
-        {
-          ...payload,
-          id: Date.now()
-        },
-        ...this.questions
-      ];
-      void this.presentToast('Question ajoutee.');
-    } else {
-      this.questions = this.questions.map((question) =>
-        question.id === this.editingId ? { ...payload, id: question.id } : question
-      );
-      void this.presentToast('Question modifiee.');
-    }
+    this.isSaving = true;
 
-    this.resetForm();
+    try {
+      if (this.editingId === null) {
+        const createdQuestion = await firstValueFrom(this.questionService.createQuestion(payload));
+        this.questions = [this.mapApiQuestionToQuizQuestion(createdQuestion), ...this.questions];
+        await this.presentToast('Question ajoutee.', 'success');
+      } else {
+        const updatedQuestion = await firstValueFrom(this.questionService.updateQuestion(this.editingId, payload));
+        const mappedQuestion = this.mapApiQuestionToQuizQuestion(updatedQuestion);
+        this.questions = this.questions.map((question) =>
+          question.id === this.editingId ? mappedQuestion : question
+        );
+        await this.presentToast('Question modifiee.', 'success');
+      }
+
+      this.resetForm();
+    } catch {
+      await this.presentToast('Enregistrement impossible. Verifie ton compte admin et la notion choisie.', 'danger');
+    } finally {
+      this.isSaving = false;
+    }
   }
 
   editQuestion(question: QuizQuestion): void {
@@ -176,14 +224,23 @@ export class AdminQuizQuestionsPage {
     };
   }
 
-  deleteQuestion(questionId: number): void {
-    this.questions = this.questions.filter((question) => question.id !== questionId);
-
-    if (this.editingId === questionId) {
-      this.resetForm();
+  async deleteQuestion(questionId: number): Promise<void> {
+    if (!confirm('Supprimer cette question ?')) {
+      return;
     }
 
-    void this.presentToast('Question supprimee.');
+    try {
+      await firstValueFrom(this.questionService.deleteQuestion(questionId));
+      this.questions = this.questions.filter((question) => question.id !== questionId);
+
+      if (this.editingId === questionId) {
+        this.resetForm();
+      }
+
+      await this.presentToast('Question supprimee.', 'success');
+    } catch {
+      await this.presentToast('Suppression impossible. Verifie ton compte admin.', 'danger');
+    }
   }
 
   resetForm(): void {
@@ -195,6 +252,10 @@ export class AdminQuizQuestionsPage {
     return question.id;
   }
 
+  trackByAnswerIndex(index: number): number {
+    return index;
+  }
+
   private createEmptyQuestion(): QuizQuestion {
     return {
       id: 0,
@@ -202,12 +263,11 @@ export class AdminQuizQuestionsPage {
       coursTitre: '',
       theme: '',
       quiz: '',
-      matiere: '',
+      matiere: this.matieres[0],
       niveau: 'Debutant',
       enonce: '',
       options: ['', '', '', ''],
-      bonneReponse: 0,
-      explication: ''
+      bonneReponse: 0
     };
   }
 
@@ -224,12 +284,90 @@ export class AdminQuizQuestionsPage {
     );
   }
 
-  private async presentToast(message: string): Promise<void> {
+  private mapApiQuestionToQuizQuestion(question: ApiQuestion): QuizQuestion {
+    const answers = this.parseAnswers(question.answers);
+    const correctAnswer = question.correctAnswer ?? question.correct_answer ?? '';
+    const notionId = question.notionId ?? question.notion_id ?? 0;
+    const courseQuiz = this.availableCourseQuizzes.find((item) => item.id === notionId);
+
+    return {
+      id: question.id,
+      coursId: notionId,
+      coursTitre: courseQuiz?.coursTitre ?? `Notion ${notionId}`,
+      theme: courseQuiz ? `${courseQuiz.theme} - ${courseQuiz.chapitre}` : `Notion ${notionId}`,
+      quiz: courseQuiz?.quizTitre ?? `Quiz notion ${notionId}`,
+      matiere: question.matiere ?? courseQuiz?.matiere ?? this.matieres[0],
+      niveau: this.mapDifficultyToNiveau(question.difficulty),
+      enonce: question.content,
+      options: answers,
+      bonneReponse: Math.max(0, answers.findIndex((answer) => answer === correctAnswer))
+    };
+  }
+
+  private parseAnswers(answers: string[] | string): string[] {
+    if (Array.isArray(answers)) {
+      return answers;
+    }
+
+    try {
+      const parsedAnswers = JSON.parse(answers);
+      return Array.isArray(parsedAnswers) ? parsedAnswers : ['', '', '', ''];
+    } catch {
+      return ['', '', '', ''];
+    }
+  }
+
+  private mapNiveauToDifficulty(niveau: string): QuestionDifficulty {
+    if (niveau === 'Intermediaire') {
+      return 'moyen';
+    }
+
+    if (niveau === 'Avance') {
+      return 'difficile';
+    }
+
+    return 'facile';
+  }
+
+  private mapDifficultyToNiveau(difficulty: QuestionDifficulty): string {
+    if (difficulty === 'moyen') {
+      return 'Intermediaire';
+    }
+
+    if (difficulty === 'difficile') {
+      return 'Avance';
+    }
+
+    return 'Debutant';
+  }
+
+  private syncAvailableCourseQuizzes(): void {
+    const existingIds = new Set(this.availableCourseQuizzes.map((courseQuiz) => courseQuiz.id));
+    const missingNotionIds = Array.from(new Set(this.questions.map((question) => question.coursId)))
+      .filter((notionId) => notionId && !existingIds.has(notionId));
+
+    this.availableCourseQuizzes = [
+      ...this.availableCourseQuizzes,
+      ...missingNotionIds.map((notionId) => ({
+        id: notionId,
+        theme: `Notion ${notionId}`,
+        chapitre: 'Quiz',
+        coursTitre: `Notion ${notionId}`,
+        quizTitre: `Quiz notion ${notionId}`,
+        matiere: this.matieres[0]
+      }))
+    ];
+  }
+
+  private async presentToast(
+    message: string,
+    color: 'success' | 'danger' | 'medium' = 'medium'
+  ): Promise<void> {
     const toast = await this.toastController.create({
       message,
       duration: 1800,
       position: 'top',
-      color: 'medium'
+      color
     });
     await toast.present();
   }
