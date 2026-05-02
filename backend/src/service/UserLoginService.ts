@@ -1,3 +1,5 @@
+// src/service/UserLoginService.ts
+
 import argon2 from "argon2";
 import UserLoginRepository from "../infrastructure/UserLoginRepository";
 import RefreshTokenService from "./RefreshTokenService";
@@ -6,21 +8,17 @@ import JwtService from "../utils/jwt";
 export default class UserLoginService {
   constructor(
     private userRepository: UserLoginRepository,
-    private refreshTokenService: RefreshTokenService,
+    private refreshTokenService: RefreshTokenService
   ) {}
 
   async login(email: string, password: string) {
     const user = await this.userRepository.findByEmail(email);
 
-    if (!user) {
-      throw new Error("USER_NOT_FOUND");
-    }
+    if (!user) throw new Error("USER_NOT_FOUND");
 
-    const passwordValid = await argon2.verify(user.password_hash, password);
+    const isValid = await argon2.verify(user.password_hash, password);
 
-    if (!passwordValid) {
-      throw new Error("INVALID_PASSWORD");
-    }
+    if (!isValid) throw new Error("INVALID_PASSWORD");
 
     const accessToken = JwtService.generate({
       userId: user.id,

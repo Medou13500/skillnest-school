@@ -9,7 +9,18 @@ import { seedTestAccount } from "./config/database.seed";
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.config";
 
-// AUTH LOGIN
+// ===================== QUESTION =====================
+
+import QuestionRepository from "./infrastructure/QuestionRepository";
+import QuestionService from "./service/QuestionService";
+import QuestionController from "./controllers/QuestionController";
+import questionRoute from "./routes/QuestionRoute";
+
+// ✅ AJOUT NOTION
+import NotionRepository from "./infrastructure/NotionRepository";
+
+// ===================== AUTH LOGIN =====================
+
 import UserLoginRepository from "./infrastructure/UserLoginRepository";
 import UserLoginService from "./service/UserLoginService";
 import UserLoginController from "./controllers/UserLoginController";
@@ -95,6 +106,12 @@ const registrationRepository = new UserRegistrationRepository();
 const askResetPasswordRepository = new AskResetPasswordRepository(pool);
 const resetPasswordRepository = new ResetPasswordRepository(pool);
 
+// Question
+const questionRepository = new QuestionRepository(pool);
+
+// ✅ NOTION REPOSITORY
+const notionRepository = new NotionRepository(pool);
+
 // ===================== SERVICES =====================
 
 const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
@@ -116,6 +133,12 @@ const resetPasswordService = new ResetPasswordService(
   userRepository
 );
 
+// ✅ QUESTION SERVICE AVEC NOTION
+const questionService = new QuestionService(
+  questionRepository,
+  notionRepository
+);
+
 const changePasswordService = new ChangePasswordService(userRepository);
 
 const updateProfileService = new UpdateProfileService(userRepository);
@@ -127,11 +150,11 @@ const loginController = new UserLoginController(loginService);
 const refreshTokenController = new RefreshTokenController(refreshTokenService);
 
 const registrationController = new UserRegistrationController(
-  registrationService
+  registrationService,
 );
 
 const askResetPasswordController = new AskResetPasswordController(
-  askResetPasswordService
+  askResetPasswordService,
 );
 
 const resetPasswordController = new ResetPasswordController(
@@ -146,8 +169,12 @@ const updateProfileController = new UpdateProfileController(
   updateProfileService
 );
 
+// Question
+const questionController = new QuestionController(questionService);
+
 // ===================== ROUTES =====================
 
+// AUTH
 app.use("/api/auth", userLoginRoute(loginController));
 app.use("/api/auth", refreshTokenRoute(refreshTokenController));
 app.use("/api/auth", userRegistrationRoute(registrationController));
@@ -156,6 +183,9 @@ app.use("/api/auth", AskResetPaswordRoute(askResetPasswordController));
 app.use("/api/auth", resetPasswordRoute(resetPasswordController));
 app.use("/api/auth", changePasswordRoute(changePasswordController));
 app.use("/api/auth", updateProfileRoute(updateProfileController));
+
+// QUESTIONS
+app.use("/api", questionRoute(questionController));
 
 // ===================== HEALTH =====================
 
