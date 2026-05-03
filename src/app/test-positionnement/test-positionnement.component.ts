@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Important pour le *ngFor
-import { IonicModule } from '@ionic/angular'; // Important pour les balises ion-
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
 
 // Interface pour structurer les niveaux proprement
 interface Level {
@@ -14,7 +15,7 @@ interface Level {
   templateUrl: './test-positionnement.component.html',
   styleUrls: ['./test-positionnement.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule] // On importe les outils nécessaires
+  imports: [CommonModule, IonicModule, RouterModule] // On importe les outils nécessaires
 })
 export class TestPositionnementComponent implements OnInit {
 
@@ -30,11 +31,8 @@ export class TestPositionnementComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('Composant Quiz End chargé avec succès !');
   }
 
-  // Fonction pour le bouton orange "Démarrer le test"
   startTest() {
-    console.log('Démarrage du test en cours...');
   }
 }

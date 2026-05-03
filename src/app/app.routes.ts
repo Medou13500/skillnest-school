@@ -7,7 +7,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: 'test-positionnement',
     pathMatch: 'full',
   },
   {
@@ -23,11 +23,11 @@ export const routes: Routes = [
     loadComponent: () => import('./connexion/connexion.page').then( m => m.ConnexionPage)
   },
   {
-    path: 'page_quiz',
+    path: 'quiz-test-positionnement',
     loadComponent: () => import('./quiz-test-positionnement/quiz-test-positionnement.component').then( m => m.QuizTestPositionnementComponent)
   },
   {
-    path: 'page_quiz_end',
+    path: 'test-positionnement',
     loadComponent: () => import('./test-positionnement/test-positionnement.component').then(m => m.TestPositionnementComponent)
   }
 
