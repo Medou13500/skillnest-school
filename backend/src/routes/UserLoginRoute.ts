@@ -4,10 +4,9 @@ import { authMiddleware } from "../middleware/auth.middlware";
 
 export default function userLoginRoute(controller: UserLoginController) {
   const router = express.Router();
-
   /**
    * @swagger
-   * /api/login:
+   * /api/auth/login:
    *   post:
    *     summary: Connexion utilisateur
    *     description: |
@@ -60,35 +59,10 @@ export default function userLoginRoute(controller: UserLoginController) {
    *                       type: string
    *       401:
    *         description: Identifiants invalides
-   */
-  router.post("/login", controller.login.bind(controller));
-
-  /**
-   * @swagger
-   * /api/login:
-   *   get:
-   *     summary: Information sur la route login
-   *     description: |
-   *       Route pédagogique indiquant comment utiliser l’endpoint de connexion.
-   *     tags:
-   *       - Auth
-   *     responses:
-   *       200:
-   *         description: Message informatif
-   *         content:
-   *           application/json:
-   *             schema:
-   *               type: object
-   *               properties:
-   *                 message:
-   *                   type: string
-   */
-  router.get("/login", (_req, res) => {
-    res.json({
-      message: "Use POST /api/login with email and password",
-    });
+  */
+  router.post("/login", (req, res) => {
+    return controller.login(req, res);
   });
-
   /**
    * @swagger
    * /api/me:
@@ -120,11 +94,7 @@ export default function userLoginRoute(controller: UserLoginController) {
    *       401:
    *         description: Token manquant ou invalide
    */
-  router.get(
-    "/me",
-    authMiddleware,
-    controller.me.bind(controller)
-  );
+  router.get("/me", authMiddleware, controller.me.bind(controller));
 
   return router;
 }

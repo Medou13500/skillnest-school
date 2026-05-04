@@ -1,107 +1,214 @@
-// =======================
-// 1️⃣ Env
-// =======================
-import "dotenv/config";
+import dotenv from "dotenv";
+dotenv.config();
 
-// =======================
-// 2️⃣ Imports globaux
-// =======================
 import express from "express";
 import pool from "./config/database.config";
+import { initializeDatabaseSchema } from "./config/database.schema";
+import { seedTestAccount } from "./config/database.seed";
 
-// =======================
-// 3️⃣ Swagger
-// =======================
 import swaggerUi from "swagger-ui-express";
 import swaggerSpec from "./config/swagger.config";
 
-// =======================
-// 4️⃣ LOGIN
-// =======================
+// ===================== QUESTION =====================
+
+import QuestionRepository from "./infrastructure/QuestionRepository";
+import QuestionService from "./service/QuestionService";
+import QuestionController from "./controllers/QuestionController";
+import questionRoute from "./routes/QuestionRoute";
+
+// ✅ AJOUT NOTION
+import NotionRepository from "./infrastructure/NotionRepository";
+
+// ===================== AUTH LOGIN =====================
+
 import UserLoginRepository from "./infrastructure/UserLoginRepository";
 import UserLoginService from "./service/UserLoginService";
 import UserLoginController from "./controllers/UserLoginController";
 import userLoginRoute from "./routes/UserLoginRoute";
 
-// =======================
-// 5️⃣ REFRESH TOKEN
-// =======================
+// REFRESH TOKEN
 import RefreshTokenRepository from "./infrastructure/RefreshTokenRepository";
 import RefreshTokenService from "./service/RefreshTokenService";
 import RefreshTokenController from "./controllers/RefreshTokenController";
 import refreshTokenRoute from "./routes/RefreshTokenRoute";
 
-// =======================
-// 6️⃣ REGISTER
-// =======================
+// REGISTER
 import UserRegistrationRepository from "./infrastructure/UserRegistrationRepository";
 import UserRegistrationService from "./service/UserRegistrationService";
 import UserRegistrationController from "./controllers/UserRegistrationController";
 import userRegistrationRoute from "./routes/UserRegistrationRoute";
 
-// =======================
-// 7️⃣ App Express
-// =======================
+// FORGOT PASSWORD (DEMANDE)
+import AskResetPasswordRepository from "./infrastructure/AskResetPasswordRepository";
+import AskResetPasswordService from "./service/askResetPasswordService";
+import AskResetPasswordController from "./controllers/AskResetPasswordController";
+import AskResetPaswordRoute from "./routes/AskResetPasswordRoute";
+
+// RESET PASSWORD (CONFIRM)
+import ResetPasswordRepository from "./infrastructure/ResetPasswordRepository";
+import ResetPasswordService from "./service/resetPasswordService";
+import ResetPasswordController from "./controllers/resetPasswordController";
+import resetPasswordRoute from "./routes/ResetPasswordRoute";
+
+// CHANGE PASSWORD (CONNECTED USER)
+import ChangePasswordService from "./service/ChangePasswordService";
+import ChangePasswordController from "./controllers/ChangePasswordController";
+import changePasswordRoute from "./routes/ChangePasswordRoute";
+
+// UPDATE PROFILE (CONNECTED USER)
+import UpdateProfileService from "./service/UpdateProfileService";
+import UpdateProfileController from "./controllers/UpdateProfileController";
+import updateProfileRoute from "./routes/UpdateProfileRoute";
+
+// EMAIL + USER
+import EmailService from "./service/emailService";
+import UserRepository from "./infrastructure/UserRepository";
+
+// ===================== APP INIT =====================
+
 const app = express();
 app.use(express.json());
 
-// =======================
-// 8️⃣ Swagger route
-// =======================
+const allowedOrigins = (process.env.CORS_ORIGINS ??
+  "http://localhost:8100,http://localhost:4200,http://127.0.0.1:8100,http://127.0.0.1:4200")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (origin && allowedOrigins.includes(origin)) {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Vary", "Origin");
+    res.header("Access-Control-Allow-Credentials", "true");
+  }
+
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.header("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(204);
+  }
+
+  next();
+});
+
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// =======================
-// 9️⃣ Repositories
-// =======================
+// ===================== REPOSITORIES =====================
+
 const loginRepository = new UserLoginRepository(pool);
+const userRepository = new UserRepository(pool);
 const refreshTokenRepository = new RefreshTokenRepository(pool);
 const registrationRepository = new UserRegistrationRepository();
 
-// =======================
-// 🔟 Services
-// =======================
-const refreshTokenService = new RefreshTokenService(
-  refreshTokenRepository
+const askResetPasswordRepository = new AskResetPasswordRepository(pool);
+const resetPasswordRepository = new ResetPasswordRepository(pool);
+
+// Question
+const questionRepository = new QuestionRepository(pool);
+
+// ✅ NOTION REPOSITORY
+const notionRepository = new NotionRepository(pool);
+
+// ===================== SERVICES =====================
+
+const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
+
+const loginService = new UserLoginService(loginRepository, refreshTokenService);
+
+const registrationService = new UserRegistrationService(registrationRepository);
+
+const emailServiceInstance = new EmailService();
+
+const askResetPasswordService = new AskResetPasswordService(
+  askResetPasswordRepository,
+  userRepository,
+  emailServiceInstance
 );
 
-const loginService = new UserLoginService(
-  loginRepository,
-  refreshTokenService
+const resetPasswordService = new ResetPasswordService(
+  resetPasswordRepository,
+  userRepository
 );
 
-const registrationService = new UserRegistrationService(
-  registrationRepository
+// ✅ QUESTION SERVICE AVEC NOTION
+const questionService = new QuestionService(
+  questionRepository,
+  notionRepository
 );
 
-// =======================
-// 1️⃣1️⃣ Controllers
-// =======================
+const changePasswordService = new ChangePasswordService(userRepository);
+
+const updateProfileService = new UpdateProfileService(userRepository);
+
+// ===================== CONTROLLERS =====================
+
 const loginController = new UserLoginController(loginService);
-const refreshTokenController = new RefreshTokenController(
-  refreshTokenService
-);
+
+const refreshTokenController = new RefreshTokenController(refreshTokenService);
+
 const registrationController = new UserRegistrationController(
-  registrationService
+  registrationService,
 );
 
-// =======================
-// 1️⃣2️⃣ Routes
-// =======================
-app.use("/api", userLoginRoute(loginController));
-app.use("/api", refreshTokenRoute(refreshTokenController));
-app.use("/api", userRegistrationRoute(registrationController));
+const askResetPasswordController = new AskResetPasswordController(
+  askResetPasswordService,
+);
 
-// =======================
-// 1️⃣3️⃣ Healthcheck
-// =======================
+const resetPasswordController = new ResetPasswordController(
+  resetPasswordService
+);
+
+const changePasswordController = new ChangePasswordController(
+  changePasswordService
+);
+
+const updateProfileController = new UpdateProfileController(
+  updateProfileService
+);
+
+// Question
+const questionController = new QuestionController(questionService);
+
+// ===================== ROUTES =====================
+
+// AUTH
+app.use("/api/auth", userLoginRoute(loginController));
+app.use("/api/auth", refreshTokenRoute(refreshTokenController));
+app.use("/api/auth", userRegistrationRoute(registrationController));
+
+app.use("/api/auth", AskResetPaswordRoute(askResetPasswordController));
+app.use("/api/auth", resetPasswordRoute(resetPasswordController));
+app.use("/api/auth", changePasswordRoute(changePasswordController));
+app.use("/api/auth", updateProfileRoute(updateProfileController));
+
+// QUESTIONS
+app.use("/api", questionRoute(questionController));
+
+// ===================== HEALTH =====================
+
 app.get("/", (_req, res) => {
   res.json({ status: "Backend running" });
 });
 
-// =======================
-// 1️⃣4️⃣ Server
-// =======================
-app.listen(3000, () => {
-  console.log("🚀 Server running on port 3000");
-  console.log("📚 Swagger available on http://localhost:3000/api/docs");
-});
+// ===================== SERVER =====================
+
+async function startServer(): Promise<void> {
+  try {
+    await initializeDatabaseSchema(pool);
+    console.log(" DB SCHEMA READY");
+    await seedTestAccount(pool);
+
+    app.listen(3000, () => {
+      console.log("🚀 Server running on port 3000");
+      console.log("📚 Swagger available on http://localhost:3000/api/docs");
+    });
+  } catch (error) {
+    console.error(" Failed to initialize database schema:", error);
+    process.exit(1);
+  }
+}
+
+void startServer();

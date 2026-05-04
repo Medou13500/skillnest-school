@@ -1,10 +1,12 @@
 version: "3.9"
 
+name: skillnest
+
 services:
 
   postgres:
     image: postgres:16
-    container_name: postgres_db
+    container_name: skillnest-postgres
 
     environment:
       POSTGRES_DB: skillnest
@@ -12,16 +14,14 @@ services:
       POSTGRES_PASSWORD: skillnest_password
 
     ports:
-    - "5440:5432"
-
-
+      - "5440:5432"
 
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin
+    container_name: skillnest-pgadmin  
 
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com

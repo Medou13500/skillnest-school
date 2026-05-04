@@ -1,0 +1,153 @@
+<ion-content [fullscreen]="true">
+  <div class="header-gradient">
+    <div class="top-row">
+      <button class="back-button" type="button" (click)="router.navigate(['/admin'])">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        <span>Retour</span>
+      </button>
+    </div>
+
+    <div class="page-title">
+      <div class="avatar">📚</div>
+      <div>
+        <h2>Cours</h2>
+        <p>Créer, modifier et supprimer les leçons ou quiz d'un thème.</p>
+      </div>
+    </div>
+
+    <div class="mini-stats">
+      <div class="m-stat"><strong>{{ totalCourses }}</strong><span>COURS</span></div>
+      <div class="m-stat"><strong>{{ totalLessons }}</strong><span>LECONS</span></div>
+      <div class="m-stat"><strong>{{ totalQuizzes }}</strong><span>QUIZ</span></div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="custom-tabs">
+      <button class="tab" type="button" (click)="router.navigate(['/admin'])">📊 Aperçu</button>
+      <button class="tab" type="button" (click)="router.navigate(['/admin/questions-quiz'])">❓ Questions quiz</button>
+      <button class="tab active" type="button">📚 Cours</button>
+      <button class="tab" type="button">⚙️ Paramètres</button>
+    </div>
+
+    <section class="editor-panel">
+      <div class="section-header">
+        <span class="icon-bg">{{ isEditing ? '✏️' : '+' }}</span>
+        <h3>{{ isEditing ? 'Modifier un cours' : 'Nouveau cours' }}</h3>
+      </div>
+
+      <div class="form-grid">
+        <label>
+          <span>Thème</span>
+          <input type="text" [(ngModel)]="form.theme" placeholder="Ex: Theme 1">
+        </label>
+
+        <label>
+          <span>Chapitre</span>
+          <input type="text" [(ngModel)]="form.chapitre" placeholder="Ex: Variables & Types">
+        </label>
+
+        <label>
+          <span>Type</span>
+          <select [(ngModel)]="form.type">
+            <option>Lecon</option>
+            <option>Quiz</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="form-grid second-row">
+        <label>
+          <span>Titre</span>
+          <input type="text" [(ngModel)]="form.titre" placeholder="Ex: Introduction aux variables">
+        </label>
+
+        <label>
+          <span>Matière</span>
+          <input type="text" [(ngModel)]="form.matiere" placeholder="Ex: Algorithmique">
+        </label>
+
+        <label>
+          <span>Niveau</span>
+          <select [(ngModel)]="form.niveau">
+            <option>Debutant</option>
+            <option>Intermediaire</option>
+            <option>Avance</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="bottom-form-row">
+        <label>
+          <span>Durée</span>
+          <input type="text" [(ngModel)]="form.duree" placeholder="Ex: 8 min">
+        </label>
+
+        <label>
+          <span>Progression</span>
+          <input type="text" [(ngModel)]="form.progression" placeholder="Ex: 1/2">
+        </label>
+
+        <label>
+          <span>Statut</span>
+          <select [(ngModel)]="form.statut">
+            <option>Publie</option>
+            <option>Brouillon</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="full-field">
+        <span>Description</span>
+        <textarea rows="3" [(ngModel)]="form.description" placeholder="Objectif ou contenu du cours"></textarea>
+      </label>
+
+      <div class="form-actions">
+        <button class="secondary-action" type="button" (click)="resetForm()">Annuler</button>
+        <button class="primary-action" type="button" (click)="saveCourse()">
+          {{ isEditing ? 'Enregistrer' : 'Ajouter le cours' }}
+        </button>
+      </div>
+    </section>
+
+    <section class="courses-panel">
+      <div class="section-header list-header">
+        <div>
+          <span class="icon-bg">📚</span>
+          <h3>Cours existants</h3>
+        </div>
+        <span class="count">{{ totalCourses }} total</span>
+      </div>
+
+      <article class="course-card" *ngFor="let course of courses; trackBy: trackByCourseId">
+        <div class="course-main">
+          <div class="course-meta">
+            <span>{{ course.theme }}</span>
+            <span>{{ course.chapitre }}</span>
+            <span [class.quiz]="course.type === 'Quiz'">{{ course.type }}</span>
+            <span>{{ course.statut }}</span>
+          </div>
+
+          <h4>{{ course.titre }}</h4>
+          <p>{{ course.description }}</p>
+
+          <div class="course-details">
+            <span>{{ course.matiere }}</span>
+            <span>{{ course.niveau }}</span>
+            <span>{{ course.duree || 'Durée non définie' }}</span>
+            <span>{{ course.progression }}</span>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="icon-action edit" type="button" (click)="editCourse(course)" aria-label="Modifier">
+            <ion-icon name="create-outline"></ion-icon>
+          </button>
+          <button class="icon-action delete" type="button" (click)="deleteCourse(course.id)" aria-label="Supprimer">
+            <ion-icon name="trash-outline"></ion-icon>
+          </button>
+        </div>
+      </article>
+    </section>
+  </div>
+</ion-content>

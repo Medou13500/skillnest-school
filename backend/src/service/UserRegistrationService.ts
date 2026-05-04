@@ -11,13 +11,13 @@ class UserRegistrationService {
   async register(email: string, password: string) {
     // règle métier : données obligatoires
     if (!email || !password) {
-      throw new Error("Email and password are required");
+      throw new Error("EMAIL_AND_PASSWORD_REQUIRED");
     }
 
     // règle métier : vérifier si l’utilisateur existe déjà
     const existingUser = await this.repository.findByEmail(email);
     if (existingUser) {
-      throw new Error("User already exists");
+      throw new Error("USER_ALREADY_EXISTS");
     }
 
     // règle métier : hash du mot de passe
