@@ -79,6 +79,14 @@ export const routes: Routes = [
     loadComponent: () => import('./features/public_access/suppression-compte/suppression-compte.page').then(m => m.SuppressionComptePage)
   },
   {
+    path: 'test-positionnement',
+    loadComponent: () => import('./features/public_access/test-positionnement/test-positionnement.component').then(m => m.TestPositionnementComponent)
+  },
+  {
+    path: 'quiz-test-positionnement',
+    loadComponent: () => import('./features/public_access/quiz-test-positionnement/quiz-test-positionnement.component').then(m => m.QuizTestPositionnementComponent)
+  },
+  {
     path: 'admin',
     loadComponent: () => import('./features/admin/admin-dashboard/admin-dashboard.page').then(m => m.AdminDashboardPage)
   },
