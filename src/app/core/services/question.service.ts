@@ -41,6 +41,16 @@ export class QuestionService {
 
   constructor(private http: HttpClient) {}
 
+  getTestPositionnementQuestions(notionId?: number): Observable<ApiQuestion[]> {
+    let params = new HttpParams().set('type', 'test');
+
+    if (notionId) {
+      params = params.set('notionId', String(notionId));
+    }
+
+    return this.http.get<ApiQuestion[]>(this.apiBaseUrl, { params });
+  }
+
   getQuizQuestions(notionId?: number): Observable<ApiQuestion[]> {
     let params = new HttpParams().set('type', 'quiz');
 
@@ -49,6 +59,10 @@ export class QuestionService {
     }
 
     return this.http.get<ApiQuestion[]>(this.apiBaseUrl, { params });
+  }
+
+  getQuestionById(id: number): Observable<ApiQuestion> {
+    return this.http.get<ApiQuestion>(`${this.apiBaseUrl}/${id}`);
   }
 
   createQuestion(payload: SaveQuestionPayload): Observable<ApiQuestion> {

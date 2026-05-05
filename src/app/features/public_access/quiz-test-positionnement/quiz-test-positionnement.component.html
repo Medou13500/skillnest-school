@@ -1,54 +1,112 @@
 <ion-content class="bg-cream">
-  <!-- Header de Quiz (Bleu) -->
-  <div class="quiz-header">
-    <!-- Barre de progression segmentée -->
-    <div class="progress-segments">
-      <div class="segment active" *ngFor="let s of [1,2,3]"></div>
-      <div class="segment" *ngFor="let s of [1,2,3,4,5,6,7]"></div>
-    </div>
-
-    <!-- Badges et Compteur -->
-    <div class="quiz-info-row">
-      <div class="badges-group">
-        <ion-badge class="badge-topic">📦 X</ion-badge>
-        <ion-badge class="badge-difficulty">X</ion-badge>
-      </div>
-      <div class="counter">
-        <span class="current">X</span><span class="total"> / X</span>
-      </div>
-    </div>
-
-    <!-- Barre de progression continue et Timer -->
-    <div class="timer-row">
-      <div class="progress-bar-container">
-        <div class="progress-fill" style="width: 40%;"></div>
-      </div>
-      <ion-badge class="timer-badge">🟢 Xs</ion-badge>
-    </div>
+  
+  <!-- État de chargement -->
+  <div *ngIf="isLoading" class="loading-container">
+    <ion-spinner></ion-spinner>
+    <p>Chargement des questions...</p>
   </div>
 
-  <!-- Zone de Question -->
-  <div class="question-container">
-    <div class="question-card">
-      <h2>X</h2>
-    </div>
-
-    <!-- Options de réponse -->
-    <div class="options-list">
-      <div class="option-item" *ngFor="let opt of ['A', 'B', 'C', 'D']">
-        <div class="letter-circle">{{ opt }}</div>
-        <div class="option-text">X</div>
-      </div>
-    </div>
+  <!-- État d'erreur -->
+  <div *ngIf="error && !isLoading" class="error-container">
+    <ion-icon name="alert-circle"></ion-icon>
+    <p>{{ error }}</p>
+    <ion-button (click)="loadTestQuestions()">Réessayer</ion-button>
   </div>
 
-  <!-- Bouton de validation fixe en bas -->
-  <ion-footer class="ion-no-border bg-transparent">
-    <div class="ion-padding">
-      <ion-button expand="block" class="btn-validate">
-        Valider ma réponse
-        <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
-      </ion-button>
+  <!-- Quiz -->
+  <div *ngIf="!isLoading && !error && questions.length > 0">
+    
+    <!-- Header de Quiz (Bleu) -->
+    <div class="quiz-header">
+      <!-- Barre de progression segmentée -->
+      <div class="progress-segments">
+        <div class="segment" 
+             *ngFor="let i of questions | slice:0:5; let index = index"
+             [class.active]="index <= currentQuestionIndex"></div>
+        <div class="segment" 
+             *ngFor="let i of questions | slice:5; let index = index"
+             [class.active]="(index + 5) <= currentQuestionIndex"></div>
+      </div>
+
+      <!-- Badges et Compteur -->
+      <div class="quiz-info-row">
+        <div class="badges-group">
+          <ion-badge class="badge-topic" *ngIf="currentQuestion?.matiere">
+            📦 {{ currentQuestion?.matiere }}
+          </ion-badge>
+          <ion-badge class="badge-difficulty" 
+                     [ngClass]="'difficulty-' + currentQuestion?.difficulty">
+            {{ currentQuestion?.difficulty }}
+          </ion-badge>
+        </div>
+        <div class="counter">
+          <span class="current">{{ currentQuestionIndex + 1 }}</span><span class="total"> / {{ questions.length }}</span>
+        </div>
+      </div>
+
+      <!-- Barre de progression continue et Timer -->
+      <div class="timer-row">
+        <div class="progress-bar-container">
+          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+        </div>
+        <ion-badge class="timer-badge" 
+                   [ngClass]="remainingTime <= 5 ? 'timer-warning' : ''">
+          🟢 {{ remainingTime }}s
+        </ion-badge>
+      </div>
     </div>
-  </ion-footer>
+
+    <!-- Zone de Question -->
+    <div class="question-container" *ngIf="currentQuestion">
+      <div class="question-card">
+        <h2>{{ currentQuestion.content }}</h2>
+      </div>
+
+      <!-- Options de réponse -->
+      <div class="options-list">
+        <div class="option-item" 
+             *ngFor="let answer of currentAnswers; let i = index"
+             (click)="selectAnswer(answer)"
+             [class.selected]="isAnswerSelected(answer)">
+          <div class="letter-circle" [class.selected]="isAnswerSelected(answer)">
+            {{ getLetterForIndex(i) }}
+          </div>
+          <div class="option-text">{{ answer }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Boutons de navigation fixe en bas -->
+    <ion-footer class="ion-no-border bg-transparent">
+      <div class="ion-padding quiz-actions">
+        <div class="button-row">
+          <ion-button 
+            expand="block" 
+            fill="outline"
+            (click)="previousQuestion()"
+            [disabled]="!canGoPrevious()">
+            <ion-icon slot="start" name="arrow-back"></ion-icon>
+            Précédent
+          </ion-button>
+
+          <ion-button 
+            expand="block" 
+            class="btn-validate"
+            (click)="nextQuestion()"
+            [disabled]="!currentQuestion || !isAnswerSelected(userAnswers[currentQuestion.id])">
+            <span *ngIf="canGoNext()">Valider</span>
+            <span *ngIf="!canGoNext()">Terminer</span>
+            <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
+          </ion-button>
+        </div>
+
+        <!-- Info réponses -->
+        <div class="quiz-stats">
+          <small>Questions répondues : {{ getAnsweredCount() }} / {{ questions.length }}</small>
+        </div>
+      </div>
+    </ion-footer>
+
+  </div>
+
 </ion-content>
