@@ -67,7 +67,9 @@ import UserRepository from "./infrastructure/UserRepository";
 // ===================== APP INIT =====================
 
 const app = express();
-app.use(express.json());
+// Allow larger JSON payloads to support base64-encoded image uploads from the admin UI
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const allowedOrigins = (process.env.CORS_ORIGINS ??
   "http://localhost:8100,http://localhost:4200,http://127.0.0.1:8100,http://127.0.0.1:4200")

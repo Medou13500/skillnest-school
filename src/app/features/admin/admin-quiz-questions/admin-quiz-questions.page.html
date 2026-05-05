@@ -85,6 +85,18 @@
         <textarea rows="3" [(ngModel)]="form.enonce" placeholder="Saisis l'enonce de la question"></textarea>
       </label>
 
+      <label class="full-field">
+        <span>Images (optionnelles)</span>
+        <input type="file" accept="image/*" (change)="onImageSelected($event)" multiple>
+      </label>
+
+      <div *ngIf="form.images && form.images.length" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+        <div *ngFor="let img of form.images; let i = index" (click)="$event.stopPropagation()" style="position:relative;">
+          <img (click)="$event.stopPropagation()" [src]="img" [alt]="'Aperçu ' + (i+1)" style="max-width:120px; max-height:120px; border-radius:8px; object-fit:cover;" />
+          <button type="button" (click)="$event.stopPropagation(); removeImageAt(i)" style="position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.6); color:white; border:0; border-radius:12px; width:24px; height:24px;">×</button>
+        </div>
+      </div>
+
       <div class="answers-grid">
         <label *ngFor="let option of form.options; let index = index; trackBy: trackByAnswerIndex">
           <span>Reponse {{ index + 1 }}</span>

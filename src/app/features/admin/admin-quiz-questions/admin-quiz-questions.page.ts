@@ -24,6 +24,7 @@ interface QuizQuestion {
   enonce: string;
   options: string[];
   bonneReponse: number;
+  images?: string[];
 }
 
 interface CourseQuizLink {
@@ -156,6 +157,43 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.form.matiere = this.matieres[0];
   }
 
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const readPromises: Promise<string>[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      readPromises.push(
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result ?? ''));
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        })
+      );
+    }
+
+    void Promise.all(readPromises)
+      .then((results) => {
+        this.form.images = [...(this.form.images || []), ...results];
+        // Clear file input so selecting the same file again will trigger change
+        try {
+          const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]');
+          if (fileInput) fileInput.value = '';
+        } catch {
+          // ignore
+        }
+      })
+      .catch(() => {
+        // ignore read errors
+      });
+  }
+
   async loadQuestions(): Promise<void> {
     this.isLoading = true;
     this.loadingError = '';
@@ -192,6 +230,10 @@ export class AdminQuizQuestionsPage implements OnInit {
       difficulty: this.mapNiveauToDifficulty(this.form.niveau)
     };
 
+    if (this.form.images && this.form.images.length) {
+      (payload as any).images = this.form.images;
+    }
+
     this.isSaving = true;
 
     try {
@@ -220,7 +262,8 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.editingId = question.id;
     this.form = {
       ...question,
-      options: [...question.options]
+      options: [...question.options],
+      images: question.images ? [...question.images] : []
     };
   }
 
@@ -246,6 +289,13 @@ export class AdminQuizQuestionsPage implements OnInit {
   resetForm(): void {
     this.editingId = null;
     this.form = this.createEmptyQuestion();
+    // Clear file input value to avoid stale file remaining in the DOM
+    try {
+      const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]');
+      if (fileInput) fileInput.value = '';
+    } catch {
+      // ignore in non-browser environments
+    }
   }
 
   trackByQuestionId(_index: number, question: QuizQuestion): number {
@@ -267,7 +317,8 @@ export class AdminQuizQuestionsPage implements OnInit {
       niveau: 'Debutant',
       enonce: '',
       options: ['', '', '', ''],
-      bonneReponse: 0
+      bonneReponse: 0,
+      images: []
     };
   }
 
@@ -300,7 +351,10 @@ export class AdminQuizQuestionsPage implements OnInit {
       niveau: this.mapDifficultyToNiveau(question.difficulty),
       enonce: question.content,
       options: answers,
-      bonneReponse: Math.max(0, answers.findIndex((answer) => answer === correctAnswer))
+      bonneReponse: Math.max(0, answers.findIndex((answer) => answer === correctAnswer)),
+      images: (question as any).images
+        ? (Array.isArray((question as any).images) ? (question as any).images : JSON.parse((question as any).images))
+        : []
     };
   }
 
@@ -315,6 +369,11 @@ export class AdminQuizQuestionsPage implements OnInit {
     } catch {
       return ['', '', '', ''];
     }
+  }
+
+  removeImageAt(index: number): void {
+    if (!this.form.images) return;
+    this.form.images = this.form.images.filter((_, i) => i !== index);
   }
 
   private mapNiveauToDifficulty(niveau: string): QuestionDifficulty {

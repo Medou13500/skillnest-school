@@ -94,6 +94,7 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
       correct_answer TEXT NOT NULL,
       type TEXT NOT NULL CHECK (type IN ('test', 'quiz')),
       difficulty TEXT NOT NULL CHECK (difficulty IN ('facile', 'moyen', 'difficile')),
+      images JSONB NOT NULL DEFAULT '[]',
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
@@ -102,6 +103,11 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
   await pool.query(`
     ALTER TABLE public.questions
     ADD COLUMN IF NOT EXISTS matiere TEXT NOT NULL DEFAULT 'Non renseignee';
+  `);
+
+  await pool.query(`
+    ALTER TABLE public.questions
+    ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]';
   `);
 
   await pool.query(`
