@@ -75,7 +75,9 @@ export class ConnexionPage {
   }
 
   goToRegister() {
-    this.router.navigate(['/inscription']);
+    this.router.navigate(['/inscription'], {
+      state: { role: this.role }
+    });
   }
 
   private showAccountCreatedToastIfNeeded(): void {
