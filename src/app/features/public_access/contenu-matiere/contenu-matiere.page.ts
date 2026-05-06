@@ -35,8 +35,6 @@ import {
   ]
 })
 export class ContenuMatierePage {
-  currentMatiere = (history.state?.matiere as string) || 'Geographie';
-
   themes = [
     {
       title: 'Theme 1',
@@ -45,7 +43,7 @@ export class ContenuMatierePage {
       open: true,
       items: [
         { id: 1, type: 'Lecon', title: 'Introduction...', done: true, route: '/lesson/1' },
-        { id: 2, type: 'Quizz', title: 'Quiz ...', done: false, route: '/quiz' }
+        { id: 2, type: 'Quizz', title: 'Quiz ...', done: false, route: '/quiz/1' }
       ]
     },
     {
@@ -99,13 +97,6 @@ export class ContenuMatierePage {
   }
 
   goTo(item: any): void {
-    if (item.route === '/quiz') {
-      this.router.navigate(['/quiz'], {
-        queryParams: { matiere: this.currentMatiere }
-      });
-      return;
-    }
-
     this.router.navigate([item.route]);
   }
 }

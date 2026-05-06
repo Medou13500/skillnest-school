@@ -93,36 +93,6 @@
   }
 }
 
-.role-selector {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin: 18px 0 10px;
-}
-
-.role-pill {
-  flex: 1;
-  border: 1px solid rgba(117, 92, 62, 0.16);
-  background: #fff;
-  color: #6b625c;
-  border-radius: 999px;
-  padding: 10px 14px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.role-pill.active {
-  background: #ef8431;
-  color: #ffffff;
-  border-color: transparent;
-}
-
-.hint-text {
-  margin: 6px 0 0;
-  font-size: 0.84rem;
-  color: #7c6d55;
-}
-
 .name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;

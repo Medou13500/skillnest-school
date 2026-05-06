@@ -59,10 +59,6 @@ export const routes: Routes = [
     loadComponent: () => import('./features/public_access/historique-etudiant/historique-etudiant.page').then(m => m.HistoriqueEtudiantPage)
   },
   {
-    path: 'parent',
-    loadComponent: () => import('./features/public_access/parent/parent.page').then(m => m.ParentPage)
-  },
-  {
     path: 'dashboard',
     loadComponent: () => import('./features/public_access/dashboard/dashboard.page').then(m => m.DashboardPage)
   },
@@ -81,10 +77,6 @@ export const routes: Routes = [
   {
     path: 'suppression-compte',
     loadComponent: () => import('./features/public_access/suppression-compte/suppression-compte.page').then(m => m.SuppressionComptePage)
-  },
-  {
-    path: 'quiz',
-    loadComponent: () => import('./features/public_access/quiz/quiz.page').then( m => m.QuizPage)
   },
   {
     path: 'admin',

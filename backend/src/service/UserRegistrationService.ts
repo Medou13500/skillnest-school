@@ -8,20 +8,11 @@ class UserRegistrationService {
     this.repository = repository;
   }
 
-  async register(
-    email: string,
-    password: string,
-    role: string = 'STUDENT',
-    firstName?: string,
-    lastName?: string,
-    studentEmail?: string
-  ) {
+  async register(email: string, password: string) {
     // règle métier : données obligatoires
     if (!email || !password) {
       throw new Error("EMAIL_AND_PASSWORD_REQUIRED");
     }
-
-    const normalizedRole = role?.toUpperCase?.() === 'PARENT' ? 'PARENT' : 'STUDENT';
 
     // règle métier : vérifier si l’utilisateur existe déjà
     const existingUser = await this.repository.findByEmail(email);
@@ -36,14 +27,8 @@ class UserRegistrationService {
     const user = await this.repository.createUser(
       email,
       passwordHash,
-      normalizedRole,
-      firstName,
-      lastName
+      "USER"
     );
-
-    if (normalizedRole === 'PARENT' && studentEmail) {
-      await this.repository.createParentStudentLink(user.id, studentEmail);
-    }
 
    // retour clean (jamais de hash)
     return {

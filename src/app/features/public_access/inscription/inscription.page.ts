@@ -37,8 +37,6 @@ export class InscriptionPage {
   username: string = '';
   email: string = '';
   classe: string = '';
-  studentEmail: string = '';
-  role: 'student' | 'parent' = 'student';
   password: string = '';
   confirmPassword: string = '';
 
@@ -64,11 +62,6 @@ export class InscriptionPage {
       'person-add-outline': personAddOutline,
       'sparkles-outline': sparklesOutline
     });
-
-    const navigation = this.router.getCurrentNavigation();
-    if (navigation?.extras.state?.['role']) {
-      this.role = navigation.extras.state['role'];
-    }
   }
 
   goBack(): void {
@@ -108,27 +101,13 @@ export class InscriptionPage {
       return;
     }
 
-    if (this.role === 'student' && !this.classe) {
-      await this.presentToast('Veuillez sélectionner votre classe.');
-      return;
-    }
-
-    if (this.role === 'parent' && !this.studentEmail) {
-      await this.presentToast('Veuillez renseigner l’email de l’élève à associer.');
-      return;
-    }
-
     this.isSubmitting = true;
 
     try {
       await firstValueFrom(
         this.http.post<RegisterResponse>(`${environment.apiUrl}/api/auth/register`, {
           email: this.email.trim(),
-          password: this.password,
-          role: this.role === 'parent' ? 'PARENT' : 'STUDENT',
-          firstName: this.prenom.trim(),
-          lastName: this.nom.trim(),
-          studentEmail: this.role === 'parent' ? this.studentEmail.trim() : undefined
+          password: this.password
         })
       );
 
@@ -148,11 +127,6 @@ export class InscriptionPage {
 
         if (backendError === 'EMAIL_AND_PASSWORD_REQUIRED') {
           await this.presentToast('Email et mot de passe obligatoires.');
-          return;
-        }
-
-        if (backendError === 'STUDENT_NOT_FOUND') {
-          await this.presentToast('Aucun élève trouvé avec cet email.');
           return;
         }
       }
