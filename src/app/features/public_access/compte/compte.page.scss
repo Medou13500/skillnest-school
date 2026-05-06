@@ -20,10 +20,32 @@
 }
 
 .hero-section {
+  position: relative;
   padding: 24px 18px 24px;
   text-align: center;
   color: #ffffff;
   background: linear-gradient(180deg, #2839cb 0%, #648ef3 100%);
+}
+
+.back-button {
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  border-radius: 999px;
+  height: 32px;
+  padding: 0 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  position: absolute;
+  top: 16px;
+  left: 16px;
+
+  ion-icon {
+    font-size: 1rem;
+  }
 }
 
 .hero-icon {
@@ -142,7 +164,7 @@
   margin: 0 auto;
   padding: 10px 14px 16px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
 }
 
@@ -163,5 +185,102 @@
 
   &.active {
     color: #ef8431;
+  }
+}
+
+@media (max-width: 420px) {
+  .account-page {
+    min-height: 100dvh;
+    padding: 0 0 82px;
+  }
+
+  .account-card {
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .hero-section {
+    padding: 16px 12px 14px;
+  }
+
+  .back-button {
+    height: 30px;
+    padding: 0 10px;
+    font-size: 0.82rem;
+    margin-top: 8px;
+
+  }
+
+  .hero-icon {
+    width: 60px;
+    height: 60px;
+    margin: 30px auto 18px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+
+    ion-icon {
+      font-size: 1.6rem;
+    }
+  }
+
+  .hero-section h1 {
+    margin-bottom: 4px;
+    font-size: 1.55rem;
+  }
+
+  .hero-section p {
+    font-size: 0.85rem;
+  }
+
+  .menu-section {
+    padding: 10px;
+  }
+
+  .section-group {
+    & + .section-group {
+      margin-top: 8px;
+    }
+
+    h2 {
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+    }
+  }
+
+  .menu-item {
+    padding: 9px 10px;
+    margin-bottom: 6px;
+    border-radius: 12px;
+    gap: 9px;
+  }
+
+  .item-icon {
+    width: 30px;
+    height: 30px;
+    flex-basis: 30px;
+    border-radius: 9px;
+
+    ion-icon {
+      font-size: 1rem;
+    }
+  }
+
+  .label {
+    font-size: 0.92rem;
+  }
+
+  .chevron {
+    font-size: 1rem;
+  }
+
+  .subjects-footer {
+    ion-toolbar {
+      --min-height: 70px;
+    }
+  }
+
+  .tab-bar {
+    padding: 8px 10px 10px;
   }
 }

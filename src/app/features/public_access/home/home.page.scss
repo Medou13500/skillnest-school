@@ -262,6 +262,18 @@
   }
 }
 
+.debug-link {
+  display: block;
+  margin: 14px auto 0;
+  padding: 8px 12px;
+  border: 1px dashed rgba(17, 27, 68, 0.35);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #111b44;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
 @media (max-width: 420px) {
   .home-shell {
     padding: 0;

@@ -2,7 +2,7 @@
   <div class="subjects-page">
     <div class="subjects-card">
       <section class="topbar">
-        <button class="back-button" type="button" (click)="router.navigate(['/accueil'])">
+        <button class="back-button" type="button" (click)="logout()">
           <ion-icon name="arrow-back-outline"></ion-icon>
         </button>
 
@@ -69,6 +69,11 @@
 <ion-footer class="subjects-footer">
   <ion-toolbar>
     <div class="tab-bar">
+      <button class="tab-item" type="button" (click)="router.navigate(['/dashboard'])">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>Mon dashboard</span>
+      </button>
+
       <button class="tab-item active" type="button">
         <ion-icon name="book-outline"></ion-icon>
         <span>Matieres</span>
@@ -82,6 +87,11 @@
       <button class="tab-item" type="button" (click)="router.navigate(['/compte'])">
         <ion-icon name="person-outline"></ion-icon>
         <span>Profil</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
       </button>
     </div>
   </ion-toolbar>

@@ -4,14 +4,18 @@ import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
+  arrowBackOutline,
   bookOutline,
   chevronForwardOutline,
   lockClosedOutline,
   notificationsOutline,
   personOutline,
   ribbonOutline,
-  trashOutline
+  speedometerOutline,
+  trashOutline,
+  logOutOutline
 } from 'ionicons/icons';
+import { AuthService } from '../../../core/services/AuthService';
 
 interface AccountMenuItem {
   label: string;
@@ -53,24 +57,32 @@ export class ComptePage {
       title: 'Zone dangereuse',
       danger: true,
       items: [
-        { label: 'Supprimer le compte', route: '/compte', icon: 'trash-outline', danger: true }
+        { label: 'Supprimer le compte', route: '/compte', icon: 'trash-outline', danger: true },
+        { label: 'Se déconnecter', route: '/logout', icon: 'log-out-outline', danger: true }
       ]
     }
   ];
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private authService: AuthService) {
     addIcons({
+      'arrow-back-outline': arrowBackOutline,
       'book-outline': bookOutline,
+      'speedometer-outline': speedometerOutline,
       'chevron-forward-outline': chevronForwardOutline,
       'lock-closed-outline': lockClosedOutline,
       'notifications-outline': notificationsOutline,
       'person-outline': personOutline,
       'ribbon-outline': ribbonOutline,
-      'trash-outline': trashOutline
+      'trash-outline': trashOutline,
+      'log-out-outline': logOutOutline
     });
   }
 
   goTo(route: string): void {
-    this.router.navigate([route]);
+    if (route === '/logout') {
+      this.authService.logout();
+    } else {
+      this.router.navigate([route]);
+    }
   }
 }

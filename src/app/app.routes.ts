@@ -84,4 +84,16 @@ export const routes: Routes = [
   },
 
 
+    path: 'admin',
+    loadComponent: () => import('./features/admin/admin-dashboard/admin-dashboard.page').then(m => m.AdminDashboardPage)
+  },
+  {
+    path: 'admin/questions-quiz',
+    loadComponent: () => import('./features/admin/admin-quiz-questions/admin-quiz-questions.page').then(m => m.AdminQuizQuestionsPage)
+  },
+  {
+    path: 'admin/cours',
+    loadComponent: () => import('./features/admin/admin-courses/admin-courses.page').then(m => m.AdminCoursesPage)
+  },
 ];
+

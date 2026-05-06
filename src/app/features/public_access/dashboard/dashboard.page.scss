@@ -34,7 +34,7 @@ ion-content { --background: #{$bg-cream}; }
     h2 { font-size: 22px; margin: 0; font-weight: 700; }
     .badge-row {
       display: flex; align-items: center; gap: 10px; margin-top: 5px;
-      .level-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px; }
+      .level-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px;background: #ff823a; }
       .user-email { font-size: 12px; opacity: 0.8; }
     }
   }
@@ -52,7 +52,7 @@ ion-content { --background: #{$bg-cream}; }
   display: flex; background: white; margin: -20px 0 20px; border-radius: 15px;
   box-shadow: 0 4px 15px rgba(0,0,0,0.05);
   .tab {
-    flex: 1; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: 600; color: #888;
+    flex: 1; padding: 15px 5px; text-align: center; font-size: 11px; font-weight: 600; color: #888; cursor: pointer;
     &.active { color: #ff6b00; border-bottom: 3px solid #ff6b00; background: #fff9f5; }
   }
 }
@@ -91,4 +91,54 @@ ion-content { --background: #{$bg-cream}; }
     .progress-bar { height: 6px; background: #eee; border-radius: 3px; .fill { height: 100%; background: #ff823a; border-radius: 3px; } }
   }
   .session-score { text-align: right; .score { display: block; font-size: 16px; font-weight: 800; color: #42b883; } .percent { font-size: 11px; color: #999; } }
+}
+
+.subjects-footer {
+  ion-toolbar {
+    --background: rgba(255, 249, 242, 0.96);
+    --border-width: 0;
+    --min-height: 82px;
+    box-shadow: 0 -8px 22px rgba(100, 78, 47, 0.08);
+  }
+}
+
+.tab-bar {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.tab-item {
+  border: 0;
+  background: transparent;
+  color: #c4b7aa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  ion-icon {
+    font-size: 1.35rem;
+  }
+
+  &.active {
+    color: #ef8431;
+  }
+}
+
+@media (max-width: 420px) {
+  .subjects-footer {
+    ion-toolbar {
+      --min-height: 70px;
+    }
+  }
+
+  .tab-bar {
+    padding: 8px 10px 10px;
+  }
 }

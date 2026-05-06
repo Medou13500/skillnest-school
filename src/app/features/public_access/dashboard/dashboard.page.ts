@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Chart, registerables } from 'chart.js';
+import { addIcons } from 'ionicons';
+import { bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
 
 Chart.register(...registerables);
 
@@ -50,10 +52,30 @@ export class DashboardPage implements OnInit, AfterViewInit {
   };
 
   constructor(
-    private router: Router,
+    public router: Router,
     private route: ActivatedRoute,
     private toastController: ToastController
   ) { }
+
+  ngAfterContentInit() {
+    addIcons({
+      'book-outline': bookOutline,
+      'ribbon-outline': ribbonOutline,
+      'person-outline': personOutline,
+      'log-out-outline': logOutOutline,
+      'speedometer-outline': speedometerOutline
+    });
+  }
+
+  logout(): void {
+    sessionStorage.clear();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rememberMe');
+    localStorage.removeItem('refreshToken');
+    void this.router.navigate(['/connexion'], { replaceUrl: true });
+  }
 
   ngOnInit() {
     this.showLoginSuccessToastIfNeeded();
@@ -116,6 +138,32 @@ export class DashboardPage implements OnInit, AfterViewInit {
         }
       }
     });
+  }
+
+  onTabClick(event: Event): void {
+    const target = (event.target as HTMLElement)?.closest('.tab');
+    if (!target) {
+      return;
+    }
+
+    const tabElements = Array.from(target.parentElement?.querySelectorAll('.tab') ?? []);
+    const clickedIndex = tabElements.indexOf(target);
+
+    switch (clickedIndex) {
+      case 0:
+        return;
+      case 1:
+        void this.router.navigate(['/notions']);
+        return;
+      case 2:
+        void this.router.navigate(['/historique-dashboard']);
+        return;
+      case 3:
+        void this.presentToast('La page badges sera disponible bientot.');
+        return;
+      default:
+        return;
+    }
   }
 
   private showLoginSuccessToastIfNeeded(): void {

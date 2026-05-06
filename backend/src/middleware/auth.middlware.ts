@@ -1,16 +1,12 @@
+// src/middleware/auth.middleware.ts
+
 import { Request, Response, NextFunction } from "express";
 import JwtService, { JwtPayload } from "../utils/jwt";
 
-/**
- * Requête étendue pour inclure l'utilisateur décodé
- */
 export interface AuthRequest extends Request {
   user?: JwtPayload;
 }
 
-/**
- * Middleware d'authentification JWT
- */
 export function authMiddleware(
   req: AuthRequest,
   res: Response,
@@ -31,7 +27,6 @@ export function authMiddleware(
   try {
     const decoded = JwtService.verify(token);
     req.user = decoded;
-
     next();
   } catch {
     return res.status(401).json({ error: "INVALID_OR_EXPIRED_TOKEN" });

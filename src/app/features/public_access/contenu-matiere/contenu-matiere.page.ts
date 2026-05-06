@@ -15,6 +15,12 @@ import {
   filterOutline,
   locateOutline,
   searchOutline
+  ,
+  speedometerOutline
+  ,
+  ribbonOutline,
+  personOutline,
+  logOutOutline
 } from 'ionicons/icons';
 
 @Component({
@@ -71,8 +77,22 @@ export class ContenuMatierePage {
       'filter-outline': filterOutline,
       'locate-outline': locateOutline,
       'search-outline': searchOutline
+      ,'speedometer-outline': speedometerOutline
+      ,'ribbon-outline': ribbonOutline
+      ,'person-outline': personOutline
+      ,'log-out-outline': logOutOutline
     });
   }
+
+    logout(): void {
+      sessionStorage.clear();
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('rememberMe');
+      localStorage.removeItem('refreshToken');
+      this.router.navigate(['/connexion'], { replaceUrl: true });
+    }
 
   toggle(theme: any): void {
     theme.open = !theme.open;

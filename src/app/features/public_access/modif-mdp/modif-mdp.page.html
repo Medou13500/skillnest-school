@@ -1,45 +1,102 @@
-<ion-content class="password-content">
-  <div class="main-container">
+<ion-content class="password-content" [fullscreen]="true">
+  <div class="password-page">
+    <div class="password-card">
+      <section class="top-actions">
+        <button class="icon-button back" type="button" (click)="goTo('/compte')">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+        </button>
 
-    <h2 class="page-title">Mot de passe</h2>
+        <div class="mini-icon">
+          <ion-icon name="lock-closed-outline"></ion-icon>
+        </div>
 
-    <div class="form-container">
+        <button class="profile-chip" type="button" (click)="goTo('/compte')">
+          <span>Mon profil</span>
+          <ion-icon name="arrow-forward-outline"></ion-icon>
+        </button>
+      </section>
 
-      <div class="input-group">
-        <label>Mot de passe actuel</label>
-        <ion-item lines="none" class="custom-input">
-          <ion-input type="password" placeholder="Mot de passe actuel" [(ngModel)]="passwordData.current"></ion-input>
-        </ion-item>
-      </div>
+      <section class="heading">
+        <h1>Changer mon <span>mot de passe.</span></h1>
+        <p>Mets a jour ton mot de passe pour garder ton compte securise.</p>
+      </section>
 
-      <div class="input-group">
-        <label>Nouveau mot de passe</label>
-        <ion-item lines="none" class="custom-input">
-          <ion-input type="password" placeholder="Nouveau mot de passe" [(ngModel)]="passwordData.new"></ion-input>
-        </ion-item>
-      </div>
+      <section class="form-shell">
+        <div class="avatar-wrap">
+          <div class="avatar-main">
+            <ion-icon name="key-outline"></ion-icon>
+          </div>
+        </div>
 
-      <div class="input-group">
-        <label>Confirmer le nouveau mot de passe</label>
-        <ion-item lines="none" class="custom-input">
-          <ion-input type="password" placeholder="Ressaisir à nouveau le mot de passe" [(ngModel)]="passwordData.confirm"></ion-input>
-        </ion-item>
-      </div>
+        <div class="input-group">
+          <label for="current-password">MOT DE PASSE ACTUEL</label>
+          <ion-item lines="none" class="custom-input">
+            <ion-input
+              id="current-password"
+              type="password"
+              placeholder="Mot de passe actuel"
+              [(ngModel)]="passwordData.current">
+            </ion-input>
+          </ion-item>
+        </div>
 
-      <ion-button expand="block" class="btn-update" (click)="updatePassword()">
-        Mettre à jour
-      </ion-button>
+        <div class="input-group">
+          <label for="new-password">NOUVEAU MOT DE PASSE</label>
+          <ion-item lines="none" class="custom-input">
+            <ion-input
+              id="new-password"
+              type="password"
+              placeholder="Nouveau mot de passe"
+              [(ngModel)]="passwordData.new">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <div class="input-group">
+          <label for="confirm-password">CONFIRMER LE MOT DE PASSE</label>
+          <ion-item lines="none" class="custom-input">
+            <ion-input
+              id="confirm-password"
+              type="password"
+              placeholder="Confirmer le nouveau mot de passe"
+              [(ngModel)]="passwordData.confirm">
+            </ion-input>
+          </ion-item>
+        </div>
+
+        <ion-button expand="block" class="btn-update" (click)="updatePassword()">
+          <span>Mettre a jour mon mot de passe</span>
+          <span class="button-icon">
+            <ion-icon name="arrow-forward-outline"></ion-icon>
+          </span>
+        </ion-button>
+      </section>
     </div>
-
   </div>
 </ion-content>
 
-<ion-footer shadow="none">
+<ion-footer class="subjects-footer">
   <ion-toolbar>
     <div class="tab-bar">
-      <ion-icon name="book-outline" class="tab-icon" (click)="router.navigate(['/liste-matiere'])"></ion-icon>
-      <ion-icon name="ribbon-outline" class="tab-icon" (click)="router.navigate(['/abonnement'])"></ion-icon>
-      <ion-icon name="person-outline" class="tab-icon active"></ion-icon>
+      <button class="tab-item" type="button" (click)="goTo('/liste-matiere')">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="goTo('/abonnement')">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
+
+      <button class="tab-item active" type="button" (click)="goTo('/compte')">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="goTo('/logout')">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
     </div>
   </ion-toolbar>
 </ion-footer>

@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { IonicModule, ToastController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { arrowBackOutline, calendarOutline, bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
 
 interface Session {
   id: number;
@@ -38,11 +41,70 @@ export class HistoriqueDashboardPage implements OnInit {
     { id: 8, titre: 'Boucles', categorie: 'Programmation', date: 'Ven. 20h15', duree: '5min', score: 8, total: 10, pourcentage: 80, icon: '🔁', statusColor: 'green' },
   ];
 
-  constructor() { }
+  constructor(
+    public router: Router,
+    private toastController: ToastController
+  ) {
+    addIcons({
+      'arrow-back-outline': arrowBackOutline,
+      'calendar-outline': calendarOutline,
+      'book-outline': bookOutline,
+      'ribbon-outline': ribbonOutline,
+      'person-outline': personOutline,
+      'log-out-outline': logOutOutline,
+      'speedometer-outline': speedometerOutline
+    });
+  }
+
+  logout(): void {
+    sessionStorage.clear();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rememberMe');
+    localStorage.removeItem('refreshToken');
+    void this.router.navigate(['/connexion'], { replaceUrl: true });
+  }
 
   ngOnInit() {}
 
   setFiltre(f: string) {
     this.filtreActif = f;
+  }
+
+  onTabClick(event: Event): void {
+    const target = (event.target as HTMLElement)?.closest('.tab');
+    if (!target) {
+      return;
+    }
+
+    const tabElements = Array.from(target.parentElement?.querySelectorAll('.tab') ?? []);
+    const clickedIndex = tabElements.indexOf(target);
+
+    switch (clickedIndex) {
+      case 0:
+        void this.router.navigate(['/dashboard']);
+        return;
+      case 1:
+        void this.router.navigate(['/notions']);
+        return;
+      case 2:
+        return;
+      case 3:
+        void this.presentToast('La page badges sera disponible bientot.');
+        return;
+      default:
+        return;
+    }
+  }
+
+  private async presentToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2200,
+      color: 'medium',
+      position: 'top'
+    });
+    await toast.present();
   }
 }

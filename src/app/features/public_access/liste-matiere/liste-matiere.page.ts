@@ -10,8 +10,11 @@ import {
   createOutline,
   medalOutline,
   personOutline,
-  ribbonOutline
+  ribbonOutline,
+  speedometerOutline,
+  logOutOutline
 } from 'ionicons/icons';
+import { AuthService } from '../../../core/services/AuthService';
 
 interface Matiere {
   nom: string;
@@ -109,16 +112,19 @@ export class ListeMatierePage {
   constructor(
     public router: Router,
     private route: ActivatedRoute,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private authService: AuthService
   ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
       'book-outline': bookOutline,
+      'speedometer-outline': speedometerOutline,
       'checkmark-outline': checkmarkOutline,
       'create-outline': createOutline,
       'medal-outline': medalOutline,
       'person-outline': personOutline,
-      'ribbon-outline': ribbonOutline
+      'ribbon-outline': ribbonOutline,
+      'log-out-outline': logOutOutline
     });
 
     this.showLoginSuccessToastIfNeeded();
@@ -154,6 +160,10 @@ export class ListeMatierePage {
     this.router.navigate(['/contenu-matiere'], {
       state: { matiere: matiere.nom }
     });
+  }
+
+  logout(): Promise<void> {
+    return this.authService.logout();
   }
 
   openQuiz(matiere: Matiere): void {

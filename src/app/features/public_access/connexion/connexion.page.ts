@@ -3,7 +3,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { NgIf } from '@angular/common';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { addIcons } from 'ionicons';
+import { firstValueFrom } from 'rxjs';
 import {
   arrowBackOutline,
   arrowForwardOutline,
@@ -13,6 +15,17 @@ import {
   personOutline,
   sparklesOutline
 } from 'ionicons/icons';
+import { environment } from '../../../../environments/environment';
+
+interface LoginResponse {
+  access_token: string;
+  refresh_token?: string;
+  user?: {
+    id: number;
+    email: string;
+    role: string;
+  };
+}
 
 @Component({
   selector: 'app-connexion',
@@ -25,13 +38,15 @@ export class ConnexionPage {
   email: string = '';
   password: string = '';
   rememberMe: boolean = false;
+  isSubmitting: boolean = false;
 
   role: 'student' | 'parent' | null = null;
 
   constructor(
     public router: Router,
     private route: ActivatedRoute,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private http: HttpClient
   ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
@@ -89,24 +104,65 @@ export class ConnexionPage {
     await toast.present();
   }
 
-  onSubmit(): void {
-    if (!this.email || !this.password) {
-      console.error('Champs manquants');
+  async onSubmit(): Promise<void> {
+    if (this.isSubmitting) {
       return;
     }
 
-    if (this.role === 'student') {
-      this.router.navigate(['/liste-matiere'], {
+    if (!this.email || !this.password) {
+      await this.presentToast('Veuillez renseigner votre email et votre mot de passe.');
+      return;
+    }
+
+    this.isSubmitting = true;
+
+    try {
+      const response = await firstValueFrom(
+        this.http.post<LoginResponse>(
+          `${environment.apiUrl}/api/auth/login`,
+          {
+            email: this.email.trim(),
+            password: this.password
+          },
+          { withCredentials: true }
+        )
+      );
+
+      localStorage.setItem('authToken', response.access_token);
+      localStorage.setItem('token', response.access_token);
+      if (response.refresh_token) {
+        localStorage.setItem('refreshToken', response.refresh_token);
+      }
+      localStorage.setItem('rememberMe', String(this.rememberMe));
+
+      if (response.user) {
+        localStorage.setItem('user', JSON.stringify(response.user));
+      }
+
+      const effectiveRole = (response.user?.role ?? this.role ?? 'student').toLowerCase();
+      const targetRoute = effectiveRole === 'admin' ? '/admin' : '/liste-matiere';
+
+      await this.router.navigate([targetRoute], {
         queryParams: { notification: 'login-success' }
       });
-    } else if (this.role === 'parent') {
-      this.router.navigate(['/dashboard'], {
-        queryParams: { notification: 'login-success' }
-      });
-    } else {
-      this.router.navigate(['/liste-matiere'], {
-        queryParams: { notification: 'login-success' }
-      });
+    } catch (error: unknown) {
+      if (error instanceof HttpErrorResponse) {
+        const backendError = error.error?.error;
+
+        if (backendError === 'USER_NOT_FOUND' || backendError === 'INVALID_PASSWORD') {
+          await this.presentToast('Email ou mot de passe incorrect.');
+          return;
+        }
+
+        if (backendError === 'EMAIL_AND_PASSWORD_REQUIRED') {
+          await this.presentToast('Veuillez renseigner votre email et votre mot de passe.');
+          return;
+        }
+      }
+
+      await this.presentToast('Connexion impossible. Vérifiez que le backend est démarré.');
+    } finally {
+      this.isSubmitting = false;
     }
   }
 }

@@ -136,6 +136,17 @@
   }
 }
 
+.password-toggle {
+  border: 0;
+  padding: 0;
+  margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  color: #8b755b;
+}
+
 .select-input {
   ion-select {
     width: 100%;
@@ -200,6 +211,7 @@
 .button-icon {
   width: 32px;
   height: 32px;
+  margin-left: 2%;
   display: grid;
   place-items: center;
   border-radius: 50%;

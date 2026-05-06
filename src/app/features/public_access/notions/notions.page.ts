@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { IonicModule, ToastController } from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
 
 interface Notion {
   titre: string;
@@ -20,8 +23,6 @@ interface Notion {
   imports: [IonicModule, CommonModule]
 })
 export class NotionsPage implements OnInit {
-
-  // Données basées sur la capture d'écran
   notions: Notion[] = [
     { titre: 'Variables', pourcentage: 85, statut: 'Maîtrisé', sessions: 8, icon: '📦', color: '#42b883', prochaineEtape: 'Passe à la notion suivante' },
     { titre: 'Conditions', pourcentage: 70, statut: 'En cours', sessions: 6, icon: '🔀', color: '#4d7cfe', prochaineEtape: 'Continue encore 2 sessions' },
@@ -31,21 +32,84 @@ export class NotionsPage implements OnInit {
     { titre: 'Algorithmes', pourcentage: 18, statut: 'À renforcer', sessions: 1, icon: '🧮', color: '#ef4444', prochaineEtape: 'Reprends les bases' }
   ];
 
-  constructor() { }
+  constructor(
+    public router: Router,
+    private toastController: ToastController
+  ) {}
+
+  ngAfterContentInit() {
+    addIcons({
+      'book-outline': bookOutline,
+      'ribbon-outline': ribbonOutline,
+      'person-outline': personOutline,
+      'log-out-outline': logOutOutline,
+      'speedometer-outline': speedometerOutline
+    });
+  }
+
+  logout(): void {
+    sessionStorage.clear();
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('rememberMe');
+    localStorage.removeItem('refreshToken');
+    void this.router.navigate(['/connexion'], { replaceUrl: true });
+  }
 
   ngOnInit() {}
 
-  getStatutClass(statut: string) {
-    switch(statut) {
-      case 'Maîtrisé': return 'status-mastered';
-      case 'En cours': return 'status-progress';
-      case 'À renforcer': return 'status-warning';
-      default: return '';
+  getStatutClass(statut: string): string {
+    switch (statut) {
+      case 'Maîtrisé':
+        return 'status-mastered';
+      case 'En cours':
+        return 'status-progress';
+      case 'À renforcer':
+        return 'status-warning';
+      default:
+        return '';
     }
   }
 
-  goBack() {
+  goBack(): void {
     // Logique pour le bouton retour
     console.log('Retour cliqué');
+  }
+
+  onTabClick(event: Event): void {
+    const target = (event.target as HTMLElement)?.closest('.tab');
+    if (!target) {
+      return;
+    }
+
+    const tabElements = Array.from(target.parentElement?.querySelectorAll('.tab') ?? []);
+    const clickedIndex = tabElements.indexOf(target);
+
+    switch (clickedIndex) {
+      case 0:
+        void this.router.navigate(['/dashboard']);
+        return;
+      case 1:
+        return;
+      case 2:
+        void this.router.navigate(['/historique-dashboard']);
+        return;
+      case 3:
+        void this.presentToast('La page badges sera disponible bientôt.');
+        return;
+      default:
+        return;
+    }
+  }
+
+  private async presentToast(message: string): Promise<void> {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2200,
+      color: 'medium',
+      position: 'top'
+    });
+    await toast.present();
   }
 }

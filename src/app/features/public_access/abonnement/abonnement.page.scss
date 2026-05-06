@@ -41,6 +41,7 @@
   position: absolute;
   top: 16px;
   left: 16px;
+  margin-top: 8px;
 
   ion-icon {
     font-size: 1rem;
@@ -287,7 +288,7 @@
   margin: 0 auto;
   padding: 10px 14px 16px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 8px;
 }
 

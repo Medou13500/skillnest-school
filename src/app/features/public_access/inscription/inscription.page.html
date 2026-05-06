@@ -84,6 +84,7 @@
               name="classe"
               [(ngModel)]="classe"
               placeholder="Selectionnez votre classe"
+              toggleIcon="caret-down-outline"
               interface="action-sheet"
               required>
               <ion-select-option value="classe1">Classe 1</ion-select-option>
@@ -98,13 +99,15 @@
           <ion-item lines="none" class="custom-input">
             <ion-input
               id="password"
-              type="password"
+              [type]="passwordVisible ? 'text' : 'password'"
               name="password"
               placeholder="........."
               [(ngModel)]="password"
               required>
             </ion-input>
-            <ion-icon name="eye-outline" slot="end"></ion-icon>
+            <button type="button" class="password-toggle" slot="end" (click)="togglePasswordVisibility()">
+              <ion-icon [name]="passwordVisible ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
           </ion-item>
         </div>
 
@@ -113,13 +116,15 @@
           <ion-item lines="none" class="custom-input">
             <ion-input
               id="confirm-password"
-              type="password"
+              [type]="confirmPasswordVisible ? 'text' : 'password'"
               name="confirmPassword"
               placeholder="........."
               [(ngModel)]="confirmPassword"
               required>
             </ion-input>
-            <ion-icon name="eye-outline" slot="end"></ion-icon>
+            <button type="button" class="password-toggle" slot="end" (click)="toggleConfirmPasswordVisibility()">
+              <ion-icon [name]="confirmPasswordVisible ? 'eye-off-outline' : 'eye-outline'"></ion-icon>
+            </button>
           </ion-item>
         </div>
 
@@ -139,7 +144,7 @@
           expand="block"
           type="submit"
           class="submit-button"
-          [disabled]="!signupForm.form.valid || password !== confirmPassword || !acceptTerms || !acceptPrivacy">
+          [disabled]="isSubmitting || !signupForm.form.valid || password !== confirmPassword || !acceptTerms || !acceptPrivacy">
           <span>Creer mon compte</span>
           <span class="button-icon">
             <ion-icon name="arrow-forward-outline"></ion-icon>
@@ -152,7 +157,7 @@
 
         <div class="secure-badge">
           <ion-icon name="sparkles-outline"></ion-icon>
-          <span>Inscription securisee SkillNest</span>
+          <span>Inscription sécurisée SkillNest</span>
         </div>
       </form>
     </div>

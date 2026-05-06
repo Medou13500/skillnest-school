@@ -56,7 +56,7 @@
         <div class="options">
           <label class="remember-me">
             <ion-checkbox [(ngModel)]="rememberMe" name="rememberMe"></ion-checkbox>
-            <span>Se souvenir de moi</span>
+            <span>Rester connecté</span>
           </label>
           <button class="forgot-link" type="button" (click)="goToForgot()">Mot de passe oublie ?</button>
         </div>
@@ -64,7 +64,7 @@
         <ion-button
           expand="block"
           type="submit"
-          [disabled]="!loginForm.form.valid"
+          [disabled]="!loginForm.form.valid || isSubmitting"
           class="login-button">
           <span>Se connecter</span>
           <span class="button-icon">
@@ -79,7 +79,7 @@
 
       <div class="secure-badge">
         <ion-icon name="sparkles-outline"></ion-icon>
-        <span>Connexion securisee SkillNest</span>
+        <span>Connexion sécurisée SkillNest</span>
       </div>
     </div>
   </div>

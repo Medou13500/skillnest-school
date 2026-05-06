@@ -101,7 +101,13 @@
 
 <ion-footer class="plans-footer">
   <ion-toolbar>
+
     <div class="tab-bar">
+      <button class="tab-item" type="button" (click)="router.navigate(['/dashboard'])">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>Mon dashboard</span>
+      </button>
+
       <button class="tab-item" type="button" (click)="router.navigate(['/liste-matiere'])">
         <ion-icon name="book-outline"></ion-icon>
         <span>Matieres</span>
@@ -116,6 +122,9 @@
         <ion-icon name="person-outline"></ion-icon>
         <span>Profil</span>
       </button>
-    </div>
+      <button class="tab-item" type="button" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>    </div>
   </ion-toolbar>
 </ion-footer>
