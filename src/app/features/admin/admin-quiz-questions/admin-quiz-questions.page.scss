@@ -375,6 +375,58 @@ textarea {
   gap: 8px;
 }
 
+/* Open-answer keyword UI */
+.open-keyword-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.open-keyword-input {
+  flex: 1 1 auto;
+  min-width: 0; /* allow shrink in grid */
+}
+
+.open-keyword-add {
+  flex: 0 0 auto;
+  padding: 8px 14px;
+  height: 38px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.open-keywords {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.keyword-chip {
+  background: #f1f5f9;
+  padding: 6px 10px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  /* control the min width to influence how many chips per line */
+  min-width: 120px;
+  max-width: calc(100% - 20px);
+}
+
+.keyword-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.keyword-remove {
+  background: transparent;
+  border: 0;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
 .icon-action {
   width: 40px;
   height: 40px;

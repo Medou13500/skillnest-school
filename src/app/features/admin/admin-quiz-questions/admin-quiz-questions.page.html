@@ -63,6 +63,14 @@
         </label>
 
         <label>
+          <span>Type de question</span>
+          <select [(ngModel)]="form.type">
+            <option [ngValue]="'quiz'">QCM</option>
+            <option [ngValue]="'test'">Réponse ouverte</option>
+          </select>
+        </label>
+
+        <label>
           <span>Niveau</span>
           <select [(ngModel)]="form.niveau">
             <option>Debutant</option>
@@ -97,7 +105,7 @@
         </div>
       </div>
 
-      <div class="answers-grid">
+      <div *ngIf="form.type === 'quiz'" class="answers-grid">
         <label *ngFor="let option of form.options; let index = index; trackBy: trackByAnswerIndex">
           <span>Reponse {{ index + 1 }}</span>
           <input
@@ -109,7 +117,7 @@
         </label>
       </div>
 
-      <div class="bottom-form-row single-row">
+      <div *ngIf="form.type === 'quiz'" class="bottom-form-row single-row">
         <label>
           <span>Bonne reponse</span>
           <select [(ngModel)]="form.bonneReponse">
@@ -117,6 +125,26 @@
               Reponse {{ index + 1 }}
             </option>
           </select>
+        </label>
+      </div>
+
+      <div *ngIf="form.type === 'test'" class="full-field">
+        <label style="display:flex; flex-direction:column; gap:8px;">
+          <span>Réponses attendues (mots-clés)</span>
+          <div style="display:flex; gap:8px; align-items:center;">
+            <input type="text" [(ngModel)]="newOpenKeyword" placeholder="Ajouter un mot-clé" />
+            <button class="primary-action" type="button" (click)="addOpenKeyword()" style="padding:6px 12px; height:36px; font-size:14px; border-radius:8px;">
+              Ajouter
+            </button>
+          </div>
+          <div *ngIf="form.openAnswers && form.openAnswers.length" style="margin-top:8px; display:flex; gap:8px; flex-wrap:wrap;">
+            <div *ngFor="let kw of form.openAnswers; let i = index" style="background:#f1f5f9; padding:6px 10px; border-radius:999px; display:inline-flex; align-items:center; gap:8px;">
+              <span>{{ kw }}</span>
+              <button type="button" (click)="removeOpenKeyword(i)" style="background:transparent; border:0; color:#b91c1c; font-weight:700;">×</button>
+            </div>
+          </div>
+          <small *ngIf="!form.openAnswers || !form.openAnswers.length" style="color:#666;">Ou saisis une réponse unique ci-dessous</small>
+          <input *ngIf="!form.openAnswers || !form.openAnswers.length" type="text" [(ngModel)]="form.openAnswer" placeholder="Saisis la réponse attendue" />
         </label>
       </div>
 
@@ -151,6 +179,7 @@
             <span>{{ question.quiz }}</span>
             <span>{{ question.matiere }}</span>
             <span>{{ question.niveau }}</span>
+            <span style="background:#e6f0ff; color:#1b4db2; padding:6px 10px; border-radius:999px; margin-left:6px; font-weight:600;">{{ question.type === 'test' ? 'Réponse ouverte' : 'QCM' }}</span>
           </div>
           <h4>{{ question.enonce }}</h4>
           <div class="answer-list">
@@ -159,6 +188,13 @@
               [class.correct]="index === question.bonneReponse">
               {{ index + 1 }}. {{ option }}
             </span>
+            <div *ngIf="question.type === 'test'" style="margin-top:8px;">
+              <strong>Réponses attendues:</strong>
+              <span *ngIf="question.openAnswers && question.openAnswers.length" style="margin-left:8px; display:inline-flex; gap:8px; flex-wrap:wrap;">
+                <span *ngFor="let kw of question.openAnswers" style="background:#f1f5f9; padding:6px 10px; border-radius:8px;">{{ kw }}</span>
+              </span>
+              <span *ngIf="!(question.openAnswers && question.openAnswers.length)" style="background:#f1f5f9; padding:6px 10px; border-radius:8px; margin-left:8px;">{{ question.openAnswer }}</span>
+            </div>
           </div>
         </div>
 
