@@ -82,8 +82,7 @@ export const routes: Routes = [
     path: 'quiz',
     loadComponent: () => import('./features/public_access/quiz/quiz.page').then( m => m.QuizPage)
   },
-
-
+  {
     path: 'admin',
     loadComponent: () => import('./features/admin/admin-dashboard/admin-dashboard.page').then(m => m.AdminDashboardPage)
   },
