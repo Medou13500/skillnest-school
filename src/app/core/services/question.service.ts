@@ -53,6 +53,16 @@ export class QuestionService {
     return this.http.get<ApiQuestion[]>(this.apiBaseUrl, { params });
   }
 
+  getAllQuestions(notionId?: number): Observable<ApiQuestion[]> {
+    let params = new HttpParams();
+
+    if (notionId) {
+      params = params.set('notionId', String(notionId));
+    }
+
+    return this.http.get<ApiQuestion[]>(this.apiBaseUrl, { params });
+  }
+
   createQuestion(payload: SaveQuestionPayload): Observable<ApiQuestion> {
     return this.http.post<ApiQuestion>(this.apiBaseUrl, payload, {
       headers: this.authHeaders()

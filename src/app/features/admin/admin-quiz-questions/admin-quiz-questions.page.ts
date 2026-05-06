@@ -203,7 +203,7 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.loadingError = '';
 
     try {
-      const apiQuestions = await firstValueFrom(this.questionService.getQuizQuestions());
+      const apiQuestions = await firstValueFrom(this.questionService.getAllQuestions());
       this.questions = apiQuestions.map((question) => this.mapApiQuestionToQuizQuestion(question));
       this.syncAvailableCourseQuizzes();
     } catch {
