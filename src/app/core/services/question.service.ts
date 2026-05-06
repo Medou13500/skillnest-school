@@ -67,6 +67,10 @@ export class QuestionService {
     return this.http.get<ApiQuestion>(`${this.apiBaseUrl}/${id}`);
   }
 
+  getAllQuestions(): Observable<ApiQuestion[]> {
+  return this.http.get<ApiQuestion[]>(this.apiBaseUrl);
+}
+
   createQuestion(payload: SaveQuestionPayload): Observable<ApiQuestion> {
     return this.http.post<ApiQuestion>(this.apiBaseUrl, payload, {
       headers: this.authHeaders()
