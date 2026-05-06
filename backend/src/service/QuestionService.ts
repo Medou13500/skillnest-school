@@ -105,6 +105,10 @@ export default class QuestionService {
       correctAnswer: question.correct_answer,
       type: question.type,
       difficulty: question.difficulty,
+      images:
+        typeof question.images === "string"
+          ? JSON.parse(question.images)
+          : question.images ?? [],
       createdAt: question.created_at,
       updatedAt: question.updated_at,
     };

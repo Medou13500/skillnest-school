@@ -10,6 +10,7 @@ export type CreateQuestionInput = {
   correctAnswer: string;
   type: QuestionType;
   difficulty: Difficulty;
+  images?: string[];
 };
 
 export type UpdateQuestionInput = Partial<CreateQuestionInput>;
@@ -23,6 +24,7 @@ export type QuestionOutput = {
   correctAnswer: string;
   type: QuestionType;
   difficulty: Difficulty;
+  images?: string[];
   createdAt: Date;
   updatedAt: Date;
 };

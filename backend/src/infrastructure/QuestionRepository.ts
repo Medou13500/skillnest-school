@@ -12,8 +12,8 @@ export default class QuestionRepository {
   async createQuestion(data: CreateQuestionInput) {
     const result = await this.pool.query(
       `
-      INSERT INTO questions (notion_id, matiere, content, answers, correct_answer, type, difficulty)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO questions (notion_id, matiere, content, answers, correct_answer, type, difficulty, images)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *
       `,
       [
@@ -24,6 +24,7 @@ export default class QuestionRepository {
         data.correctAnswer,
         data.type,
         data.difficulty,
+        data.images !== undefined ? JSON.stringify(data.images) : null,
       ]
     );
 
@@ -85,8 +86,9 @@ export default class QuestionRepository {
         correct_answer = COALESCE($5, correct_answer),
         type = COALESCE($6, type),
         difficulty = COALESCE($7, difficulty),
+        images = COALESCE($8, images),
         updated_at = NOW()
-      WHERE id = $8
+      WHERE id = $9
       RETURNING *
       `,
       [
@@ -97,6 +99,7 @@ export default class QuestionRepository {
         data.correctAnswer ?? null,
         data.type ?? null,
         data.difficulty ?? null,
+        data.images !== undefined ? JSON.stringify(data.images) : null,
         id,
       ]
     );

@@ -21,6 +21,7 @@ export interface ApiQuestion {
   created_at?: string;
   updatedAt?: string;
   updated_at?: string;
+  images?: string[] | string;
 }
 
 export interface SaveQuestionPayload {
@@ -31,6 +32,7 @@ export interface SaveQuestionPayload {
   correctAnswer: string;
   type: QuestionType;
   difficulty: QuestionDifficulty;
+  images?: string[];
 }
 
 @Injectable({

@@ -24,6 +24,10 @@ interface QuizQuestion {
   enonce: string;
   options: string[];
   bonneReponse: number;
+  images?: string[];
+  type?: 'quiz' | 'test';
+  openAnswer?: string;
+  openAnswers?: string[];
 }
 
 interface CourseQuizLink {
@@ -87,6 +91,7 @@ export class AdminQuizQuestionsPage implements OnInit {
   questions: QuizQuestion[] = [];
 
   form: QuizQuestion = this.createEmptyQuestion();
+  newOpenKeyword = '';
 
   constructor(
     public router: Router,
@@ -156,12 +161,49 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.form.matiere = this.matieres[0];
   }
 
+  onImageSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+
+    if (!files || files.length === 0) {
+      return;
+    }
+
+    const readPromises: Promise<string>[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+      readPromises.push(
+        new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(String(reader.result ?? ''));
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        })
+      );
+    }
+
+    void Promise.all(readPromises)
+      .then((results) => {
+        this.form.images = [...(this.form.images || []), ...results];
+        // Clear file input so selecting the same file again will trigger change
+        try {
+          const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]');
+          if (fileInput) fileInput.value = '';
+        } catch {
+          // ignore
+        }
+      })
+      .catch(() => {
+        // ignore read errors
+      });
+  }
+
   async loadQuestions(): Promise<void> {
     this.isLoading = true;
     this.loadingError = '';
 
     try {
-      const apiQuestions = await firstValueFrom(this.questionService.getQuizQuestions());
+      const apiQuestions = await firstValueFrom(this.questionService.getAllQuestions());
       this.questions = apiQuestions.map((question) => this.mapApiQuestionToQuizQuestion(question));
       this.syncAvailableCourseQuizzes();
     } catch {
@@ -186,11 +228,18 @@ export class AdminQuizQuestionsPage implements OnInit {
       notionId: Number(this.form.coursId),
       matiere: this.form.matiere,
       content: this.form.enonce.trim(),
-      answers: this.form.options.map((option) => option.trim()),
-      correctAnswer: this.form.options[this.form.bonneReponse].trim(),
-      type: 'quiz',
+      answers:
+        this.form.type === 'quiz' ? this.form.options.map((option) => option.trim()) : (this.form.openAnswers && this.form.openAnswers.length ? this.form.openAnswers.map((k) => k.trim()) : [(this.form.openAnswer || '').trim()]),
+      // backend expects a single `correctAnswer` for validation; send the first openAnswer as canonical
+      correctAnswer:
+        this.form.type === 'quiz' ? this.form.options[this.form.bonneReponse].trim() : ((this.form.openAnswers && this.form.openAnswers[0]) || (this.form.openAnswer || '')).trim(),
+      type: this.form.type === 'test' ? 'test' : 'quiz',
       difficulty: this.mapNiveauToDifficulty(this.form.niveau)
     };
+
+    if (this.form.images && this.form.images.length) {
+      (payload as any).images = this.form.images;
+    }
 
     this.isSaving = true;
 
@@ -220,7 +269,13 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.editingId = question.id;
     this.form = {
       ...question,
-      options: [...question.options]
+      options: [...(question.options || [])],
+      images: question.images ? [...question.images] : [],
+      type: (question as any).type ?? 'quiz',
+      openAnswer: (question as any).type === 'test' ? ((question as any).correctAnswer ?? '') : '',
+      openAnswers: (question as any).type === 'test'
+        ? (question.openAnswers && question.openAnswers.length ? [...question.openAnswers] : ((question as any).answers ? this.parseAnswers((question as any).answers) : []))
+        : []
     };
   }
 
@@ -246,6 +301,13 @@ export class AdminQuizQuestionsPage implements OnInit {
   resetForm(): void {
     this.editingId = null;
     this.form = this.createEmptyQuestion();
+    // Clear file input value to avoid stale file remaining in the DOM
+    try {
+      const fileInput = document.querySelector<HTMLInputElement>('input[type="file"]');
+      if (fileInput) fileInput.value = '';
+    } catch {
+      // ignore in non-browser environments
+    }
   }
 
   trackByQuestionId(_index: number, question: QuizQuestion): number {
@@ -267,17 +329,31 @@ export class AdminQuizQuestionsPage implements OnInit {
       niveau: 'Debutant',
       enonce: '',
       options: ['', '', '', ''],
-      bonneReponse: 0
+      bonneReponse: 0,
+      images: [],
+      type: 'quiz',
+      openAnswer: '',
+      openAnswers: []
     };
   }
 
   private isFormValid(): boolean {
-    return Boolean(
+    const base = Boolean(
       this.form.coursId &&
       this.form.coursTitre.trim() &&
       this.form.quiz.trim() &&
       this.form.matiere.trim() &&
-      this.form.enonce.trim() &&
+      this.form.enonce.trim()
+    );
+
+    if (!base) return false;
+
+    if (this.form.type === 'test') {
+      return Boolean((this.form.openAnswers && this.form.openAnswers.length > 0) || (this.form.openAnswer || '').trim());
+    }
+
+    // default: quiz (QCM)
+    return (
       this.form.options.every((option) => option.trim()) &&
       this.form.bonneReponse >= 0 &&
       this.form.bonneReponse < this.form.options.length
@@ -299,22 +375,56 @@ export class AdminQuizQuestionsPage implements OnInit {
       matiere: question.matiere ?? courseQuiz?.matiere ?? this.matieres[0],
       niveau: this.mapDifficultyToNiveau(question.difficulty),
       enonce: question.content,
-      options: answers,
-      bonneReponse: Math.max(0, answers.findIndex((answer) => answer === correctAnswer))
+      options: question.type === 'quiz' ? (answers && answers.length ? answers : ['', '', '', '']) : [],
+      bonneReponse: question.type === 'quiz' ? Math.max(0, answers.findIndex((answer) => answer === correctAnswer)) : 0,
+      images: (question as any).images
+        ? (Array.isArray((question as any).images) ? (question as any).images : JSON.parse((question as any).images))
+        : [],
+      type: question.type ?? 'quiz',
+      openAnswer: question.type === 'test' ? (correctAnswer ?? '') : '',
+      openAnswers: question.type === 'test' ? (Array.isArray(this.parseAnswers((question as any).answers)) ? this.parseAnswers((question as any).answers).filter((a) => typeof a === 'string' && a.trim().length > 0) : []) : []
     };
   }
 
   private parseAnswers(answers: string[] | string): string[] {
     if (Array.isArray(answers)) {
-      return answers;
+      return answers.filter((s) => typeof s === 'string' && s.trim().length > 0);
     }
 
-    try {
-      const parsedAnswers = JSON.parse(answers);
-      return Array.isArray(parsedAnswers) ? parsedAnswers : ['', '', '', ''];
-    } catch {
-      return ['', '', '', ''];
+    if (typeof answers === 'string') {
+      try {
+        const parsedAnswers = JSON.parse(answers);
+        if (Array.isArray(parsedAnswers)) return parsedAnswers;
+      } catch {
+        // ignore
+      }
+
+      if (answers.includes(',')) {
+        return answers
+          .split(',')
+          .map((s) => s.trim())
+          .filter((s) => s.length > 0);
+      }
     }
+
+    return [];
+  }
+
+  removeImageAt(index: number): void {
+    if (!this.form.images) return;
+    this.form.images = this.form.images.filter((_, i) => i !== index);
+  }
+
+  addOpenKeyword(): void {
+    const kw = (this.newOpenKeyword || '').trim();
+    if (!kw) return;
+    this.form.openAnswers = [...(this.form.openAnswers || []), kw];
+    this.newOpenKeyword = '';
+  }
+
+  removeOpenKeyword(index: number): void {
+    if (!this.form.openAnswers) return;
+    this.form.openAnswers = this.form.openAnswers.filter((_, i) => i !== index);
   }
 
   private mapNiveauToDifficulty(niveau: string): QuestionDifficulty {
