@@ -77,6 +77,24 @@ export class ContenuMatierePage {
   }
 
   goTo(item: any): void {
-    this.router.navigate([item.route]);
+    if (item.type === 'Quizz') {
+      this.router.navigate(['/quiz'], { queryParams: { matiere: this.getMatiereFromTheme(item) } });
+    } else {
+      this.router.navigate([item.route]);
+    }
+  }
+
+  private getMatiereFromTheme(item: any): string | null {
+    const theme = this.themes.find(t => t.items.some(i => i.id === item.id));
+    if (theme) {
+      // This is a simple mapping, you might need a more robust solution
+      switch (theme.title) {
+        case 'Theme 1': return 'maths';
+        case 'Theme 2': return 'francais';
+        case 'Theme 3': return 'anglais';
+        default: return null;
+      }
+    }
+    return null;
   }
 }
