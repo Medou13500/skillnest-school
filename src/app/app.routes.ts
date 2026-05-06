@@ -59,6 +59,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/public_access/historique-etudiant/historique-etudiant.page').then(m => m.HistoriqueEtudiantPage)
   },
   {
+    path: 'parent',
+    loadComponent: () => import('./features/public_access/parent/parent.page').then(m => m.ParentPage)
+  },
+  {
     path: 'dashboard',
     loadComponent: () => import('./features/public_access/dashboard/dashboard.page').then(m => m.DashboardPage)
   },

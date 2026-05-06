@@ -49,6 +49,16 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
   `);
 
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS public.parent_student_links (
+      id SERIAL PRIMARY KEY,
+      parent_user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+      student_user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (parent_user_id, student_user_id)
+    );
+  `);
+
+  await pool.query(`
     CREATE INDEX IF NOT EXISTS idx_refresh_tokens_user_id
       ON public.refresh_tokens(user_id);
   `);
