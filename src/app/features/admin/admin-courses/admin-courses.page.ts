@@ -11,7 +11,7 @@ interface CourseItem {
   theme: string;
   chapitre: string;
   titre: string;
-  type: 'Lecon' | 'Quiz';
+  type: 'Leçon' | 'Quiz';
   matiere: string;
   niveau: string;
   duree: string;
@@ -36,9 +36,9 @@ export class AdminCoursesPage {
       theme: 'Theme 1',
       chapitre: 'Variables & Types',
       titre: 'Introduction aux variables',
-      type: 'Lecon',
+      type: 'Leçon',
       matiere: 'Algorithmique',
-      niveau: 'Debutant',
+      niveau: 'Débutant',
       duree: '8 min',
       progression: '1/2',
       statut: 'Publie',
@@ -51,7 +51,7 @@ export class AdminCoursesPage {
       titre: 'Quiz Variables & Types',
       type: 'Quiz',
       matiere: 'Algorithmique',
-      niveau: 'Debutant',
+      niveau: 'Débutant',
       duree: '5 min',
       progression: '1/2',
       statut: 'Publie',
@@ -62,9 +62,9 @@ export class AdminCoursesPage {
       theme: 'Theme 2',
       chapitre: 'Conditions & Boucles',
       titre: 'Conditions simples',
-      type: 'Lecon',
+      type: 'Leçon',
       matiere: 'Algorithmique',
-      niveau: 'Intermediaire',
+      niveau: 'Intermédiaire',
       duree: '10 min',
       progression: '0/2',
       statut: 'Brouillon',
@@ -90,7 +90,7 @@ export class AdminCoursesPage {
   }
 
   get totalLessons(): number {
-    return this.courses.filter((course) => course.type === 'Lecon').length;
+    return this.courses.filter((course) => course.type === 'Leçon').length;
   }
 
   get totalQuizzes(): number {
@@ -161,9 +161,9 @@ export class AdminCoursesPage {
       theme: '',
       chapitre: '',
       titre: '',
-      type: 'Lecon',
+      type: 'Leçon',
       matiere: 'Algorithmique',
-      niveau: 'Debutant',
+      niveau: 'Débutant',
       duree: '',
       progression: '0/1',
       statut: 'Brouillon',

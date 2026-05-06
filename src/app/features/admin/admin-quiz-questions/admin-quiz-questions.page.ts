@@ -51,7 +51,7 @@ export class AdminQuizQuestionsPage implements OnInit {
   isLoading = false;
   isSaving = false;
   loadingError = '';
-  readonly matieres = ['Geographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT', 'Algorithmique'];
+  readonly matieres = ['Géographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT', 'Algorithmique'];
 
   availableCourseQuizzes: CourseQuizLink[] = [
     {
@@ -60,7 +60,7 @@ export class AdminQuizQuestionsPage implements OnInit {
       chapitre: 'Quiz',
       coursTitre: 'Notion 1',
       quizTitre: 'Quiz notion 1',
-      matiere: 'Geographie'
+      matiere: 'Géographie'
     },
     {
       id: 2,
@@ -220,7 +220,7 @@ export class AdminQuizQuestionsPage implements OnInit {
     }
 
     if (!this.isFormValid()) {
-      void this.presentToast('Complete la question, les 4 reponses et la bonne reponse.');
+      void this.presentToast('Complète la question, les 4 réponses et la bonne réponse.');
       return;
     }
 
@@ -247,14 +247,14 @@ export class AdminQuizQuestionsPage implements OnInit {
       if (this.editingId === null) {
         const createdQuestion = await firstValueFrom(this.questionService.createQuestion(payload));
         this.questions = [this.mapApiQuestionToQuizQuestion(createdQuestion), ...this.questions];
-        await this.presentToast('Question ajoutee.', 'success');
+        await this.presentToast('Question ajoutée.', 'success');
       } else {
         const updatedQuestion = await firstValueFrom(this.questionService.updateQuestion(this.editingId, payload));
         const mappedQuestion = this.mapApiQuestionToQuizQuestion(updatedQuestion);
         this.questions = this.questions.map((question) =>
           question.id === this.editingId ? mappedQuestion : question
         );
-        await this.presentToast('Question modifiee.', 'success');
+        await this.presentToast('Question modifiée.', 'success');
       }
 
       this.resetForm();
@@ -326,7 +326,7 @@ export class AdminQuizQuestionsPage implements OnInit {
       theme: '',
       quiz: '',
       matiere: this.matieres[0],
-      niveau: 'Debutant',
+      niveau: 'Débutant',
       enonce: '',
       options: ['', '', '', ''],
       bonneReponse: 0,
@@ -428,11 +428,11 @@ export class AdminQuizQuestionsPage implements OnInit {
   }
 
   private mapNiveauToDifficulty(niveau: string): QuestionDifficulty {
-    if (niveau === 'Intermediaire') {
+    if (niveau === 'Intermédiaire') {
       return 'moyen';
     }
 
-    if (niveau === 'Avance') {
+    if (niveau === 'Avancé') {
       return 'difficile';
     }
 
@@ -441,14 +441,14 @@ export class AdminQuizQuestionsPage implements OnInit {
 
   private mapDifficultyToNiveau(difficulty: QuestionDifficulty): string {
     if (difficulty === 'moyen') {
-      return 'Intermediaire';
+      return 'Intermédiaire';
     }
 
     if (difficulty === 'difficile') {
-      return 'Avance';
+      return 'Avancé';
     }
 
-    return 'Debutant';
+    return 'Débutant';
   }
 
   private syncAvailableCourseQuizzes(): void {
