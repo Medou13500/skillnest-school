@@ -64,14 +64,18 @@ export default class QuestionRepository {
   }
 
   // ================= GET BY ID =================
-  async findById(id: number) {
-    const result = await this.pool.query(
-      `SELECT * FROM questions WHERE id = $1`,
-      [id]
-    );
+async findById(id: number) {
+  console.log("ID RECHERCHÉ :", id);
 
-    return result.rows[0] || null;
-  }
+  const result = await this.pool.query(
+    `SELECT * FROM questions WHERE id = $1`,
+    [id]
+  );
+
+  console.log("RESULT DB :", result.rows);
+
+  return result.rows[0] || null;
+}
 
   // ================= UPDATE =================
   async updateQuestion(id: number, data: UpdateQuestionInput) {
@@ -101,7 +105,7 @@ export default class QuestionRepository {
         data.difficulty ?? null,
         data.images !== undefined ? JSON.stringify(data.images) : null,
         id,
-      ]
+      ],
     );
 
     if ((result.rowCount ?? 0) === 0) return null;
@@ -117,7 +121,7 @@ export default class QuestionRepository {
       WHERE id = $1
       RETURNING id
       `,
-      [id]
+      [id],
     );
 
     return (result.rowCount ?? 0) > 0;

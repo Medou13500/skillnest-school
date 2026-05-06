@@ -18,7 +18,6 @@
     <div class="mini-stats">
       <div class="m-stat"><strong>{{ totalQuestions }}</strong><span>QUESTIONS</span></div>
       <div class="m-stat"><strong>{{ totalQuiz }}</strong><span>QUIZ</span></div>
-      <div class="m-stat"><strong>{{ questions.length ? questions[0].niveau : '-' }}</strong><span>NIVEAU</span></div>
     </div>
   </div>
 
@@ -26,8 +25,6 @@
     <div class="custom-tabs">
       <button class="tab" type="button" (click)="router.navigate(['/admin'])">📊 Aperçu</button>
       <button class="tab active" type="button">❓ Questions quiz</button>
-      <button class="tab" type="button" (click)="router.navigate(['/admin/cours'])">📚 Cours</button>
-      <button class="tab" type="button">⚙️ Paramètres</button>
     </div>
 
     <section class="editor-panel">
@@ -38,7 +35,7 @@
 
       <div class="form-grid">
         <label>
-          <span>Notion / quiz lie</span>
+          <span>Notion / quiz lié</span>
           <select [(ngModel)]="form.coursId" (ngModelChange)="onCourseQuizChange($event)">
             <option [ngValue]="0">Choisir une notion</option>
             <option *ngFor="let courseQuiz of availableCourseQuizzes" [ngValue]="courseQuiz.id">
@@ -58,7 +55,7 @@
         </label>
 
         <label>
-          <span>Matiere</span>
+          <span>Matière</span>
           <input type="text" [value]="form.matiere || 'Choisis une notion'" readonly>
         </label>
 
@@ -73,9 +70,9 @@
         <label>
           <span>Niveau</span>
           <select [(ngModel)]="form.niveau">
-            <option>Debutant</option>
-            <option>Intermediaire</option>
-            <option>Avance</option>
+            <option>Débutant</option>
+            <option>Intermédiaire</option>
+            <option>Avancé</option>
           </select>
         </label>
       </div>
@@ -90,7 +87,7 @@
 
       <label class="full-field">
         <span>Question</span>
-        <textarea rows="3" [(ngModel)]="form.enonce" placeholder="Saisis l'enonce de la question"></textarea>
+        <textarea rows="3" [(ngModel)]="form.enonce" placeholder="Saisis l'énonce de la question"></textarea>
       </label>
 
       <label class="full-field">
@@ -107,7 +104,7 @@
 
       <div *ngIf="form.type === 'quiz'" class="answers-grid">
         <label *ngFor="let option of form.options; let index = index; trackBy: trackByAnswerIndex">
-          <span>Reponse {{ index + 1 }}</span>
+          <span>Réponse {{ index + 1 }}</span>
           <input
             type="text"
             [(ngModel)]="form.options[index]"
@@ -119,10 +116,10 @@
 
       <div *ngIf="form.type === 'quiz'" class="bottom-form-row single-row">
         <label>
-          <span>Bonne reponse</span>
+          <span>Bonne Réponse</span>
           <select [(ngModel)]="form.bonneReponse">
             <option *ngFor="let option of form.options; let index = index" [ngValue]="index">
-              Reponse {{ index + 1 }}
+              Réponse {{ index + 1 }}
             </option>
           </select>
         </label>
