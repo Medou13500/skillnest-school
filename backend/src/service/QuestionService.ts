@@ -17,6 +17,7 @@ export default class QuestionService {
  
   async createQuestion(data: CreateQuestionInput): Promise<QuestionOutput> {
     if (!data.notionId) throw new Error("notionId requis");
+    if (!data.matiere) throw new Error("matiere requise");
     if (!data.content) throw new Error("content requis");
     if (!data.answers?.length) throw new Error("answers requis");
 
@@ -95,6 +96,7 @@ export default class QuestionService {
     return {
       id: question.id,
       notionId: question.notion_id,
+      matiere: question.matiere,
       content: question.content,
       answers:
         typeof question.answers === "string"
@@ -103,6 +105,10 @@ export default class QuestionService {
       correctAnswer: question.correct_answer,
       type: question.type,
       difficulty: question.difficulty,
+      images:
+        typeof question.images === "string"
+          ? JSON.parse(question.images)
+          : question.images ?? [],
       createdAt: question.created_at,
       updatedAt: question.updated_at,
     };

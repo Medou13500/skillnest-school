@@ -95,7 +95,7 @@ export default function refreshTokenRoute(
    *       500:
    *         description: Erreur interne
    */
-  router.post("/auth/logout", controller.logout.bind(controller));
+  router.post("/logout", controller.logout.bind(controller));
 
   /**
    * @swagger
@@ -137,7 +137,7 @@ export default function refreshTokenRoute(
    *       401:
    *         description: Refresh token invalide
    */
-  router.post("/auth/logout", controller.logout.bind(controller));
+  router.post("/logout", controller.logout.bind(controller));
 
   return router;
 }

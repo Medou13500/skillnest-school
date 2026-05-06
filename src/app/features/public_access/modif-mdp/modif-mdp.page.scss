@@ -1,0 +1,255 @@
+.password-content {
+  --background: #f7ecdc;
+}
+
+.password-page {
+  min-height: 100%;
+  padding: 14px 12px 96px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 211, 112, 0.35), transparent 28%),
+    #f7ecdc;
+}
+
+.password-card {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 20px 16px 10px;
+  border-radius: 28px 28px 0 0;
+  background: #f8eddd;
+  box-shadow: 0 18px 42px rgba(116, 92, 58, 0.16);
+  position: relative;
+}
+
+.top-actions {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-button {
+  width: 40px;
+  height: 40px;
+  border: 0;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #ffffff;
+  background: #ef8431;
+
+  ion-icon {
+    font-size: 1.15rem;
+  }
+}
+
+.mini-icon {
+  width: 22px;
+  height: 22px;
+  color: #f3a02f;
+  display: grid;
+  place-items: center;
+
+  ion-icon {
+    font-size: 1.15rem;
+  }
+}
+
+.profile-chip {
+  justify-self: end;
+  border: 0;
+  border-radius: 999px;
+  height: 38px;
+  padding: 0 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ef8431;
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 700;
+
+  ion-icon {
+    font-size: 0.95rem;
+  }
+}
+
+.heading {
+  margin-top: 18px;
+
+  h1 {
+    margin: 0 0 8px;
+    color: #111b44;
+    font-size: 2.05rem;
+    font-weight: 800;
+    line-height: 1.05;
+  }
+
+  span {
+    color: #ef8431;
+  }
+
+  p {
+    margin: 0;
+    color: #7e6a5a;
+    font-size: 1.03rem;
+    line-height: 1.45;
+  }
+}
+
+.form-shell {
+  margin-top: 22px;
+  border-radius: 22px;
+  background: #ffffff;
+  border: 1px solid rgba(226, 207, 184, 0.7);
+  box-shadow: 0 10px 24px rgba(44, 53, 103, 0.08);
+  padding: 22px 14px 16px;
+}
+
+.avatar-wrap {
+  width: fit-content;
+  margin: 0 auto 16px;
+}
+
+.avatar-main {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #111b44;
+  background: linear-gradient(180deg, #ffb800 0%, #ef8431 100%);
+
+  ion-icon {
+    font-size: 2rem;
+  }
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  color: #6d5949;
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+}
+
+.input-group {
+  margin-top: 14px;
+}
+
+.custom-input {
+  --background: #faf8f5;
+  --padding-start: 12px;
+  --inner-padding-end: 12px;
+  --min-height: 46px;
+  --color: #6d7286;
+  --placeholder-color: #9397a8;
+  border: 1px solid rgba(226, 189, 146, 0.7);
+  border-radius: 14px;
+}
+
+.btn-update {
+  --background: linear-gradient(90deg, #ffb800 0%, #ef8431 100%);
+  --background-hover: linear-gradient(90deg, #ffb800 0%, #ef8431 100%);
+  --background-activated: linear-gradient(90deg, #ffb800 0%, #ef8431 100%);
+  --border-radius: 999px;
+  --color: #ffffff;
+  --box-shadow: none;
+  margin-top: 22px;
+  height: 58px;
+  font-size: 1.03rem;
+  font-weight: 700;
+  text-transform: none;
+
+  &::part(native) {
+    padding: 0 10px 0 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+  }
+}
+
+.button-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.22);
+
+  ion-icon {
+    font-size: 1rem;
+  }
+}
+
+.subjects-footer {
+  ion-toolbar {
+    --background: rgba(255, 249, 242, 0.96);
+    --border-width: 0;
+    --min-height: 82px;
+    box-shadow: 0 -8px 22px rgba(100, 78, 47, 0.08);
+  }
+}
+
+.tab-bar {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.tab-item {
+  border: 0;
+  background: transparent;
+  color: #c4b7aa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  ion-icon {
+    font-size: 1.35rem;
+  }
+
+  &.active {
+    color: #ef8431;
+  }
+}
+
+@media (max-width: 420px) {
+  .password-page {
+    padding: 0 0 82px;
+  }
+
+  .password-card {
+    border-radius: 0;
+    min-height: 100vh;
+    box-shadow: none;
+    padding-top: 18px;
+  }
+
+  .heading {
+    h1 {
+      font-size: 1.8rem;
+    }
+
+    p {
+      font-size: 0.95rem;
+    }
+  }
+
+  .subjects-footer {
+    ion-toolbar {
+      --min-height: 70px;
+    }
+  }
+
+  .tab-bar {
+    padding: 8px 10px 10px;
+  }
+}

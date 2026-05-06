@@ -1,0 +1,128 @@
+<ion-content [fullscreen]="true">
+  <div class="header-gradient">
+    <div class="user-profile">
+      <div class="avatar">{{ user.initiales }}</div>
+      <div class="user-info">
+        <h2>{{ user.nom }}</h2>
+        <div class="badge-row">
+          <span class="level-badge">⚡ {{ user.niveau }}</span>
+          <span class="user-email">{{ user.email }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-stats">
+      <div class="m-stat"><strong>24</strong><span>QUIZ</span></div>
+      <div class="m-stat"><strong>72%</strong><span>MOY.</span></div>
+      <div class="m-stat"><strong>5j 🔥</strong><span>SÉRIE</span></div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="custom-tabs" (click)="onTabClick($event)">
+      <div class="tab active">📊 Aperçu</div>
+      <div class="tab">🧠 Notions</div>
+      <div class="tab">📋 Historique</div>
+      <div class="tab">🏅 Badges</div>
+    </div>
+
+    <div class="section-header">
+      <span class="icon-bg">📊</span>
+      <h3>Statistiques globales</h3>
+    </div>
+
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="6" *ngFor="let stat of stats">
+          <div class="stat-card">
+            <div class="card-icon" [ngClass]="stat.color">{{ stat.icon }}</div>
+            <div class="card-value">{{ stat.value }}</div>
+            <div class="card-label">{{ stat.label }}</div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <div class="section-header performance">
+      <div class="left">
+        <span class="icon-bg">📈</span>
+        <h3>Performance</h3>
+      </div>
+      <span class="moyenne-text">Moy. 72%</span>
+    </div>
+
+    <div class="chart-card">
+      <div class="toggle-container">
+        <div class="toggle-btn" [class.active]="selectedPeriod === '7'" (click)="selectedPeriod = '7'">7 jours</div>
+        <div class="toggle-btn" [class.active]="selectedPeriod === '30'" (click)="selectedPeriod = '30'">30 jours</div>
+      </div>
+      <div class="canvas-container">
+        <canvas #lineChart></canvas>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="icon-bg">🧩</span>
+      <h3>Score par notion</h3>
+    </div>
+
+    <div class="chart-card">
+      <div class="canvas-container">
+        <canvas #barChart></canvas>
+      </div>
+    </div>
+
+    <div class="section-header">
+      <span class="icon-bg">⏱️</span>
+      <h3>Dernière session</h3>
+    </div>
+
+    <div class="session-card" *ngIf="lastSession">
+      <div class="session-icon">{{ lastSession.icon }}</div>
+      <div class="session-info">
+        <h4>{{ lastSession.titre }}</h4>
+        <p>{{ lastSession.categorie }} · {{ lastSession.date }} · {{ lastSession.duree }}</p>
+        <div class="progress-container">
+          <div class="progress-bar">
+            <div class="fill" [style.width.%]="lastSession.pourcentage"></div>
+          </div>
+        </div>
+      </div>
+      <div class="session-score">
+        <span class="score">{{ lastSession.score }}/{{ lastSession.total }}</span>
+        <span class="percent">{{ lastSession.pourcentage }}%</span>
+      </div>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="subjects-footer">
+  <ion-toolbar>
+    <div class="tab-bar">
+      <button class="tab-item active" type="button" (click)="router.navigate(['/dashboard'])">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>Mon dashboard</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="router.navigate(['/liste-matiere'])">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="router.navigate(['/abonnement'])">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="router.navigate(['/compte'])">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

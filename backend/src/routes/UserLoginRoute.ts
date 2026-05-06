@@ -59,12 +59,10 @@ export default function userLoginRoute(controller: UserLoginController) {
    *                       type: string
    *       401:
    *         description: Identifiants invalides
-   */
+  */
   router.post("/login", (req, res) => {
-  console.log("CONTROLLER:", controller);
-
-  return controller.login(req, res);
-});
+    return controller.login(req, res);
+  });
   /**
    * @swagger
    * /api/me:

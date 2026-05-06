@@ -1,0 +1,158 @@
+<ion-content class="subject-content" [fullscreen]="true">
+  <div class="subject-page">
+    <div class="subject-card">
+      <section class="hero-section">
+        <button class="back-button" type="button" (click)="router.navigate(['/liste-matiere'])">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Retour</span>
+        </button>
+
+        <p class="breadcrumb">Terminale <span>&rsaquo;</span> <strong>Algorithmique</strong></p>
+
+        <div class="hero-main">
+          <div class="hero-icon">
+            <ion-icon name="book-outline"></ion-icon>
+          </div>
+
+          <div class="hero-text">
+            <h1>Algorithmique</h1>
+            <p>2/6 elements completes</p>
+          </div>
+        </div>
+
+        <div class="progress-block">
+          <div class="progress-track">
+            <span class="progress-value"></span>
+          </div>
+          <span class="progress-label">33%</span>
+        </div>
+      </section>
+
+      <section class="content-section">
+        <section class="objectives-card">
+          <div class="section-header">
+            <div class="section-title">
+              <span class="title-icon target">
+                <ion-icon name="locate-outline"></ion-icon>
+              </span>
+              <h2>Objectifs</h2>
+            </div>
+            <ion-icon name="chevron-down-outline"></ion-icon>
+          </div>
+
+          <div class="section-divider"></div>
+
+          <ul>
+            <li>Lorem ipsum dolor sit amet.</li>
+            <li>Lorem ipsum dolor sit amet.</li>
+            <li>Lorem ipsum dolor sit amet.</li>
+          </ul>
+        </section>
+
+        <div class="toolbar-row">
+          <ion-item lines="none" class="search-input">
+            <ion-icon name="search-outline" slot="start"></ion-icon>
+            <ion-input placeholder="Rechercher..."></ion-input>
+          </ion-item>
+
+          <button class="filter-button" type="button">
+            <ion-icon name="filter-outline"></ion-icon>
+            <span>Filtres</span>
+          </button>
+        </div>
+
+        <section class="themes-list">
+          <article class="theme-card" *ngFor="let theme of themes">
+            <header class="theme-header" (click)="toggle(theme)">
+              <div class="theme-main">
+                <span class="theme-badge"></span>
+                <div>
+                  <h3>{{ theme.title }}</h3>
+                  <p>{{ theme.subtitle }}</p>
+                </div>
+              </div>
+
+              <div class="theme-meta">
+                <span class="theme-progress">{{ theme.progress }}</span>
+                <ion-icon [name]="theme.open ? 'chevron-down-outline' : 'chevron-forward-outline'"></ion-icon>
+              </div>
+            </header>
+
+            <div class="theme-content" [class.open]="theme.open">
+              <div
+                class="lesson-item"
+                *ngFor="let item of theme.items"
+                [class.lesson]="item.type === 'Lecon'"
+                [class.quiz]="item.type === 'Quizz'"
+                (click)="goTo(item)">
+                <div class="item-left">
+                  <span class="item-icon">
+                    <ion-icon [name]="item.type === 'Lecon' ? 'book-outline' : 'create-outline'"></ion-icon>
+                  </span>
+
+                  <div class="item-text">
+                    <span class="item-tag">{{ item.type }}</span>
+                    <strong>{{ item.title }}</strong>
+                  </div>
+                </div>
+
+                <div class="item-right">
+                  <ion-button
+                    size="small"
+                    class="action-button"
+                    (click)="$event.stopPropagation(); goTo(item)">
+                    <span>{{ item.done ? 'Revoir' : 'Commencer' }}</span>
+                    <span class="button-icon">
+                      <ion-icon name="arrow-forward-outline"></ion-icon>
+                    </span>
+                  </ion-button>
+
+                  <ion-icon
+                    [name]="item.done ? 'checkmark-circle' : 'ellipse-outline'"
+                    class="status-icon"
+                    [class.done]="item.done">
+                  </ion-icon>
+                </div>
+              </div>
+
+              <div class="empty-state" *ngIf="theme.items.length === 0">
+                Aucun contenu disponible pour ce theme
+              </div>
+            </div>
+          </article>
+        </section>
+      </section>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="subjects-footer">
+  <ion-toolbar>
+    <div class="tab-bar">
+      <button class="tab-item" type="button" (click)="router.navigate(['/dashboard'])">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>Mon dashboard</span>
+      </button>
+
+      <button class="tab-item active" type="button" (click)="router.navigate(['/liste-matiere'])">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="router.navigate(['/abonnement'])">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="router.navigate(['/compte'])">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

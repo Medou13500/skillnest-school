@@ -1,0 +1,306 @@
+.subjects-content {
+  --background: #f7ecdc;
+}
+
+.subjects-page {
+  min-height: 100%;
+  padding: 18px 16px 110px;
+  background:
+    radial-gradient(circle at top right, rgba(255, 211, 112, 0.35), transparent 28%),
+    #f7ecdc;
+}
+
+.subjects-card {
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.topbar {
+  margin-top: 15px;
+  margin-bottom: 18px;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+}
+
+.back-button {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(186, 162, 136, 0.35);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  color: #7f6753;
+  display: grid;
+  place-items: center;
+
+  ion-icon {
+    font-size: 1rem;
+  }
+}
+
+.title-block {
+  h1 {
+    margin: 0 0 4px;
+    color: #101827;
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  span {
+    color: #ef8431;
+  }
+
+  p {
+    margin: 0;
+    color: #8b6c52;
+    font-size: 0.92rem;
+  }
+}
+
+.level-badge {
+  padding: 10px 12px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 193, 94, 0.16);
+  color: #7f6441;
+  font-size: 0.84rem;
+  font-weight: 700;
+  white-space: nowrap;
+
+  ion-icon {
+    color: #f29a2e;
+    font-size: 1rem;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.subject-tile {
+  border: 0;
+  padding: 0;
+  background: #ffffff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(44, 53, 103, 0.08);
+}
+
+.tile-cover {
+  height: 116px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.matiere-icon {
+  width: 84px;
+  height: 84px;
+  object-fit: contain;
+  position: relative;
+  z-index: 1;
+}
+
+.cover-bubble {
+  position: absolute;
+  right: -18px;
+  top: -10px;
+  width: 70px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.subject-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #26b85f;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 700;
+
+  ion-icon {
+    font-size: 0.8rem;
+  }
+}
+
+.tile-content {
+  padding: 12px 10px 12px;
+
+  h2 {
+    margin: 0 0 10px;
+    color: #101827;
+    font-size: 1.35rem;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+}
+
+.stats-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  color: #7d644c;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.progress-label {
+  margin: 0 0 6px;
+  color: #3e3b3b;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.progress-track {
+  height: 6px;
+  border-radius: 999px;
+  overflow: hidden;
+  background: #ece0d1;
+}
+
+.progress-fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+}
+
+.subjects-footer {
+  ion-toolbar {
+    --background: rgba(255, 249, 242, 0.96);
+    --border-width: 0;
+    --min-height: 82px;
+    box-shadow: 0 -8px 22px rgba(100, 78, 47, 0.08);
+  }
+}
+
+.tab-bar {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 10px 14px 16px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+
+.tab-item {
+  border: 0;
+  background: transparent;
+  color: #c4b7aa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  font-weight: 600;
+
+  ion-icon {
+    font-size: 1.35rem;
+  }
+
+  &.active {
+    color: #ef8431;
+  }
+}
+
+@media (max-width: 420px) {
+  .subjects-page {
+    min-height: 100dvh;
+    padding: 10px 10px 88px;
+  }
+
+  .topbar {
+    margin-bottom: 10px;
+    gap: 8px;
+  }
+
+  .title-block {
+    h1 {
+      font-size: 1.45rem;
+      margin-bottom: 2px;
+    }
+
+    p {
+      font-size: 0.78rem;
+    }
+  }
+
+  .level-badge {
+    padding: 7px 8px;
+    font-size: 0.72rem;
+    gap: 4px;
+  }
+
+  .grid {
+    gap: 8px;
+  }
+
+  .subject-tile {
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(44, 53, 103, 0.07);
+  }
+
+  .tile-cover {
+    height: 78px;
+  }
+
+  .matiere-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .subject-badge {
+    top: 6px;
+    right: 6px;
+    padding: 2px 6px;
+    font-size: 0.62rem;
+  }
+
+  .tile-content {
+    padding: 8px 8px 9px;
+
+    h2 {
+      margin-bottom: 6px;
+      font-size: 1rem;
+    }
+  }
+
+  .stats-row {
+    margin-bottom: 6px;
+    font-size: 0.62rem;
+    gap: 4px;
+  }
+
+  .progress-label {
+    margin-bottom: 4px;
+    font-size: 0.68rem;
+  }
+
+  .progress-track {
+    height: 5px;
+  }
+
+  .subjects-footer {
+    ion-toolbar {
+      --min-height: 70px;
+    }
+  }
+
+  .tab-bar {
+    padding: 8px 10px 10px;
+  }
+}

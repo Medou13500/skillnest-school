@@ -1,0 +1,45 @@
+<ion-content [fullscreen]="true">
+  <div class="header-gradient">
+    <div class="user-profile">
+      <div class="avatar">{{ user.initiales }}</div>
+      <div class="user-info">
+        <h2>{{ user.nom }}</h2>
+        <div class="badge-row">
+          <span class="level-badge">⚡ {{ user.niveau }}</span>
+          <span class="user-email">{{ user.email }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mini-stats">
+      <div class="m-stat"><strong>{{ usersCount }}</strong><span>USERS</span></div>
+      <div class="m-stat"><strong>{{ coursesCount }}</strong><span>COURS</span></div>
+      <div class="m-stat"><strong>{{ pendingReports }}</strong><span>SIGNAL.</span></div>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="custom-tabs">
+      <div class="tab active">📊 Aperçu</div>
+      <button class="tab" type="button" (click)="router.navigate(['/admin/questions-quiz'])">❓ Questions quiz</button>
+    </div>
+
+    <div class="section-header">
+      <span class="icon-bg">📊</span>
+      <h3>Statistiques globales</h3>
+    </div>
+
+    <ion-grid class="ion-no-padding">
+      <ion-row>
+        <ion-col size="6" *ngFor="let stat of stats">
+          <div class="stat-card">
+            <div class="card-icon" [ngClass]="stat.color">{{ stat.icon }}</div>
+            <div class="card-value">{{ stat.value }}</div>
+            <div class="card-label">{{ stat.label }}</div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+  </div>
+</ion-content>

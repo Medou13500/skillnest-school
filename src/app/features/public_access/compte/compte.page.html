@@ -1,0 +1,69 @@
+<ion-content class="account-content" [fullscreen]="true">
+  <div class="account-page">
+    <div class="account-card">
+      <section class="hero-section">
+        <button class="back-button" type="button" (click)="goTo('/liste-matiere')">
+          <ion-icon name="arrow-back-outline"></ion-icon>
+          <span>Retour</span>
+        </button>
+
+        <div class="hero-icon">
+          <ion-icon name="person-outline"></ion-icon>
+        </div>
+
+        <h1>Mon Compte</h1>
+        <p>Gerez vos informations et preferences</p>
+      </section>
+
+      <section class="menu-section">
+        <div class="section-group" *ngFor="let section of sections">
+          <h2 [class.danger]="section.danger">{{ section.title }}</h2>
+
+          <button
+            class="menu-item"
+            type="button"
+            *ngFor="let item of section.items"
+            [class.danger]="item.danger"
+            (click)="goTo(item.route)">
+            <span class="item-icon">
+              <ion-icon [name]="item.icon"></ion-icon>
+            </span>
+            <span class="label">{{ item.label }}</span>
+            <ion-icon class="chevron" name="chevron-forward-outline"></ion-icon>
+          </button>
+        </div>
+      </section>
+    </div>
+  </div>
+</ion-content>
+
+<ion-footer class="subjects-footer">
+  <ion-toolbar>
+    <div class="tab-bar">
+      <button class="tab-item" type="button" (click)="goTo('/dashboard')">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>Mon dashboard</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="goTo('/liste-matiere')">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="goTo('/abonnement')">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
+
+      <button class="tab-item active" type="button">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="goTo('/logout')">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

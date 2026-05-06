@@ -75,7 +75,7 @@ export default function resetPasswordRoute(
    */
 
   router.post(
-    "/auth/reset-password/confirm",
+    "/reset-password/confirm",
     controller.resetPassword.bind(controller)
   );
 
