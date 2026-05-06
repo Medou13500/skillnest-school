@@ -4,7 +4,9 @@
       "Bash(find /c/Users/Nahte/skillnest-school_cloned/backend/src -type f -name *.ts)",
       "Bash(find /c/Users/Nahte/skillnest-school_cloned -type f \\\\\\(-name *service* -o -name *api* -o -name *http* -o -name *fetch* \\\\\\))",
       "Bash(grep -E \"\\\\.\\(ts|js\\)$\")",
-      "Bash(find /c/Users/Nahte/skillnest-school_cloned -type f -name *.service.ts -o -type f -name *api*)"
+      "Bash(find /c/Users/Nahte/skillnest-school_cloned -type f -name *.service.ts -o -type f -name *api*)",
+      "Bash(xargs grep *)",
+      "Bash(git rm *)"
     ]
   }
 }

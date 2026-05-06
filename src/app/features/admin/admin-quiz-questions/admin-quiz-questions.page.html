@@ -18,7 +18,6 @@
     <div class="mini-stats">
       <div class="m-stat"><strong>{{ totalQuestions }}</strong><span>QUESTIONS</span></div>
       <div class="m-stat"><strong>{{ totalQuiz }}</strong><span>QUIZ</span></div>
-      <div class="m-stat"><strong>{{ questions.length ? questions[0].niveau : '-' }}</strong><span>NIVEAU</span></div>
     </div>
   </div>
 
@@ -26,8 +25,6 @@
     <div class="custom-tabs">
       <button class="tab" type="button" (click)="router.navigate(['/admin'])">📊 Aperçu</button>
       <button class="tab active" type="button">❓ Questions quiz</button>
-      <button class="tab" type="button" (click)="router.navigate(['/admin/cours'])">📚 Cours</button>
-      <button class="tab" type="button">⚙️ Paramètres</button>
     </div>
 
     <section class="editor-panel">
