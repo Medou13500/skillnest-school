@@ -1,0 +1,12 @@
+# Dossiers
+node_modules/
+dist/
+build/
+
+# Fichiers
+.env
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
