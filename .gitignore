@@ -1,0 +1,13 @@
+# Dossiers
+node_modules/
+dist/
+build/
+.angular/
+.claude/
+# Fichiers
+.env
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

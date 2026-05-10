@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 import { NgForOf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
@@ -36,7 +37,8 @@ type MatiereQuizKey = 'geographie' | 'maths' | 'anglais' | 'francais' | 'science
   styleUrls: ['./liste-matiere.page.scss'],
   standalone: true,
   imports: [
-    IonicModule
+    IonicModule,
+    MenuComponent
   ]
 })
 export class ListeMatierePage {

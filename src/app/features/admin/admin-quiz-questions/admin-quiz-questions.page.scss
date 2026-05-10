@@ -84,7 +84,27 @@ ion-content {
       opacity: 0.75;
     }
   }
+  /* admin-logout styles moved outside as the button is not inside .mini-stats */
 }
+
+/* Ensure logout button styles apply when the button is a direct child of the header */
+.header-gradient .admin-logout {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid rgba(0,0,0,0.06);
+  color: #ef6b3a;
+  z-index: 1400;
+  font-weight: 600;
+  font-size: 13px;
+}
+.header-gradient .admin-logout ion-icon { font-size: 18px; }
 
 .main-content {
   padding: 0 15px 30px;

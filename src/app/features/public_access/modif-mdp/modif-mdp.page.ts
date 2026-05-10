@@ -18,13 +18,14 @@ import {
 } from 'ionicons/icons';
 import { environment } from '../../../../environments/environment';
 import { AuthService } from '../../../core/services/AuthService';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 
 @Component({
   selector: 'app-change-password',
   templateUrl: './modif-mdp.page.html',
   styleUrls: ['./modif-mdp.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, MenuComponent]
 })
 export class ModifMdpPage {
   passwordData = {

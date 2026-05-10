@@ -124,7 +124,10 @@ const notionRepository = new NotionRepository(pool);
 
 const answerRepository = new AnswerRepository(pool);
 
-
+const answerService = new AnswerService(
+  answerRepository,
+  questionRepository
+);
 
 const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
 

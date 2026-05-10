@@ -102,35 +102,7 @@
       </div>
     </div>
   </div>
+
 </ion-content>
 
-<ion-footer class="subjects-footer">
-  <ion-toolbar>
-    <div class="tab-bar">
-      <button class="tab-item active" type="button" (click)="router.navigate(['/dashboard'])">
-        <ion-icon name="speedometer-outline"></ion-icon>
-        <span>Mon dashboard</span>
-      </button>
-
-      <button class="tab-item" type="button" (click)="router.navigate(['/liste-matiere'])">
-        <ion-icon name="book-outline"></ion-icon>
-        <span>Matieres</span>
-      </button>
-
-      <button class="tab-item" type="button" (click)="router.navigate(['/abonnement'])">
-        <ion-icon name="ribbon-outline"></ion-icon>
-        <span>Classement</span>
-      </button>
-
-      <button class="tab-item" type="button" (click)="router.navigate(['/compte'])">
-        <ion-icon name="person-outline"></ion-icon>
-        <span>Profil</span>
-      </button>
-
-      <button class="tab-item" type="button" (click)="logout()">
-        <ion-icon name="log-out-outline"></ion-icon>
-        <span>Logout</span>
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-footer>
+<app-menu [active]="'dashboard'"></app-menu>

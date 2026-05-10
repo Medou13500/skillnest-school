@@ -7,6 +7,11 @@
       </button>
     </div>
 
+    <button class="admin-logout" type="button" (click)="logout()" aria-label="Logout">
+      <ion-icon name="log-out-outline"></ion-icon>
+      <span>Logout</span>
+    </button>
+
     <div class="page-title">
       <div class="avatar">?</div>
       <div>
@@ -35,9 +40,10 @@
 
       <div class="form-grid">
         <label>
-          <span>Notion / quiz lié</span>
+          <span>Notion / quiz lie</span>
           <select [(ngModel)]="form.coursId" (ngModelChange)="onCourseQuizChange($event)">
             <option [ngValue]="0">Choisir une notion</option>
+
             <option *ngFor="let courseQuiz of availableCourseQuizzes" [ngValue]="courseQuiz.id">
               {{ courseQuiz.theme }} - {{ courseQuiz.chapitre }} / {{ courseQuiz.quizTitre }}
             </option>
@@ -45,18 +51,16 @@
         </label>
 
         <label>
-          <span>ID notion</span>
-          <input
-            type="number"
-            min="1"
-            [(ngModel)]="form.coursId"
-            (ngModelChange)="onManualNotionChange($event)"
-            placeholder="Ex: 1">
-        </label>
+          <span>Matiere</span>
 
-        <label>
-          <span>Matière</span>
-          <input type="text" [value]="form.matiere || 'Choisis une notion'" readonly>
+          <select *ngIf="form.coursId === -1" [(ngModel)]="form.matiere">
+            <option *ngFor="let m of matieres" [ngValue]="m">{{ m }}</option>
+          </select>
+
+          <input *ngIf="form.coursId !== -1"
+                 type="text"
+                 [value]="form.matiere || 'Choisis une notion'"
+                 readonly>
         </label>
 
         <label>
@@ -64,15 +68,6 @@
           <select [(ngModel)]="form.type">
             <option [ngValue]="'quiz'">QCM</option>
             <option [ngValue]="'test'">Réponse ouverte</option>
-          </select>
-        </label>
-
-        <label>
-          <span>Niveau</span>
-          <select [(ngModel)]="form.niveau">
-            <option>Débutant</option>
-            <option>Intermédiaire</option>
-            <option>Avancé</option>
           </select>
         </label>
       </div>
@@ -87,7 +82,7 @@
 
       <label class="full-field">
         <span>Question</span>
-        <textarea rows="3" [(ngModel)]="form.enonce" placeholder="Saisis l'énonce de la question"></textarea>
+        <textarea rows="3" [(ngModel)]="form.enonce" placeholder="Saisis l'enonce de la question"></textarea>
       </label>
 
       <label class="full-field">
@@ -104,7 +99,7 @@
 
       <div *ngIf="form.type === 'quiz'" class="answers-grid">
         <label *ngFor="let option of form.options; let index = index; trackBy: trackByAnswerIndex">
-          <span>Réponse {{ index + 1 }}</span>
+          <span>Reponse {{ index + 1 }}</span>
           <input
             type="text"
             [(ngModel)]="form.options[index]"
@@ -116,10 +111,10 @@
 
       <div *ngIf="form.type === 'quiz'" class="bottom-form-row single-row">
         <label>
-          <span>Bonne Réponse</span>
+          <span>Bonne reponse</span>
           <select [(ngModel)]="form.bonneReponse">
             <option *ngFor="let option of form.options; let index = index" [ngValue]="index">
-              Réponse {{ index + 1 }}
+              Reponse {{ index + 1 }}
             </option>
           </select>
         </label>
@@ -171,11 +166,8 @@
       <article class="question-card" *ngFor="let question of questions; trackBy: trackByQuestionId">
         <div class="question-main">
           <div class="question-meta">
-            <span>{{ question.theme }}</span>
-            <span>{{ question.coursTitre }}</span>
-            <span>{{ question.quiz }}</span>
+            <!-- Removed theme / coursTitre / quiz tags for cleaner list view -->
             <span>{{ question.matiere }}</span>
-            <span>{{ question.niveau }}</span>
             <span style="background:#e6f0ff; color:#1b4db2; padding:6px 10px; border-radius:999px; margin-left:6px; font-weight:600;">{{ question.type === 'test' ? 'Réponse ouverte' : 'QCM' }}</span>
           </div>
           <h4>{{ question.enonce }}</h4>

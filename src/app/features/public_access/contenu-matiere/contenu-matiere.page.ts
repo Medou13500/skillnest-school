@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { NgForOf, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 import {
   arrowBackOutline,
   arrowForwardOutline,
@@ -31,7 +32,8 @@ import {
   imports: [
     IonicModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    MenuComponent
   ]
 })
 export class ContenuMatierePage {

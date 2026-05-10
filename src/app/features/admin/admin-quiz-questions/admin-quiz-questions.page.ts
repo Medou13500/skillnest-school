@@ -4,7 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, createOutline, trashOutline } from 'ionicons/icons';
+import { arrowBackOutline, createOutline, trashOutline, logOutOutline } from 'ionicons/icons';
+import { AuthService } from '../../../core/services/AuthService';
 import { firstValueFrom } from 'rxjs';
 import {
   ApiQuestion,
@@ -20,7 +21,6 @@ interface QuizQuestion {
   theme: string;
   quiz: string;
   matiere: string;
-  niveau: string;
   enonce: string;
   options: string[];
   bonneReponse: number;
@@ -51,16 +51,24 @@ export class AdminQuizQuestionsPage implements OnInit {
   isLoading = false;
   isSaving = false;
   loadingError = '';
-  readonly matieres = ['Géographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT', 'Algorithmique'];
+  readonly matieres = ['Geographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT', 'Algorithmique'];
 
   availableCourseQuizzes: CourseQuizLink[] = [
+    {
+      id: -1,
+      theme: 'Évaluation',
+      chapitre: 'Test de positionnement',
+      coursTitre: 'Test de positionnement',
+      quizTitre: 'Test initial',
+      matiere: 'Geographie'
+    },
     {
       id: 1,
       theme: 'Notion 1',
       chapitre: 'Quiz',
       coursTitre: 'Notion 1',
       quizTitre: 'Quiz notion 1',
-      matiere: 'Géographie'
+      matiere: 'Geographie'
     },
     {
       id: 2,
@@ -96,13 +104,19 @@ export class AdminQuizQuestionsPage implements OnInit {
   constructor(
     public router: Router,
     private toastController: ToastController,
-    private questionService: QuestionService
+    private questionService: QuestionService,
+    private authService: AuthService
   ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
       'create-outline': createOutline,
-      'trash-outline': trashOutline
+      'trash-outline': trashOutline,
+      'log-out-outline': logOutOutline
     });
+  }
+
+  logout(): Promise<void> {
+    return this.authService.logout();
   }
 
   ngOnInit(): void {
@@ -126,9 +140,24 @@ export class AdminQuizQuestionsPage implements OnInit {
   }
 
   onCourseQuizChange(coursId: number): void {
-    const selectedCourseQuiz = this.availableCourseQuizzes.find((courseQuiz) => courseQuiz.id === Number(coursId));
+    if (coursId === -1) {
+      this.form.coursId = -1;
+      this.form.coursTitre = 'Test de positionnement';
+      this.form.theme = 'Évaluation';
+      this.form.quiz = 'Test initial';
+
+      // On met la première matière par défaut,
+      // l'utilisateur pourra la changer via le select HTML
+      this.form.matiere = this.matieres[0];
+      return;
+    }
+
+    const selectedCourseQuiz = this.availableCourseQuizzes.find(
+      (courseQuiz) => courseQuiz.id === Number(coursId)
+    );
 
     if (!selectedCourseQuiz) {
+      this.form.matiere = ''; // Reset si rien n'est choisi
       return;
     }
 
@@ -139,27 +168,6 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.form.matiere = selectedCourseQuiz.matiere;
   }
 
-  onManualNotionChange(notionId: number): void {
-    const parsedNotionId = Number(notionId);
-
-    if (!parsedNotionId || parsedNotionId < 1) {
-      this.form.coursId = 0;
-      return;
-    }
-
-    const selectedCourseQuiz = this.availableCourseQuizzes.find((courseQuiz) => courseQuiz.id === parsedNotionId);
-
-    if (selectedCourseQuiz) {
-      this.onCourseQuizChange(parsedNotionId);
-      return;
-    }
-
-    this.form.coursId = parsedNotionId;
-    this.form.coursTitre = `Notion ${parsedNotionId}`;
-    this.form.theme = `Notion ${parsedNotionId}`;
-    this.form.quiz = `Quiz notion ${parsedNotionId}`;
-    this.form.matiere = this.matieres[0];
-  }
 
   onImageSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -220,12 +228,12 @@ export class AdminQuizQuestionsPage implements OnInit {
     }
 
     if (!this.isFormValid()) {
-      void this.presentToast('Complète la question, les 4 réponses et la bonne réponse.');
+      void this.presentToast('Complete la question, les 4 reponses et la bonne reponse.');
       return;
     }
 
     const payload: SaveQuestionPayload = {
-      notionId: Number(this.form.coursId),
+      notionId: this.form.coursId === -1 ? null as any : Number(this.form.coursId),
       matiere: this.form.matiere,
       content: this.form.enonce.trim(),
       answers:
@@ -234,7 +242,7 @@ export class AdminQuizQuestionsPage implements OnInit {
       correctAnswer:
         this.form.type === 'quiz' ? this.form.options[this.form.bonneReponse].trim() : ((this.form.openAnswers && this.form.openAnswers[0]) || (this.form.openAnswer || '')).trim(),
       type: this.form.type === 'test' ? 'test' : 'quiz',
-      difficulty: this.mapNiveauToDifficulty(this.form.niveau)
+      difficulty: "facile"
     };
 
     if (this.form.images && this.form.images.length) {
@@ -247,19 +255,26 @@ export class AdminQuizQuestionsPage implements OnInit {
       if (this.editingId === null) {
         const createdQuestion = await firstValueFrom(this.questionService.createQuestion(payload));
         this.questions = [this.mapApiQuestionToQuizQuestion(createdQuestion), ...this.questions];
-        await this.presentToast('Question ajoutée.', 'success');
+        await this.presentToast('Question ajoutee.', 'success');
       } else {
         const updatedQuestion = await firstValueFrom(this.questionService.updateQuestion(this.editingId, payload));
         const mappedQuestion = this.mapApiQuestionToQuizQuestion(updatedQuestion);
         this.questions = this.questions.map((question) =>
           question.id === this.editingId ? mappedQuestion : question
         );
-        await this.presentToast('Question modifiée.', 'success');
+        await this.presentToast('Question modifiee.', 'success');
       }
 
       this.resetForm();
     } catch {
-      await this.presentToast('Enregistrement impossible. Verifie ton compte admin et la notion choisie.', 'danger');
+      // try to show backend error when available
+      try {
+        const err = (arguments[0] as any) ?? null;
+        const msg = err?.error?.error ?? err?.message ?? 'Enregistrement impossible. Verifie ton compte admin et la notion choisie.';
+        await this.presentToast(msg, 'danger');
+      } catch {
+        await this.presentToast('Enregistrement impossible. Verifie ton compte admin et la notion choisie.', 'danger');
+      }
     } finally {
       this.isSaving = false;
     }
@@ -326,7 +341,6 @@ export class AdminQuizQuestionsPage implements OnInit {
       theme: '',
       quiz: '',
       matiere: this.matieres[0],
-      niveau: 'Débutant',
       enonce: '',
       options: ['', '', '', ''],
       bonneReponse: 0,
@@ -339,7 +353,7 @@ export class AdminQuizQuestionsPage implements OnInit {
 
   private isFormValid(): boolean {
     const base = Boolean(
-      this.form.coursId &&
+      this.form.coursId !== 0 &&
       this.form.coursTitre.trim() &&
       this.form.quiz.trim() &&
       this.form.matiere.trim() &&
@@ -363,17 +377,22 @@ export class AdminQuizQuestionsPage implements OnInit {
   private mapApiQuestionToQuizQuestion(question: ApiQuestion): QuizQuestion {
     const answers = this.parseAnswers(question.answers);
     const correctAnswer = question.correctAnswer ?? question.correct_answer ?? '';
-    const notionId = question.notionId ?? question.notion_id ?? 0;
+
+    // Determine notion id: treat null/undefined notion as test (-1) for all questions
+    const rawNotion = (question as any).notionId ?? (question as any).notion_id;
+    const notionId = rawNotion === null || rawNotion === undefined
+      ? -1
+      : Number(rawNotion);
+
     const courseQuiz = this.availableCourseQuizzes.find((item) => item.id === notionId);
 
     return {
       id: question.id,
       coursId: notionId,
-      coursTitre: courseQuiz?.coursTitre ?? `Notion ${notionId}`,
-      theme: courseQuiz ? `${courseQuiz.theme} - ${courseQuiz.chapitre}` : `Notion ${notionId}`,
-      quiz: courseQuiz?.quizTitre ?? `Quiz notion ${notionId}`,
+      coursTitre: notionId === -1 ? 'Test de positionnement' : (courseQuiz?.coursTitre ?? `Notion ${notionId}`),
+      theme: notionId === -1 ? 'Évaluation' : (courseQuiz ? `${courseQuiz.theme} - ${courseQuiz.chapitre}` : `Notion ${notionId}`),
+      quiz: notionId === -1 ? 'Test initial' : (courseQuiz?.quizTitre ?? `Quiz notion ${notionId}`),
       matiere: question.matiere ?? courseQuiz?.matiere ?? this.matieres[0],
-      niveau: this.mapDifficultyToNiveau(question.difficulty),
       enonce: question.content,
       options: question.type === 'quiz' ? (answers && answers.length ? answers : ['', '', '', '']) : [],
       bonneReponse: question.type === 'quiz' ? Math.max(0, answers.findIndex((answer) => answer === correctAnswer)) : 0,
@@ -427,37 +446,30 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.form.openAnswers = this.form.openAnswers.filter((_, i) => i !== index);
   }
 
-  private mapNiveauToDifficulty(niveau: string): QuestionDifficulty {
-    if (niveau === 'Intermédiaire') {
-      return 'moyen';
-    }
 
-    if (niveau === 'Avancé') {
-      return 'difficile';
-    }
-
-    return 'facile';
-  }
-
-  private mapDifficultyToNiveau(difficulty: QuestionDifficulty): string {
-    if (difficulty === 'moyen') {
-      return 'Intermédiaire';
-    }
-
-    if (difficulty === 'difficile') {
-      return 'Avancé';
-    }
-
-    return 'Débutant';
-  }
 
   private syncAvailableCourseQuizzes(): void {
     const existingIds = new Set(this.availableCourseQuizzes.map((courseQuiz) => courseQuiz.id));
     const missingNotionIds = Array.from(new Set(this.questions.map((question) => question.coursId)))
-      .filter((notionId) => notionId && !existingIds.has(notionId));
+      // ignore falsy ids and only include positive notion ids (real notions)
+      .filter((notionId) => typeof notionId === 'number' && notionId > 0 && !existingIds.has(notionId));
+
+    // Ensure we include the "Test de positionnement" entry (id -1) when any question uses it
+    const hasTestNotion = this.questions.some((q) => q.coursId === -1) || this.form?.coursId === -1;
+    const base = [...this.availableCourseQuizzes];
+    if (hasTestNotion && !existingIds.has(-1)) {
+      base.unshift({
+        id: -1,
+        theme: 'Évaluation',
+        chapitre: 'Test de positionnement',
+        coursTitre: 'Test de positionnement',
+        quizTitre: 'Test initial',
+        matiere: this.matieres[0]
+      });
+    }
 
     this.availableCourseQuizzes = [
-      ...this.availableCourseQuizzes,
+      ...base,
       ...missingNotionIds.map((notionId) => ({
         id: notionId,
         theme: `Notion ${notionId}`,

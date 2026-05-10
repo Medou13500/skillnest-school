@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 
 interface Notion {
   titre: string;
@@ -20,7 +21,7 @@ interface Notion {
   templateUrl: './notions.page.html',
   styleUrls: ['./notions.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule, MenuComponent]
 })
 export class NotionsPage implements OnInit {
   notions: Notion[] = [
