@@ -16,7 +16,8 @@ export default class QuestionService {
 
  
   async createQuestion(data: CreateQuestionInput): Promise<QuestionOutput> {
-    if (!data.notionId) throw new Error("notionId requis");
+    // notionId can be null for "Test de positionnement". Require presence (could be null).
+    if (data.notionId === undefined) throw new Error("notionId requis");
     if (!data.matiere) throw new Error("matiere requise");
     if (!data.content) throw new Error("content requis");
     if (!data.answers?.length) throw new Error("answers requis");
@@ -25,8 +26,11 @@ export default class QuestionService {
       throw new Error("correctAnswer invalide");
     }
 
-    const notion = await this.notionRepository.findById(data.notionId);
-    if (!notion) throw new Error("NOTION_NOT_FOUND");
+    // Only validate notion existence when a real notion id is provided (not null)
+    if (data.notionId !== null) {
+      const notion = await this.notionRepository.findById(data.notionId as number);
+      if (!notion) throw new Error("NOTION_NOT_FOUND");
+    }
 
     const question = await this.repo.createQuestion(data);
 
@@ -57,8 +61,11 @@ export default class QuestionService {
 
     // vérifier notion si fournie
     if (data.notionId !== undefined) {
-      const notion = await this.notionRepository.findById(data.notionId);
-      if (!notion) throw new Error("NOTION_NOT_FOUND");
+      if (data.notionId !== null) {
+        const notion = await this.notionRepository.findById(data.notionId as number);
+        if (!notion) throw new Error("NOTION_NOT_FOUND");
+      }
+      // if it's explicitly null, treat as "test" (allowed)
     }
 
     // validation answers
