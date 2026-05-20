@@ -1,0 +1,50 @@
+<ng-container *ngIf="isAuthenticated">
+  <div class="mobile-hamburger" [class.open]="open" (click)="toggle()" aria-label="Menu">
+    <div class="hamburger-icon" role="img" aria-hidden="true">
+      <span class="bar1"></span>
+      <span class="bar2"></span>
+      <span class="bar3"></span>
+    </div>
+  </div>
+
+  <div class="mobile-panel" [class.open]="open" (click)="open = false">
+  <div class="panel-content" (click)="$event.stopPropagation()">
+    <div class="panel-header">
+      <button class="close" type="button" (click)="toggle()">
+        <ion-icon name="close-outline"></ion-icon>
+      </button>
+    </div>
+
+    <nav>
+      <button *ngFor="let item of nav" class="nav-item" (click)="navigate(item.path)">
+        <ion-icon [name]="item.icon"></ion-icon>
+        <span>{{ item.label }}</span>
+      </button>
+      <button class="tab-item" type="button" (click)="navigate('/dashboard')" >
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>Mon dashboard</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="navigate('/liste-matiere')" >
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="navigate('/abonnement')" >
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="navigate('/compte')" >
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
+
+      <button class="nav-item logout" (click)="logout()">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
+    </nav>
+  </div>
+</div>
+</ng-container>

@@ -1,0 +1,30 @@
+<ion-footer class="subjects-footer">
+  <ion-toolbar>
+    <div class="tab-bar">
+      <button class="tab-item" type="button" (click)="navigate('/dashboard')" [class.active]="active==='dashboard'">
+        <ion-icon name="speedometer-outline"></ion-icon>
+        <span>Mon dashboard</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="navigate('/liste-matiere')" [class.active]="active==='matieres'">
+        <ion-icon name="book-outline"></ion-icon>
+        <span>Matieres</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="navigate('/abonnement')" [class.active]="active==='classement'">
+        <ion-icon name="ribbon-outline"></ion-icon>
+        <span>Classement</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="navigate('/compte')" [class.active]="active==='profil'">
+        <ion-icon name="person-outline"></ion-icon>
+        <span>Profil</span>
+      </button>
+
+      <button class="tab-item" type="button" (click)="navigate('/logout')">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
+    </div>
+  </ion-toolbar>
+</ion-footer>
