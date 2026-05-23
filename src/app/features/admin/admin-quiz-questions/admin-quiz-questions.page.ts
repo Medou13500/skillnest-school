@@ -156,6 +156,10 @@ export class AdminQuizQuestionsPage implements OnInit {
     this.displayLimit += 5;
   }
 
+  showLess(): void {
+    this.displayLimit = 5;
+  }
+
   onCourseQuizChange(coursId: number): void {
     if (coursId === -1) {
       this.form.coursId = -1;

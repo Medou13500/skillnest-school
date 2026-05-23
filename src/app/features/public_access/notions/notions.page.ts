@@ -14,6 +14,7 @@ interface Notion {
   icon: string;
   color: string;
   prochaineEtape: string;
+  expanded?: boolean;
 }
 
 @Component({
@@ -73,9 +74,12 @@ export class NotionsPage implements OnInit {
     }
   }
 
+  toggleNotion(notion: Notion): void {
+    notion.expanded = !notion.expanded;
+  }
+
   goBack(): void {
-    // Logique pour le bouton retour
-    console.log('Retour cliqué');
+    void this.router.navigate(['/dashboard']);
   }
 
   onTabClick(event: Event): void {

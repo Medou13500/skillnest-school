@@ -213,9 +213,12 @@
         </div>
       </article>
 
-      <div class="show-more-container" *ngIf="questions.length > displayLimit">
-        <button class="show-more-button" (click)="showMore()">
+      <div class="show-more-container">
+        <button class="show-more-button" (click)="showMore()" *ngIf="questions.length > displayLimit">
           Afficher plus de questions ({{ questions.length - displayLimit }} restantes)
+        </button>
+        <button class="show-more-button secondary" (click)="showLess()" *ngIf="displayLimit > 5">
+          Réduire le nombre de questions
         </button>
       </div>
     </section>

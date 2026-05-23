@@ -203,6 +203,19 @@ ion-content {
     background: #ff823a;
     color: white;
   }
+
+  &.secondary {
+    background: #f5f5f5;
+    color: #666;
+    border-color: #ddd;
+    border-style: solid;
+    margin-top: 10px;
+
+    &:active {
+      background: #eee;
+      color: #333;
+    }
+  }
 }
 
 .editor-panel,

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Router, NavigationEnd } from '@angular/router';
-import { NgIf } from '@angular/common';
+import { NgIf, NgFor } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../core/services/AuthService';
 import { addIcons } from 'ionicons';
@@ -10,7 +10,7 @@ import { logOutOutline, speedometerOutline, bookOutline, ribbonOutline, personOu
 @Component({
   selector: 'app-mobile-menu',
   standalone: true,
-  imports: [IonicModule, NgIf],
+  imports: [IonicModule, NgIf, NgFor],
   templateUrl: './mobile-menu.component.html',
   styleUrls: ['./mobile-menu.component.scss']
 })

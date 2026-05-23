@@ -1,97 +1,114 @@
 <ion-content [fullscreen]="true">
-  <div class="header-gradient">
-    <div class="user-profile">
-      <div class="avatar">{{ user.initiales }}</div>
-      <div class="user-info">
-        <h2>{{ user.nom }}</h2>
-        <div class="badge-row">
-          <span class="level-badge">⚡ {{ user.niveau }}</span>
-          <span class="user-email">{{ user.email }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="mini-stats">
-      <div class="m-stat"><strong>24</strong><span>QUIZ</span></div>
-      <div class="m-stat"><strong>72%</strong><span>MOY.</span></div>
-      <div class="m-stat"><strong>5j 🔥</strong><span>SÉRIE</span></div>
-    </div>
-  </div>
-
-  <div class="main-content">
-    <div class="custom-tabs" (click)="onTabClick($event)">
-      <div class="tab active">📊 Aperçu</div>
-      <div class="tab">🧠 Notions</div>
-      <div class="tab">📋 Historique</div>
-      <div class="tab">🏅 Badges</div>
-    </div>
-
-    <div class="section-header">
-      <span class="icon-bg">📊</span>
-      <h3>Statistiques globales</h3>
-    </div>
-
-    <ion-grid class="ion-no-padding">
-      <ion-row>
-        <ion-col size="6" *ngFor="let stat of stats">
-          <div class="stat-card">
-            <div class="card-icon" [ngClass]="stat.color">{{ stat.icon }}</div>
-            <div class="card-value">{{ stat.value }}</div>
-            <div class="card-label">{{ stat.label }}</div>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-
-    <div class="section-header performance">
-      <div class="left">
-        <span class="icon-bg">📈</span>
-        <h3>Performance</h3>
-      </div>
-      <span class="moyenne-text">Moy. 72%</span>
-    </div>
-
-    <div class="chart-card">
-      <div class="toggle-container">
-        <div class="toggle-btn" [class.active]="selectedPeriod === '7'" (click)="selectedPeriod = '7'">7 jours</div>
-        <div class="toggle-btn" [class.active]="selectedPeriod === '30'" (click)="selectedPeriod = '30'">30 jours</div>
-      </div>
-      <div class="canvas-container">
-        <canvas #lineChart></canvas>
-      </div>
-    </div>
-
-    <div class="section-header">
-      <span class="icon-bg">🧩</span>
-      <h3>Score par notion</h3>
-    </div>
-
-    <div class="chart-card">
-      <div class="canvas-container">
-        <canvas #barChart></canvas>
-      </div>
-    </div>
-
-    <div class="section-header">
-      <span class="icon-bg">⏱️</span>
-      <h3>Dernière session</h3>
-    </div>
-
-    <div class="session-card" *ngIf="lastSession">
-      <div class="session-icon">{{ lastSession.icon }}</div>
-      <div class="session-info">
-        <h4>{{ lastSession.titre }}</h4>
-        <p>{{ lastSession.categorie }} · {{ lastSession.date }} · {{ lastSession.duree }}</p>
-        <div class="progress-container">
-          <div class="progress-bar">
-            <div class="fill" [style.width.%]="lastSession.pourcentage"></div>
+  <div class="dashboard-wrapper">
+    <!-- Header Section -->
+    <header class="dashboard-header">
+      <div class="header-content">
+        <div class="user-block">
+          <div class="avatar">{{ user.initiales }}</div>
+          <div class="user-text">
+            <p class="greeting">Bonjour,</p>
+            <h2>{{ user.nom }}</h2>
           </div>
         </div>
       </div>
-      <div class="session-score">
-        <span class="score">{{ lastSession.score }}/{{ lastSession.total }}</span>
-        <span class="percent">{{ lastSession.pourcentage }}%</span>
+
+      <div class="quick-stats-row">
+        <div class="q-stat">
+          <strong>24</strong>
+          <span>Quiz</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="q-stat">
+          <strong>72%</strong>
+          <span>Moyenne</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="q-stat">
+          <strong>5j</strong>
+          <span>Série 🔥</span>
+        </div>
       </div>
+    </header>
+
+    <div class="main-body">
+      <!-- Tabs Navigation -->
+      <div class="custom-tabs" (click)="onTabClick($event)">
+        <div class="tab active">Aperçu</div>
+        <div class="tab">Notions</div>
+        <div class="tab">Historique</div>
+        <div class="tab">Badges</div>
+      </div>
+
+      <!-- Global Stats Grid -->
+      <section class="stats-section">
+        <div class="section-title">
+          <ion-icon name="stats-chart-outline"></ion-icon>
+          <h3>Statistiques globales</h3>
+        </div>
+
+        <div class="bento-grid">
+          <div class="bento-card" *ngFor="let stat of stats">
+            <div class="bento-icon" [ngClass]="stat.color">{{ stat.icon }}</div>
+            <div class="bento-info">
+              <span class="bento-value">{{ stat.value }}</span>
+              <span class="bento-label">{{ stat.label }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Performance Chart -->
+      <section class="chart-section">
+        <div class="section-title space-between">
+          <div class="flex-title">
+            <ion-icon name="trending-up-outline"></ion-icon>
+            <h3>Performance</h3>
+          </div>
+          <div class="period-toggle">
+            <span [class.active]="selectedPeriod === '7'" (click)="selectedPeriod = '7'">7j</span>
+            <span [class.active]="selectedPeriod === '30'" (click)="selectedPeriod = '30'">30j</span>
+          </div>
+        </div>
+
+        <div class="chart-container card-look">
+          <canvas #lineChart></canvas>
+        </div>
+      </section>
+
+      <!-- Score by Notion -->
+      <section class="chart-section">
+        <div class="section-title">
+          <ion-icon name="pie-chart-outline"></ion-icon>
+          <h3>Maîtrise par notion</h3>
+        </div>
+        <div class="chart-container card-look">
+          <canvas #barChart></canvas>
+        </div>
+      </section>
+
+      <!-- Last Session -->
+      <section class="last-session-section" *ngIf="lastSession">
+        <div class="section-title">
+          <ion-icon name="time-outline"></ion-icon>
+          <h3>Dernière session</h3>
+        </div>
+        <div class="session-card">
+          <div class="session-icon">{{ lastSession.icon }}</div>
+          <div class="session-main">
+            <div class="session-header">
+              <h4>{{ lastSession.titre }}</h4>
+              <span class="session-score">{{ lastSession.score }}/{{ lastSession.total }}</span>
+            </div>
+            <p class="session-meta">{{ lastSession.categorie }} • {{ lastSession.date }}</p>
+            <div class="session-progress">
+              <div class="progress-track">
+                <div class="progress-fill" [style.width.%]="lastSession.pourcentage"></div>
+              </div>
+              <span class="progress-text">{{ lastSession.pourcentage }}%</span>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
   </div>
 </ion-content>
