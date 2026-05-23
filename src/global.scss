@@ -36,7 +36,13 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import '@ionic/angular/css/palettes/dark.system.css';
 
-ion-toast.centered-toast::part(message) {
-  text-align: center;
-  width: 100%;
+/* Ajout d'une marge de sécurité en haut pour éviter que les éléments soient cachés par l'encoche (notch) ou la barre d'état */
+ion-content {
+  --padding-top: env(safe-area-inset-top, 20px) !important;
 }
+
+/* Optionnel : Ajustement spécifique pour les pages qui n'ont pas de header Ionic */
+.login-page, .home-page, .inscription-page {
+  padding-top: env(safe-area-inset-top, 20px);
+}
+

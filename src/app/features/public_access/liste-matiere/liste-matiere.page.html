@@ -2,13 +2,9 @@
   <div class="subjects-page">
     <div class="subjects-card">
       <section class="topbar">
-        <button class="back-button" type="button" (click)="logout()">
-          <ion-icon name="arrow-back-outline"></ion-icon>
-        </button>
-
         <div class="title-block">
           <h1>Terminale <span>&rsaquo;</span></h1>
-          <p>6 matieres disponibles</p>
+          <p>{{ matieres.length }} matières disponibles</p>
         </div>
 
         <div class="level-badge">

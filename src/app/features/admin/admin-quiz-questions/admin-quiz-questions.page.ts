@@ -51,6 +51,10 @@ export class AdminQuizQuestionsPage implements OnInit {
   isLoading = false;
   isSaving = false;
   loadingError = '';
+  showForm = false; // Basculer entre liste et formulaire
+  expandedId: number | null = null; // ID de la question développée
+  displayLimit = 5; // Nombre de questions affichées initialement
+
   readonly matieres = ['Geographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT', 'Algorithmique'];
 
   availableCourseQuizzes: CourseQuizLink[] = [
@@ -137,6 +141,19 @@ export class AdminQuizQuestionsPage implements OnInit {
 
   get selectedCourseQuiz(): CourseQuizLink | undefined {
     return this.availableCourseQuizzes.find((courseQuiz) => courseQuiz.id === Number(this.form.coursId));
+  }
+
+  toggleForm() {
+    this.showForm = !this.showForm;
+    if (this.showForm) this.expandedId = null;
+  }
+
+  toggleExpand(id: number) {
+    this.expandedId = this.expandedId === id ? null : id;
+  }
+
+  showMore(): void {
+    this.displayLimit += 5;
   }
 
   onCourseQuizChange(coursId: number): void {

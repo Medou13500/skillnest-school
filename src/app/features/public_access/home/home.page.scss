@@ -30,17 +30,6 @@
   background: #f8eddd;
   box-shadow: 0 18px 42px rgba(116, 92, 58, 0.16);
   overflow: hidden;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 18px;
-    right: 18px;
-    height: 4px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #f3b10b 0%, #ef8431 100%);
-  }
 }
 
 .decor {
@@ -244,7 +233,7 @@
 .footer-badge {
   width: fit-content;
   max-width: 100%;
-  margin: 74px auto 0;
+  margin: 32px auto 0;
   padding: 12px 18px;
   display: flex;
   align-items: center;
@@ -262,18 +251,6 @@
   }
 }
 
-.debug-link {
-  display: block;
-  margin: 14px auto 0;
-  padding: 8px 12px;
-  border: 1px dashed rgba(17, 27, 68, 0.35);
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.8);
-  color: #111b44;
-  font-size: 0.85rem;
-  font-weight: 700;
-}
-
 @media (max-width: 420px) {
   .home-shell {
     padding: 0;
@@ -283,7 +260,7 @@
     width: 100%;
     min-height: 100vh;
     border-radius: 0;
-    padding-top: 24px;
+    padding-top: calc(24px + env(safe-area-inset-top, 0px));
   }
 
   .brand-title {

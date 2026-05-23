@@ -4,6 +4,16 @@ dist/
 build/
 .angular/
 .claude/
+.android/
+# Ignorer le dossier de build Angular
+angular/
+
+# Ignorer le dossier www (fichiers compilés)
+www/
+
+# Ignorer les fichiers de sauvegarde ou de configuration générés automatiquement
+*.xml.orig
+
 # Fichiers
 .env
 *.log

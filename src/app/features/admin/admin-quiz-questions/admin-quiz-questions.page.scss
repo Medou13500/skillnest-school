@@ -9,7 +9,7 @@ ion-content {
 
 .header-gradient {
   background: $blue-grad;
-  padding: 22px 20px 34px;
+  padding: 40px 20px 34px;
   border-bottom-left-radius: 30px;
   border-bottom-right-radius: 30px;
   color: white;
@@ -17,6 +17,9 @@ ion-content {
 
 .top-row {
   margin-bottom: 18px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .back-button {
@@ -87,11 +90,8 @@ ion-content {
   /* admin-logout styles moved outside as the button is not inside .mini-stats */
 }
 
-/* Ensure logout button styles apply when the button is a direct child of the header */
-.header-gradient .admin-logout {
-  position: absolute;
-  top: 12px;
-  right: 14px;
+/* Ensure logout button styles apply when the button is a child of top-row */
+.admin-logout {
   padding: 8px 12px;
   display: flex;
   align-items: center;
@@ -100,11 +100,10 @@ ion-content {
   background: rgba(255,255,255,0.95);
   border: 1px solid rgba(0,0,0,0.06);
   color: #ef6b3a;
-  z-index: 1400;
   font-weight: 600;
   font-size: 13px;
 }
-.header-gradient .admin-logout ion-icon { font-size: 18px; }
+.admin-logout ion-icon { font-size: 18px; }
 
 .main-content {
   padding: 0 15px 30px;
@@ -134,6 +133,75 @@ ion-content {
       border-bottom: 3px solid #ff6b00;
       background: #fff9f5;
     }
+  }
+}
+
+.action-header {
+  margin-bottom: 16px;
+
+  .add-button {
+    width: 100%;
+    padding: 16px;
+    background: #ff823a;
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 15px rgba(255, 130, 58, 0.2);
+
+    ion-icon { font-size: 24px; }
+  }
+}
+
+.close-form {
+  background: #ece7df;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1a1a1a;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  margin-right: 8px;
+  transition: all 0.2s;
+
+  ion-icon {
+    font-size: 24px;
+  }
+
+  &:active {
+    background: #ff823a;
+    color: white;
+    transform: scale(0.9);
+  }
+}
+
+.show-more-container {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.show-more-button {
+  width: 100%;
+  padding: 14px;
+  background: #fdf5e9;
+  color: #ff823a;
+  border: 2px dashed #ff823a;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.2s;
+
+  &:active {
+    background: #ff823a;
+    color: white;
   }
 }
 
@@ -317,14 +385,94 @@ textarea {
 }
 
 .question-card {
-  display: flex;
-  justify-content: space-between;
-  gap: 14px;
-  padding: 15px;
+  padding: 0; /* On gère le padding dans les sous-blocs */
   border: 1px solid #f0ebe3;
   border-radius: 16px;
   background: #fffdf9;
   margin-top: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.question-header {
+  padding: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+
+  &:active {
+    background-color: #f5f0eb;
+  }
+
+  h4 {
+    margin: 8px 0 0;
+    font-size: 15px;
+    line-height: 1.35;
+    color: #1a1a1a;
+  }
+}
+
+.question-card.expanded {
+  border-color: #ff823a;
+  box-shadow: 0 8px 24px rgba(255, 130, 58, 0.15);
+
+  .expand-icon {
+    transform: rotate(180deg);
+    color: #ffffff;
+    background: #ff823a;
+  }
+}
+
+.type-badge {
+  background: #e6f0ff;
+  color: #1b4db2;
+  padding: 4px 10px;
+  border-radius: 999px;
+  margin-left: 6px;
+  font-weight: 600;
+  font-size: 11px;
+}
+
+.expand-icon {
+  font-size: 20px;
+  color: #444;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #ece7df;
+  border-radius: 50%;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.question-details {
+  padding: 0 16px 16px;
+  border-top: 1px solid #fcfaf7;
+  background: #fffdf9;
+}
+
+.card-actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px dashed #eee;
+
+  .icon-action {
+    flex: 1;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 700;
+  }
 }
 
 .state-message {

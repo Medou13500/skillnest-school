@@ -5,12 +5,12 @@
         <ion-icon name="arrow-back-outline"></ion-icon>
         <span>Retour</span>
       </button>
-    </div>
 
-    <button class="admin-logout" type="button" (click)="logout()" aria-label="Logout">
-      <ion-icon name="log-out-outline"></ion-icon>
-      <span>Logout</span>
-    </button>
+      <button class="admin-logout" type="button" (click)="logout()" aria-label="Logout">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
+    </div>
 
     <div class="page-title">
       <div class="avatar">?</div>
@@ -29,12 +29,21 @@
   <div class="main-content">
     <div class="custom-tabs">
       <button class="tab" type="button" (click)="router.navigate(['/admin'])">📊 Aperçu</button>
-      <button class="tab active" type="button">❓ Questions quiz</button>
+      <button class="tab active" type="button" (click)="showForm = false">❓ Questions quiz</button>
     </div>
 
-    <section class="editor-panel">
+    <div class="action-header" *ngIf="!showForm">
+      <button class="add-button" (click)="showForm = true">
+        <ion-icon name="add-outline"></ion-icon>
+        <span>Ajouter une question</span>
+      </button>
+    </div>
+
+    <section class="editor-panel" *ngIf="showForm">
       <div class="section-header">
-        <span class="icon-bg">{{ isEditing ? '✏️' : '+' }}</span>
+        <button class="close-form" (click)="showForm = false">
+          <ion-icon name="close-outline"></ion-icon>
+        </button>
         <h3>{{ isEditing ? 'Modifier une question' : 'Nouvelle question' }}</h3>
       </div>
 
@@ -148,7 +157,7 @@
       </div>
     </section>
 
-    <section class="questions-panel">
+    <section class="questions-panel" *ngIf="!showForm">
       <div class="section-header list-header">
         <div>
           <span class="icon-bg">?</span>
@@ -163,14 +172,19 @@
         Aucune question quiz pour le moment.
       </div>
 
-      <article class="question-card" *ngFor="let question of questions; trackBy: trackByQuestionId">
-        <div class="question-main">
-          <div class="question-meta">
-            <!-- Removed theme / coursTitre / quiz tags for cleaner list view -->
-            <span>{{ question.matiere }}</span>
-            <span style="background:#e6f0ff; color:#1b4db2; padding:6px 10px; border-radius:999px; margin-left:6px; font-weight:600;">{{ question.type === 'test' ? 'Réponse ouverte' : 'QCM' }}</span>
+      <article class="question-card" [class.expanded]="expandedId === question.id" *ngFor="let question of questions.slice(0, displayLimit); trackBy: trackByQuestionId">
+        <div class="question-header" (click)="toggleExpand(question.id)">
+          <div class="question-summary">
+            <div class="question-meta">
+              <span>{{ question.matiere }}</span>
+              <span class="type-badge">{{ question.type === 'test' ? 'Ouverte' : 'QCM' }}</span>
+            </div>
+            <h4>{{ question.enonce }}</h4>
           </div>
-          <h4>{{ question.enonce }}</h4>
+          <ion-icon [name]="expandedId === question.id ? 'chevron-up-outline' : 'chevron-down-outline'" class="expand-icon"></ion-icon>
+        </div>
+
+        <div class="question-details" *ngIf="expandedId === question.id">
           <div class="answer-list">
             <span
               *ngFor="let option of question.options; let index = index"
@@ -185,17 +199,25 @@
               <span *ngIf="!(question.openAnswers && question.openAnswers.length)" style="background:#f1f5f9; padding:6px 10px; border-radius:8px; margin-left:8px;">{{ question.openAnswer }}</span>
             </div>
           </div>
-        </div>
 
-        <div class="card-actions">
-          <button class="icon-action edit" type="button" (click)="editQuestion(question)" aria-label="Modifier">
-            <ion-icon name="create-outline"></ion-icon>
-          </button>
-          <button class="icon-action delete" type="button" (click)="deleteQuestion(question.id)" aria-label="Supprimer">
-            <ion-icon name="trash-outline"></ion-icon>
-          </button>
+          <div class="card-actions">
+            <button class="icon-action edit" type="button" (click)="editQuestion(question); showForm = true;" aria-label="Modifier">
+              <ion-icon name="create-outline"></ion-icon>
+              <span>Modifier</span>
+            </button>
+            <button class="icon-action delete" type="button" (click)="deleteQuestion(question.id)" aria-label="Supprimer">
+              <ion-icon name="trash-outline"></ion-icon>
+              <span>Supprimer</span>
+            </button>
+          </div>
         </div>
       </article>
+
+      <div class="show-more-container" *ngIf="questions.length > displayLimit">
+        <button class="show-more-button" (click)="showMore()">
+          Afficher plus de questions ({{ questions.length - displayLimit }} restantes)
+        </button>
+      </div>
     </section>
   </div>
 </ion-content>
