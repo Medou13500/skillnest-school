@@ -30,23 +30,24 @@
 
       <section class="content-section">
         <section class="objectives-card">
-          <div class="section-header">
+          <div class="section-header" (click)="objectivesOpen = !objectivesOpen" style="cursor: pointer;">
             <div class="section-title">
               <span class="title-icon target">
                 <ion-icon name="locate-outline"></ion-icon>
               </span>
               <h2>Objectifs</h2>
             </div>
-            <ion-icon name="chevron-down-outline"></ion-icon>
+            <ion-icon [name]="objectivesOpen ? 'chevron-down-outline' : 'chevron-forward-outline'"></ion-icon>
           </div>
 
-          <div class="section-divider"></div>
-
-          <ul>
-            <li>Lorem ipsum dolor sit amet.</li>
-            <li>Lorem ipsum dolor sit amet.</li>
-            <li>Lorem ipsum dolor sit amet.</li>
-          </ul>
+          <div class="objectives-content" [class.open]="objectivesOpen">
+            <div class="section-divider"></div>
+            <ul>
+              <li>Lorem ipsum dolor sit amet.</li>
+              <li>Lorem ipsum dolor sit amet.</li>
+              <li>Lorem ipsum dolor sit amet.</li>
+            </ul>
+          </div>
         </section>
 
         <div class="toolbar-row">
