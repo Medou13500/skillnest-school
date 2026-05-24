@@ -16,6 +16,7 @@ import {
   logOutOutline
 } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/AuthService';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 
 interface AccountMenuItem {
   label: string;
@@ -35,7 +36,7 @@ interface AccountSection {
   templateUrl: './compte.page.html',
   styleUrls: ['./compte.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule, MenuComponent]
 })
 export class ComptePage {
   sections: AccountSection[] = [

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { addIcons } from 'ionicons';
 import { arrowBackOutline, calendarOutline, bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 
 interface Session {
   id: number;
@@ -23,12 +24,13 @@ interface Session {
   templateUrl: './historique-dashboard.page.html',
   styleUrls: ['./historique-dashboard.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule]
+  imports: [IonicModule, CommonModule, MenuComponent]
 })
 export class HistoriqueDashboardPage implements OnInit {
 
   filtres = ['Tout', 'Variables', 'Conditions', 'Boucles', 'Fonctions'];
   filtreActif = 'Tout';
+  visibleCount = 5;
 
   sessions: Session[] = [
     { id: 1, titre: 'Variables', categorie: 'Algorithmique', date: 'Auj. 14h32', duree: '4min', score: 8, total: 10, pourcentage: 80, icon: '🧮', statusColor: 'green' },
@@ -56,6 +58,18 @@ export class HistoriqueDashboardPage implements OnInit {
     });
   }
 
+  get visibleSessions(): Session[] {
+    return this.sessions.slice(0, this.visibleCount);
+  }
+
+  showMore(): void {
+    this.visibleCount += 5;
+  }
+
+  showLess(): void {
+    this.visibleCount = 5;
+  }
+
   logout(): void {
     sessionStorage.clear();
     localStorage.removeItem('authToken');
@@ -67,6 +81,10 @@ export class HistoriqueDashboardPage implements OnInit {
   }
 
   ngOnInit() {}
+
+  goBack(): void {
+    void this.router.navigate(['/dashboard']);
+  }
 
   setFiltre(f: string) {
     this.filtreActif = f;

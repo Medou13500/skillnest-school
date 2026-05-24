@@ -2,13 +2,9 @@
   <div class="subjects-page">
     <div class="subjects-card">
       <section class="topbar">
-        <button class="back-button" type="button" (click)="logout()">
-          <ion-icon name="arrow-back-outline"></ion-icon>
-        </button>
-
         <div class="title-block">
           <h1>Terminale <span>&rsaquo;</span></h1>
-          <p>6 matieres disponibles</p>
+          <p>{{ matieres.length }} matières disponibles</p>
         </div>
 
         <div class="level-badge">
@@ -52,6 +48,11 @@
                   [style.background]="matiere.progressColor">
                 </span>
               </div>
+
+              <button class="quiz-button" type="button" (click)="$event.stopPropagation(); openQuiz(matiere)">
+                <ion-icon name="create-outline"></ion-icon>
+                <span>Quiz</span>
+              </button>
             </div>
 
           </article>
@@ -61,33 +62,4 @@
   </div>
 </ion-content>
 
-<ion-footer class="subjects-footer">
-  <ion-toolbar>
-    <div class="tab-bar">
-      <button class="tab-item" type="button" (click)="router.navigate(['/dashboard'])">
-        <ion-icon name="speedometer-outline"></ion-icon>
-        <span>Mon dashboard</span>
-      </button>
-
-      <button class="tab-item active" type="button">
-        <ion-icon name="book-outline"></ion-icon>
-        <span>Matieres</span>
-      </button>
-
-      <button class="tab-item" type="button" (click)="router.navigate(['/abonnement'])">
-        <ion-icon name="ribbon-outline"></ion-icon>
-        <span>Classement</span>
-      </button>
-
-      <button class="tab-item" type="button" (click)="router.navigate(['/compte'])">
-        <ion-icon name="person-outline"></ion-icon>
-        <span>Profil</span>
-      </button>
-
-      <button class="tab-item" type="button" (click)="logout()">
-        <ion-icon name="log-out-outline"></ion-icon>
-        <span>Logout</span>
-      </button>
-    </div>
-  </ion-toolbar>
-</ion-footer>
+<app-menu [active]="'matieres'"></app-menu>

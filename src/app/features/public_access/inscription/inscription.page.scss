@@ -20,17 +20,6 @@
   background: #f8eddd;
   box-shadow: 0 18px 42px rgba(116, 92, 58, 0.16);
   position: relative;
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 18px;
-    right: 18px;
-    height: 4px;
-    border-radius: 999px;
-    background: linear-gradient(90deg, #f3b10b 0%, #ef8431 100%);
-  }
 }
 
 .back-button {
@@ -93,6 +82,36 @@
   }
 }
 
+.role-selector {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 18px 0 10px;
+}
+
+.role-pill {
+  flex: 1;
+  border: 1px solid rgba(117, 92, 62, 0.16);
+  background: #fff;
+  color: #6b625c;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.role-pill.active {
+  background: #ef8431;
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.hint-text {
+  margin: 6px 0 0;
+  font-size: 0.84rem;
+  color: #7c6d55;
+}
+
 .name-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -118,21 +137,38 @@
   --inner-padding-end: 14px;
   --min-height: 50px;
   --placeholder-color: #b0a6b2;
+  --placeholder-opacity: 0.6;
   border-radius: 14px;
   border: 1px solid rgba(117, 92, 62, 0.12);
   box-shadow: 0 8px 22px rgba(44, 53, 103, 0.08);
+  margin-top: 4px;
+  overflow: hidden;
+
+  &::part(native) {
+    background: #ffffff;
+    border-radius: 14px;
+    padding-inline-start: var(--padding-start);
+    padding-inline-end: var(--inner-padding-end);
+  }
+
+  ion-input {
+    --padding-start: 10px !important;
+    font-size: 1rem;
+    width: 100%;
+  }
 
   ion-icon {
     color: #8b755b;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    flex-shrink: 0;
   }
 
   ion-icon[slot='start'] {
-    margin-right: 8px;
+    margin: 0;
   }
 
   ion-icon[slot='end'] {
-    margin-left: 8px;
+    margin: 0;
   }
 }
 
@@ -268,6 +304,6 @@
     width: 100%;
     min-height: 100vh;
     border-radius: 0;
-    padding-top: 18px;
+    padding-top: calc(18px + env(safe-area-inset-top, 0px));
   }
 }

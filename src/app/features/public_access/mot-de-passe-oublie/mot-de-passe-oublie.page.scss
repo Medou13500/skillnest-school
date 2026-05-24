@@ -83,18 +83,31 @@
   border-radius: 16px;
   border: 1px solid rgba(117, 92, 62, 0.14);
   box-shadow: 0 8px 22px rgba(44, 53, 103, 0.08);
+  margin-top: 4px;
+  overflow: hidden;
+
+  &::part(native) {
+    background: #ffffff;
+    border-radius: 16px;
+    padding-inline-start: var(--padding-start);
+    padding-inline-end: var(--inner-padding-end);
+  }
 
   ion-icon {
-    margin-right: 10px;
     color: #8b755b;
     font-size: 1.1rem;
+    flex-shrink: 0;
+    margin: 0;
   }
 }
 
 .email-input {
   --color: #433f54;
   --placeholder-color: #a09aae;
+  --placeholder-opacity: 0.6;
+  --padding-start: 10px !important;
   font-size: 0.98rem;
+  width: 100%;
 }
 
 .submit-button {

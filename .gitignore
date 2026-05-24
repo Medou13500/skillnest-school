@@ -1,12 +1,23 @@
-# Bloque les dossiers de dépendances et caches partout
-**/node_modules/
-**/.angular/
-**/dist/
+# Dossiers
+node_modules/
+dist/
+build/
+.angular/
+.claude/
+.android/
+# Ignorer le dossier de build Angular
+angular/
 
-# Sécurité : Ne jamais envoyer les variables d'environnement
-**.env
-backend/.env
+# Ignorer le dossier www (fichiers compilés)
+www/
 
-# Android / IDE configuration
-**/.idea/
-**/android/.idea/
+# Ignorer les fichiers de sauvegarde ou de configuration générés automatiquement
+*.xml.orig
+
+# Fichiers
+.env
+*.log
+
+# OS
+.DS_Store
+Thumbs.db

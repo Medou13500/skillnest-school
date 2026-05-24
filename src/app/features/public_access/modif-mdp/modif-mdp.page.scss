@@ -25,6 +25,7 @@
   grid-template-columns: auto auto 1fr;
   align-items: center;
   gap: 10px;
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 .icon-button {
@@ -67,6 +68,10 @@
   color: #ffffff;
   font-size: 0.98rem;
   font-weight: 700;
+
+  @media (max-width: 768px) {
+    display: none; /* Cache sur mobile pour laisser la place au menu hamburger */
+  }
 
   ion-icon {
     font-size: 0.95rem;
@@ -144,8 +149,22 @@ label {
   --min-height: 46px;
   --color: #6d7286;
   --placeholder-color: #9397a8;
+  --placeholder-opacity: 0.6;
   border: 1px solid rgba(226, 189, 146, 0.7);
   border-radius: 14px;
+  overflow: hidden;
+
+  &::part(native) {
+    background: #faf8f5;
+    border-radius: 14px;
+    padding-inline-start: var(--padding-start);
+    padding-inline-end: var(--inner-padding-end);
+  }
+
+  ion-input {
+    width: 100%;
+    font-size: 0.95rem;
+  }
 }
 
 .btn-update {

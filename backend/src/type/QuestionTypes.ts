@@ -3,7 +3,7 @@ export type QuestionType = "test" | "quiz";
 export type Difficulty = "facile" | "moyen" | "difficile";
 
 export type CreateQuestionInput = {
-  notionId: number;
+  notionId?: number | null;
   matiere: string;
   content: string;
   answers: string[];
@@ -17,7 +17,7 @@ export type UpdateQuestionInput = Partial<CreateQuestionInput>;
 
 export type QuestionOutput = {
   id: number;
-  notionId: number;
+  notionId?: number | null;
   matiere: string;
   content: string;
   answers: string[];

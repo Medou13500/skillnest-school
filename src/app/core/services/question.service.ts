@@ -25,7 +25,7 @@ export interface ApiQuestion {
 }
 
 export interface SaveQuestionPayload {
-  notionId: number;
+  notionId?: number | null;
   matiere: string;
   content: string;
   answers: string[];

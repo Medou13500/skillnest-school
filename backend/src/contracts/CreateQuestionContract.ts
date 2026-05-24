@@ -1,5 +1,5 @@
 export interface CreateQuestionContract {
-  notionId: number;
+  notionId?: number | null;
   content: string;
   answers: string[];
   correctAnswer: string;

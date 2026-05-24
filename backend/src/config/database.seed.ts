@@ -10,7 +10,7 @@ export async function seedTestAccount(pool: Pool): Promise<void> {
   await seedAccount(pool, {
     email: process.env.TEST_ACCOUNT_EMAIL ?? "test@gmail.com",
     password: process.env.TEST_ACCOUNT_PASSWORD ?? "test1234",
-    role: process.env.TEST_ACCOUNT_ROLE ?? "USER",
+    role: process.env.TEST_ACCOUNT_ROLE ?? "STUDENT",
     label: "Test account",
   });
 
@@ -19,6 +19,13 @@ export async function seedTestAccount(pool: Pool): Promise<void> {
     password: process.env.TEST_ADMIN_PASSWORD ?? "admin1234",
     role: "admin",
     label: "Test admin account",
+  });
+
+  await seedAccount(pool, {
+    email: "test_parent@gmail.com",
+    password: "parent1234",
+    role: "PARENT",
+    label: "Test parent account",
   });
 }
 
@@ -42,7 +49,16 @@ async function seedAccount(
   );
 
   if (existing.rows.length > 0) {
-    console.log(` ${account.label} already exists: ${account.email}`);
+    const passwordHash = await argon2.hash(account.password);
+    await pool.query(
+      `
+      UPDATE public.users
+      SET password_hash = $1, role = $2
+      WHERE email = $3
+      `,
+      [passwordHash, account.role, account.email]
+    );
+    console.log(` ${account.label} updated: ${account.email}`);
     return;
   }
 

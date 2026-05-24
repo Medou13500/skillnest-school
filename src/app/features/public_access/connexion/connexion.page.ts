@@ -75,7 +75,9 @@ export class ConnexionPage {
   }
 
   goToRegister() {
-    this.router.navigate(['/inscription']);
+    this.router.navigate(['/inscription'], {
+      state: { role: this.role }
+    });
   }
 
   private showAccountCreatedToastIfNeeded(): void {
@@ -140,7 +142,13 @@ export class ConnexionPage {
       }
 
       const effectiveRole = (response.user?.role ?? this.role ?? 'student').toLowerCase();
-      const targetRoute = effectiveRole === 'admin' ? '/admin' : '/liste-matiere';
+      let targetRoute = '/liste-matiere';
+
+      if (effectiveRole === 'admin') {
+        targetRoute = '/admin';
+      } else if (effectiveRole === 'parent') {
+        targetRoute = '/parent';
+      }
 
       await this.router.navigate([targetRoute], {
         queryParams: { notification: 'login-success' }

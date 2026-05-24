@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 import { NgForOf } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { addIcons } from 'ionicons';
@@ -7,6 +8,7 @@ import {
   arrowBackOutline,
   bookOutline,
   checkmarkOutline,
+  createOutline,
   medalOutline,
   personOutline,
   ribbonOutline,
@@ -27,13 +29,16 @@ interface Matiere {
   progressColor: string;
 }
 
+type MatiereQuizKey = 'geographie' | 'maths' | 'anglais' | 'francais' | 'sciences' | 'svt';
+
 @Component({
   selector: 'app-liste-matiere',
   templateUrl: './liste-matiere.page.html',
   styleUrls: ['./liste-matiere.page.scss'],
   standalone: true,
   imports: [
-    IonicModule
+    IonicModule,
+    MenuComponent
   ]
 })
 export class ListeMatierePage {
@@ -117,6 +122,7 @@ export class ListeMatierePage {
       'book-outline': bookOutline,
       'speedometer-outline': speedometerOutline,
       'checkmark-outline': checkmarkOutline,
+      'create-outline': createOutline,
       'medal-outline': medalOutline,
       'person-outline': personOutline,
       'ribbon-outline': ribbonOutline,
@@ -160,5 +166,32 @@ export class ListeMatierePage {
 
   logout(): Promise<void> {
     return this.authService.logout();
+  }
+
+  openQuiz(matiere: Matiere): void {
+    this.router.navigate(['/quiz'], {
+      queryParams: { matiere: this.getQuizKey(matiere.nom) }
+    });
+  }
+
+  private getQuizKey(matiere: string): MatiereQuizKey {
+    switch (matiere.toLowerCase()) {
+      case 'geographie':
+      case 'géographie':
+        return 'geographie';
+      case 'maths':
+        return 'maths';
+      case 'anglais':
+        return 'anglais';
+      case 'francais':
+      case 'français':
+        return 'francais';
+      case 'sciences':
+        return 'sciences';
+      case 'svt':
+        return 'svt';
+      default:
+        return 'maths';
+    }
   }
 }

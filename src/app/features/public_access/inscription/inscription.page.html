@@ -12,9 +12,18 @@
         </div>
 
         <h1 class="page-title">Creer un compte</h1>
-        <p class="page-subtitle">
-          Rejoignez <strong>SkillNest School</strong> et commencez a apprendre
-        </p>
+      <p class="page-subtitle">
+        Rejoignez <strong>SkillNest School</strong> et commencez a apprendre
+      </p>
+
+      <div class="role-selector">
+        <button type="button" class="role-pill" [class.active]="role === 'student'" (click)="role = 'student'">
+          Etudiant
+        </button>
+        <button type="button" class="role-pill" [class.active]="role === 'parent'" (click)="role = 'parent'">
+          Parent
+        </button>
+      </div>
       </section>
 
       <form (ngSubmit)="onSubmit()" #signupForm="ngForm">
@@ -76,7 +85,7 @@
           </ion-item>
         </div>
 
-        <div class="input-group">
+        <div class="input-group" *ngIf="role === 'student'">
           <label for="classe">Classe</label>
           <ion-item lines="none" class="custom-input select-input">
             <ion-select
@@ -92,6 +101,21 @@
               <ion-select-option value="classe3">Classe 3</ion-select-option>
             </ion-select>
           </ion-item>
+        </div>
+
+        <div class="input-group" *ngIf="role === 'parent'">
+          <label for="studentEmail">Email de l'élève</label>
+          <ion-item lines="none" class="custom-input">
+            <ion-input
+              id="studentEmail"
+              type="email"
+              name="studentEmail"
+              placeholder="email@eleve.fr"
+              [(ngModel)]="studentEmail"
+              required>
+            </ion-input>
+          </ion-item>
+          <p class="hint-text">L'élève doit déjà être inscrit avec cet email.</p>
         </div>
 
         <div class="input-group">

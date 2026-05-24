@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { NgForOf, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 import {
   arrowBackOutline,
   arrowForwardOutline,
@@ -31,19 +32,23 @@ import {
   imports: [
     IonicModule,
     NgIf,
-    NgForOf
+    NgForOf,
+    MenuComponent
   ]
 })
 export class ContenuMatierePage {
+  currentMatiere = (history.state?.matiere as string) || 'Geographie';
+  objectivesOpen = false;
+
   themes = [
     {
       title: 'Theme 1',
       subtitle: 'Variables & Types',
       progress: '1/2',
-      open: true,
+      open: false,
       items: [
         { id: 1, type: 'Lecon', title: 'Introduction...', done: true, route: '/lesson/1' },
-        { id: 2, type: 'Quizz', title: 'Quiz ...', done: false, route: '/quiz/1' }
+        { id: 2, type: 'Quizz', title: 'Quiz ...', done: false, route: '/quiz' }
       ]
     },
     {
@@ -97,6 +102,13 @@ export class ContenuMatierePage {
   }
 
   goTo(item: any): void {
+    if (item.route === '/quiz') {
+      this.router.navigate(['/quiz'], {
+        queryParams: { matiere: this.currentMatiere }
+      });
+      return;
+    }
+
     this.router.navigate([item.route]);
   }
 }

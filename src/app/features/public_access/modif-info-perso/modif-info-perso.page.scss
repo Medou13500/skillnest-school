@@ -3,21 +3,26 @@
 }
 
 .profile-page {
-  min-height: 100%;
-  padding: 14px 12px 18px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
   background:
     radial-gradient(circle at top right, rgba(255, 211, 112, 0.35), transparent 28%),
     #f7ecdc;
+  overflow: hidden;
 }
 
 .profile-card {
   max-width: 420px;
   margin: 0 auto;
-  padding: 20px 16px 10px;
-  border-radius: 28px 28px 0 0;
+  padding: 10px 16px 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0;
   background: #f8eddd;
-  box-shadow: 0 18px 42px rgba(116, 92, 58, 0.16);
-  position: relative;
+  box-shadow: none;
 }
 
 .top-actions {
@@ -25,6 +30,7 @@
   grid-template-columns: auto auto 1fr;
   align-items: center;
   gap: 10px;
+  padding-top: env(safe-area-inset-top, 0px);
 }
 
 .icon-button {
@@ -68,6 +74,10 @@
   font-size: 0.98rem;
   font-weight: 700;
 
+  @media (max-width: 768px) {
+    display: none; /* Cache sur mobile pour laisser la place au menu hamburger */
+  }
+
   ion-icon {
     font-size: 0.95rem;
   }
@@ -97,12 +107,16 @@
 }
 
 .form-shell {
-  margin-top: 22px;
+  flex: 1;
+  margin-top: 18px;
+  margin-bottom: 16px;
   border-radius: 22px;
   background: #ffffff;
   border: 1px solid rgba(226, 207, 184, 0.7);
   box-shadow: 0 10px 24px rgba(44, 53, 103, 0.08);
   padding: 22px 14px 16px;
+  overflow-y: auto; /* Permet le scroll interne si le formulaire est long */
+  -webkit-overflow-scrolling: touch;
 }
 
 .avatar-wrap {
@@ -163,8 +177,22 @@ label {
   --min-height: 46px;
   --color: #6d7286;
   --placeholder-color: #9397a8;
+  --placeholder-opacity: 0.6;
   border: 1px solid rgba(226, 189, 146, 0.7);
   border-radius: 14px;
+  overflow: hidden;
+
+  &::part(native) {
+    background: #faf8f5;
+    border-radius: 14px;
+    padding-inline-start: var(--padding-start);
+    padding-inline-end: var(--inner-padding-end);
+  }
+
+  ion-input {
+    width: 100%;
+    font-size: 0.95rem;
+  }
 }
 
 .btn-update {

@@ -24,7 +24,7 @@ export default class QuestionRepository {
         data.correctAnswer,
         data.type,
         data.difficulty,
-        data.images !== undefined ? JSON.stringify(data.images) : null,
+        JSON.stringify(data.images ?? []),
       ]
     );
 
@@ -103,7 +103,7 @@ async findById(id: number) {
         data.correctAnswer ?? null,
         data.type ?? null,
         data.difficulty ?? null,
-        data.images !== undefined ? JSON.stringify(data.images) : null,
+        data.images !== undefined ? JSON.stringify(data.images ?? []) : null,
         id,
       ],
     );

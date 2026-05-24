@@ -5,7 +5,18 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
 import { Chart, registerables } from 'chart.js';
 import { addIcons } from 'ionicons';
-import { bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
+import {
+  bookOutline,
+  ribbonOutline,
+  personOutline,
+  logOutOutline,
+  speedometerOutline,
+  statsChartOutline,
+  trendingUpOutline,
+  pieChartOutline,
+  timeOutline
+} from 'ionicons/icons';
+import { MenuComponent } from '../../../shared/menu/menu.component';
 
 Chart.register(...registerables);
 
@@ -14,7 +25,7 @@ Chart.register(...registerables);
   templateUrl: './dashboard.page.html',
   styleUrls: ['./dashboard.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule]
+  imports: [IonicModule, CommonModule, FormsModule, MenuComponent]
 })
 export class DashboardPage implements OnInit, AfterViewInit {
   @ViewChild('lineChart') lineChart!: ElementRef;
@@ -63,7 +74,11 @@ export class DashboardPage implements OnInit, AfterViewInit {
       'ribbon-outline': ribbonOutline,
       'person-outline': personOutline,
       'log-out-outline': logOutOutline,
-      'speedometer-outline': speedometerOutline
+      'speedometer-outline': speedometerOutline,
+      'stats-chart-outline': statsChartOutline,
+      'trending-up-outline': trendingUpOutline,
+      'pie-chart-outline': pieChartOutline,
+      'time-outline': timeOutline
     });
   }
 

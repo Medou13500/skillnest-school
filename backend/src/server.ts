@@ -79,7 +79,7 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 const allowedOrigins = (process.env.CORS_ORIGINS ??
-  "http://localhost:8100,http://localhost:4200,http://127.0.0.1:8100,http://127.0.0.1:4200")
+  "http://localhost,http://localhost:8100,http://localhost:4200,http://127.0.0.1:8100,http://127.0.0.1:4200,capacitor://localhost,http://192.168.1.204:8100")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
@@ -124,7 +124,10 @@ const notionRepository = new NotionRepository(pool);
 
 const answerRepository = new AnswerRepository(pool);
 
-
+const answerService = new AnswerService(
+  answerRepository,
+  questionRepository
+);
 
 const refreshTokenService = new RefreshTokenService(refreshTokenRepository);
 
