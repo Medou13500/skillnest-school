@@ -1,0 +1,12 @@
+# Bloque les dossiers de dépendances et caches partout
+**/node_modules/
+**/.angular/
+**/dist/
+
+# Sécurité : Ne jamais envoyer les variables d'environnement
+**.env
+backend/.env
+
+# Android / IDE configuration
+**/.idea/
+**/android/.idea/
