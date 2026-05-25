@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,16 +7,22 @@ import {
 	arrowBackOutline,
 	arrowForwardOutline,
 	checkmarkCircle,
+	closeOutline,
 	helpCircleOutline,
 	refreshOutline,
 	trophyOutline
 } from 'ionicons/icons';
+import { QuestionService, ApiQuestion } from '../../../core/services/question.service';
+import { firstValueFrom } from 'rxjs';
 
 interface QuizQuestion {
 	id: number;
 	question: string;
 	options: string[];
 	correctIndex: number;
+	type: 'quiz' | 'test';
+	correctAnswer?: string;
+	images: string[];
 }
 
 type SubjectKey = 'geographie' | 'maths' | 'anglais' | 'francais' | 'sciences' | 'svt';
@@ -31,195 +37,90 @@ interface PlacementSubject {
 	questions: QuizQuestion[];
 }
 
+import { FormsModule } from '@angular/forms';
+
 @Component({
 	selector: 'app-quiz',
 	templateUrl: './quiz.page.html',
 	styleUrls: ['./quiz.page.scss'],
 	standalone: true,
-	imports: [IonicModule, CommonModule]
+	imports: [IonicModule, CommonModule, FormsModule]
 })
-export class QuizPage {
+export class QuizPage implements OnInit {
 	studentName = 'Emma Dubois';
 	selectedSubjectKey: SubjectKey | null = null;
+	isLoading = false;
 
 	subjects: PlacementSubject[] = [
 		{
 			key: 'geographie',
 			title: 'Geographie',
 			description: 'Repérage, cartes et notions de territoire.',
-			duration: '3 questions',
+			duration: '0 questions',
 			accent: '#4caf50',
 			icon: '🌍',
-			questions: [
-				{
-					id: 1,
-					question: 'Quel continent se trouve au sud de l’Europe ?',
-					options: ['L’Afrique', 'L’Asie', 'L’Océanie', 'L’Amérique du Nord'],
-					correctIndex: 0
-				},
-				{
-					id: 2,
-					question: 'Qu’est-ce qu’une échelle sur une carte ?',
-					options: ['Un lieu', 'Un rapport de distance', 'Un climat', 'Une frontière'],
-					correctIndex: 1
-				},
-				{
-					id: 3,
-					question: 'Quel document sert à localiser des reliefs ?',
-					options: ['Une carte topographique', 'Un roman', 'Un graphique', 'Un carnet de notes'],
-					correctIndex: 0
-				}
-			]
+			questions: []
 		},
 		{
 			key: 'maths',
 			title: 'Maths',
 			description: 'Calcul, logique et résolution de problèmes.',
-			duration: '3 questions',
+			duration: '0 questions',
 			accent: '#ef8431',
 			icon: '🔢',
-			questions: [
-				{
-					id: 1,
-					question: 'Combien vaut 7 × 8 ?',
-					options: ['54', '56', '64', '72'],
-					correctIndex: 1
-				},
-				{
-					id: 2,
-					question: 'Quelle expression est une fraction ?',
-					options: ['5 + 2', '9 / 3', '7 - 1', '4 × 2'],
-					correctIndex: 1
-				},
-				{
-					id: 3,
-					question: 'Quel terme désigne le résultat d’une addition ?',
-					options: ['Produit', 'Différence', 'Somme', 'Quotient'],
-					correctIndex: 2
-				}
-			]
+			questions: []
 		},
 		{
 			key: 'anglais',
 			title: 'Anglais',
 			description: 'Vocabulaire, grammaire et compréhension.',
-			duration: '3 questions',
+			duration: '0 questions',
 			accent: '#2f8be6',
 			icon: 'A',
-			questions: [
-				{
-					id: 1,
-					question: 'Comment dit-on “bonjour” en anglais ?',
-					options: ['Hello', 'Thanks', 'Goodbye', 'Please'],
-					correctIndex: 0
-				},
-				{
-					id: 2,
-					question: 'Quel mot est un verbe ?',
-					options: ['Blue', 'Run', 'Dog', 'Chair'],
-					correctIndex: 1
-				},
-				{
-					id: 3,
-					question: 'Le pluriel de “book” est :',
-					options: ['books', 'bookes', 'bok', 'booking'],
-					correctIndex: 0
-				}
-			]
+			questions: []
 		},
 		{
 			key: 'francais',
 			title: 'Francais',
 			description: 'Lecture, orthographe et vocabulaire.',
-			duration: '3 questions',
+			duration: '0 questions',
 			accent: '#4950b7',
 			icon: '✍️',
-			questions: [
-				{
-					id: 1,
-					question: 'Quel est le féminin de “acteur” ?',
-					options: ['Acteuse', 'Actrice', 'Acter', 'Actoriale'],
-					correctIndex: 1
-				},
-				{
-					id: 2,
-					question: 'Une phrase se termine généralement par :',
-					options: ['Une virgule', 'Un point', 'Un tiret', 'Un accent'],
-					correctIndex: 1
-				},
-				{
-					id: 3,
-					question: 'Quel mot est un synonyme de “rapide” ?',
-					options: ['Lent', 'Vif', 'Paresseux', 'Vide'],
-					correctIndex: 1
-				}
-			]
+			questions: []
 		},
 		{
 			key: 'sciences',
 			title: 'Sciences',
 			description: 'Observation, démarche scientifique et notions de base.',
-			duration: '3 questions',
+			duration: '0 questions',
 			accent: '#0f9bb0',
 			icon: '🧪',
-			questions: [
-				{
-					id: 1,
-					question: 'Quel outil sert à mesurer la température ?',
-					options: ['Thermomètre', 'Boussole', 'Balance', 'Chronomètre'],
-					correctIndex: 0
-				},
-				{
-					id: 2,
-					question: 'L’eau bout à environ :',
-					options: ['0°C', '25°C', '100°C', '200°C'],
-					correctIndex: 2
-				},
-				{
-					id: 3,
-					question: 'Quel sens permet de percevoir un son ?',
-					options: ['La vue', 'L’ouïe', 'L’odorat', 'Le toucher'],
-					correctIndex: 1
-				}
-			]
+			questions: []
 		},
 		{
 			key: 'svt',
 			title: 'SVT',
 			description: 'Biologie, corps humain et environnement.',
-			duration: '3 questions',
+			duration: '0 questions',
 			accent: '#73c56d',
 			icon: '🧬',
-			questions: [
-				{
-					id: 1,
-					question: 'Quel organe pompe le sang ?',
-					options: ['Le foie', 'Le cœur', 'Le poumon', 'L’estomac'],
-					correctIndex: 1
-				},
-				{
-					id: 2,
-					question: 'Les plantes ont besoin de quoi pour la photosynthèse ?',
-					options: ['Lumière', 'Pluie seulement', 'Sable', 'Vent'],
-					correctIndex: 0
-				},
-				{
-					id: 3,
-					question: 'Quel est le support principal du corps humain ?',
-					options: ['Les muscles', 'Le squelette', 'La peau', 'Les nerfs'],
-					correctIndex: 1
-				}
-			]
+			questions: []
 		}
 	];
 
 	currentQuestionIndex = 0;
 	selectedAnswers: number[] = [];
+	openAnswers: string[] = []; // Stockage pour les questions ouvertes
 	isSubmitted = false;
+
+	// Fullscreen image viewer state
+	isImageFullscreen = false;
+	activeImageIndex = 0;
 
 	constructor(
 		public router: Router,
-		private route: ActivatedRoute
+		private route: ActivatedRoute,
+		private questionService: QuestionService
 	) {
 		addIcons({
 			'arrow-back-outline': arrowBackOutline,
@@ -227,10 +128,81 @@ export class QuizPage {
 			'checkmark-circle': checkmarkCircle,
 			'help-circle-outline': helpCircleOutline,
 			'refresh-outline': refreshOutline,
-			'trophy-outline': trophyOutline
+			'trophy-outline': trophyOutline,
+			'close-outline': closeOutline
 		});
 
 		this.restoreSubjectFromRoute();
+	}
+
+	ngOnInit(): void {
+		void this.loadQuestions();
+	}
+
+	async loadQuestions(): Promise<void> {
+		this.isLoading = true;
+		try {
+			const apiQuestions = await firstValueFrom(this.questionService.getAllQuestions());
+
+			// On récupère TOUTES les questions pour le test de positionnement
+			// Quel que soit leur type (quiz ou test) ou leur notionId
+			const validQuestions = apiQuestions;
+
+			// On répartit les questions dans les matières
+			this.subjects.forEach(subject => {
+				const subjectQuestions = validQuestions.filter(q =>
+					this.normalizeSubjectKey(q.matiere) === subject.key
+				);
+
+				subject.questions = subjectQuestions.map(q => ({
+					id: q.id,
+					question: q.content,
+					options: this.parseAnswers(q.answers),
+					correctIndex: this.findCorrectIndex(q),
+					type: q.type,
+					correctAnswer: q.correctAnswer ?? q.correct_answer,
+					images: this.parseImages(q.images)
+				}));
+
+				subject.duration = `${subject.questions.length} questions`;
+			});
+		} catch (error) {
+			console.error('Erreur lors du chargement des questions:', error);
+		} finally {
+			this.isLoading = false;
+		}
+	}
+
+	private parseAnswers(answers: string[] | string): string[] {
+		if (Array.isArray(answers)) {
+			return answers.filter((s) => typeof s === 'string' && s.trim().length > 0);
+		}
+		if (typeof answers === 'string') {
+			try {
+				const parsed = JSON.parse(answers);
+				if (Array.isArray(parsed)) return parsed;
+			} catch {}
+			if (answers.includes(',')) {
+				return answers.split(',').map(s => s.trim()).filter(s => s.length > 0);
+			}
+		}
+		return [];
+	}
+
+	private parseImages(images: string[] | string | undefined): string[] {
+		if (!images) return [];
+		if (Array.isArray(images)) return images;
+		try {
+			const parsed = JSON.parse(images);
+			if (Array.isArray(parsed)) return parsed;
+		} catch {}
+		return [];
+	}
+
+	private findCorrectIndex(q: ApiQuestion): number {
+		const answers = this.parseAnswers(q.answers);
+		const correct = q.correctAnswer ?? q.correct_answer ?? '';
+		return Math.max(0, answers.findIndex(a => a === correct));
 	}
 
 	get selectedSubject(): PlacementSubject | null {
@@ -255,6 +227,11 @@ export class QuizPage {
 
 	get score(): number {
 		return this.questions.reduce((total, question, index) => {
+			if (question.type === 'test') {
+				const userAns = (this.openAnswers[index] || '').trim().toLowerCase();
+				const correctAns = (question.correctAnswer || '').trim().toLowerCase();
+				return total + (userAns === correctAns ? 1 : 0);
+			}
 			return total + (this.selectedAnswers[index] === question.correctIndex ? 1 : 0);
 		}, 0);
 	}
@@ -286,8 +263,9 @@ export class QuizPage {
 		}
 	}
 
-	private normalizeSubjectKey(value: string | null): SubjectKey | null {
-		switch ((value ?? '').toLowerCase()) {
+	private normalizeSubjectKey(value: string | null | undefined): SubjectKey | null {
+		const val = (value ?? '').trim().toLowerCase();
+		switch (val) {
 			case 'geographie':
 			case 'géographie':
 				return 'geographie';
@@ -359,15 +337,38 @@ export class QuizPage {
 	restartQuiz(): void {
 		this.currentQuestionIndex = 0;
 		this.selectedAnswers = [];
+		this.openAnswers = [];
 		this.isSubmitted = false;
 	}
 
 	goBack(): void {
+		if (this.isImageFullscreen) {
+			this.closeFullscreen();
+			return;
+		}
+
 		if (this.selectedSubjectKey) {
 			this.changeSubject();
 			return;
 		}
 
 		this.router.navigate(['/contenu-matiere']);
+	}
+
+	openFullscreen(index: number): void {
+		this.activeImageIndex = index;
+		this.isImageFullscreen = true;
+
+		// Attendre que le DOM soit rendu pour scroller
+		setTimeout(() => {
+			const element = document.getElementById('fs-img-' + index);
+			if (element) {
+				element.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' });
+			}
+		}, 50);
+	}
+
+	closeFullscreen(): void {
+		this.isImageFullscreen = false;
 	}
 }
