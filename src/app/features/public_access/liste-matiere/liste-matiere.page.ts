@@ -45,7 +45,7 @@ export class ListeMatierePage {
   matieres: Matiere[] = [
     {
       nom: 'Geographie',
-      icon: 'assets/icon/globe-terrestre.png',
+      icon: '🌍',
       leconsFaites: 8,
       leconsTotal: 10,
       quizFaits: 8,
@@ -56,7 +56,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Maths',
-      icon: 'assets/icon/calculator.png',
+      icon: '🔢',
       leconsFaites: 0,
       leconsTotal: 15,
       quizFaits: 0,
@@ -67,7 +67,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Anglais',
-      icon: 'assets/icon/book.png',
+      icon: '🇬🇧',
       leconsFaites: 8,
       leconsTotal: 16,
       quizFaits: 14,
@@ -78,7 +78,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Francais',
-      icon: 'assets/icon/flag.png',
+      icon: '✍️',
       leconsFaites: 8,
       leconsTotal: 8,
       quizFaits: 8,
@@ -89,7 +89,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'Sciences',
-      icon: 'assets/icon/flask.png',
+      icon: '🧪',
       leconsFaites: 0,
       leconsTotal: 14,
       quizFaits: 0,
@@ -100,7 +100,7 @@ export class ListeMatierePage {
     },
     {
       nom: 'SVT',
-      icon: 'assets/icon/globe-terrestre.png',
+      icon: '🧬',
       leconsFaites: 2,
       leconsTotal: 9,
       quizFaits: 2,

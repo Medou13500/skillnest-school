@@ -76,7 +76,7 @@ export class QuizPage implements OnInit {
 			description: 'Vocabulaire, grammaire et compréhension.',
 			duration: '0 questions',
 			accent: '#2f8be6',
-			icon: 'A',
+			icon: '🇬🇧',
 			questions: []
 		},
 		{
