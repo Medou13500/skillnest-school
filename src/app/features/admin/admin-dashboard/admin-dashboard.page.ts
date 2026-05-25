@@ -51,6 +51,10 @@ export class AdminDashboardPage implements OnInit {
     await t.present();
   }
 
+  goToTest() {
+  this.router.navigateByUrl('/test-positionnement');
+}
+
   logout(): Promise<void> {
     return this.authService.logout();
   }
