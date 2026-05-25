@@ -20,7 +20,7 @@
             (click)="openMatiere(matiere)">
 
             <div class="tile-cover" [style.background]="matiere.couleur">
-              <img [src]="matiere.icon" [alt]="matiere.nom" class="matiere-icon" />
+              <span class="matiere-emoji">{{ matiere.icon }}</span>
               <span class="cover-bubble"></span>
 
               @if (matiere.progression === 100) {

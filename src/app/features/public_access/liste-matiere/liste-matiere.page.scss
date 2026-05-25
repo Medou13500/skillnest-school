@@ -80,18 +80,17 @@
 }
 
 .tile-cover {
-  flex: 0 0 32%; /* Hauteur fixe réduite pour la partie couleur */
+  flex: 0 0 45%; /* Augmenté de 32% à 45% pour donner plus de place à l'icône */
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.matiere-icon {
-  height: 80%;
-  max-width: 60%;
-  object-fit: contain;
+.matiere-emoji {
+  font-size: 3.5rem; /* Augmenté de 2.2rem à 3.5rem */
   z-index: 1;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); /* Ajout d'une petite ombre pour le relief */
 }
 
 .subject-badge {

@@ -55,7 +55,7 @@ export class AdminQuizQuestionsPage implements OnInit {
   expandedId: number | null = null; // ID de la question développée
   displayLimit = 5; // Nombre de questions affichées initialement
 
-  readonly matieres = ['Geographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT', 'Algorithmique'];
+  readonly matieres = ['Geographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT'];
 
   availableCourseQuizzes: CourseQuizLink[] = [
     {

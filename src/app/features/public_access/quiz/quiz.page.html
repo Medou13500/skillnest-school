@@ -32,8 +32,16 @@
 				<p>Chaque test te situe rapidement pour adapter ton parcours de travail.</p>
 			</div>
 
-			<div class="subject-grid">
-				<button type="button" class="subject-card" *ngFor="let subject of subjects" (click)="selectSubject(subject)">
+			<div class="loading-state" *ngIf="isLoading">
+				<ion-spinner name="crescent" color="primary"></ion-spinner>
+				<p>Chargement des questions...</p>
+			</div>
+
+			<div class="subject-grid" *ngIf="!isLoading">
+				<button type="button" class="subject-card"
+					*ngFor="let subject of subjects"
+					(click)="selectSubject(subject)"
+					[disabled]="subject.questions.length === 0">
 					<div class="subject-icon" [style.background]="subject.accent">
 						<span>{{ subject.icon }}</span>
 					</div>
@@ -44,7 +52,8 @@
 						<span>{{ subject.duration }}</span>
 					</div>
 
-					<span class="subject-action">Commencer</span>
+					<span class="subject-action" *ngIf="subject.questions.length > 0">Commencer</span>
+					<span class="subject-action empty" *ngIf="subject.questions.length === 0">Bientôt</span>
 				</button>
 			</div>
 		</section>
@@ -76,7 +85,20 @@
 			<article class="question-card">
 				<h2>{{ currentQuestion.question }}</h2>
 
-				<div class="options-list">
+				<!-- Thumbnails Container -->
+				<div class="question-thumbnails" *ngIf="currentQuestion.images && currentQuestion.images.length > 0">
+					<div class="thumb-wrapper" *ngFor="let img of currentQuestion.images.slice(0, 4); let i = index" (click)="openFullscreen(i)">
+						<img [src]="img" alt="Miniature question">
+
+						<!-- Badge +N s'il y a plus de 4 images -->
+						<div class="more-overlay" *ngIf="i === 3 && currentQuestion.images.length > 4">
+							<span>+{{ currentQuestion.images.length - 3 }}</span>
+						</div>
+					</div>
+				</div>
+
+				<!-- Mode QCM -->
+				<div class="options-list" *ngIf="currentQuestion.type === 'quiz'">
 					<button
 						type="button"
 						class="option-item"
@@ -87,6 +109,19 @@
 						<span class="option-text">{{ option }}</span>
 						<ion-icon name="checkmark-circle" *ngIf="isOptionSelected(i)"></ion-icon>
 					</button>
+				</div>
+
+				<!-- Mode Ouverte -->
+				<div class="open-answer-input" *ngIf="currentQuestion.type === 'test'">
+					<ion-item lines="none" class="custom-input">
+						<ion-textarea
+							placeholder="Tape ta réponse ici..."
+							[(ngModel)]="openAnswers[currentQuestionIndex]"
+							[autoGrow]="true"
+							rows="3">
+						</ion-textarea>
+					</ion-item>
+					<p class="input-hint">Ta réponse sera vérifiée automatiquement à la fin.</p>
 				</div>
 			</article>
 
@@ -115,8 +150,21 @@
 			<div class="result-breakdown">
 				<div class="result-item" *ngFor="let question of questions; index as i">
 					<span class="result-question">Q{{ i + 1 }}</span>
-					<span class="result-status" [class.ok]="selectedAnswers[i] === question.correctIndex" [class.ko]="selectedAnswers[i] !== question.correctIndex">
+
+					<!-- Status pour QCM -->
+					<span *ngIf="question.type === 'quiz'"
+						class="result-status"
+						[class.ok]="selectedAnswers[i] === question.correctIndex"
+						[class.ko]="selectedAnswers[i] !== question.correctIndex">
 						{{ selectedAnswers[i] === question.correctIndex ? 'Correct' : 'À revoir' }}
+					</span>
+
+					<!-- Status pour Ouverte -->
+					<span *ngIf="question.type === 'test'"
+						class="result-status"
+						[class.ok]="(openAnswers[i] || '').trim().toLowerCase() === (question.correctAnswer || '').trim().toLowerCase()"
+						[class.ko]="(openAnswers[i] || '').trim().toLowerCase() !== (question.correctAnswer || '').trim().toLowerCase()">
+						{{ (openAnswers[i] || '').trim().toLowerCase() === (question.correctAnswer || '').trim().toLowerCase() ? 'Correct' : 'À revoir' }}
 					</span>
 				</div>
 			</div>
@@ -126,5 +174,22 @@
 				<span>Recommencer</span>
 			</button>
 		</section>
+	</div>
+
+	<!-- Fullscreen Image Viewer -->
+	<div class="fullscreen-overlay" *ngIf="isImageFullscreen" (click)="closeFullscreen()">
+		<button class="close-overlay" (click)="closeFullscreen()">
+			<ion-icon name="close-outline"></ion-icon>
+		</button>
+
+		<div class="fullscreen-swiper" (click)="$event.stopPropagation()">
+			<div [id]="'fs-img-' + i" class="fullscreen-img-wrapper" *ngFor="let img of currentQuestion.images; let i = index">
+				<img [src]="img" alt="Image plein écran">
+			</div>
+		</div>
+
+		<div class="image-counter" *ngIf="currentQuestion.images.length > 1">
+			{{ activeImageIndex + 1 }} / {{ currentQuestion.images.length }}
+		</div>
 	</div>
 </ion-content>
