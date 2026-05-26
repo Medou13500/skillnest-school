@@ -1,6 +1,7 @@
 import express from "express";
 import UpdateProfileController from "../controllers/UpdateProfileController";
 import { authMiddleware, AuthRequest } from "../middleware/auth.middlware";
+import { adminOnly } from "../middleware/admin.middlware";
 
 export default function updateProfileRoute(controller: UpdateProfileController) {
   const router = express.Router();
@@ -65,6 +66,23 @@ export default function updateProfileRoute(controller: UpdateProfileController) 
       authMiddleware(req as AuthRequest, res, next);
     },
     controller.updateProfile.bind(controller)
+  );
+
+  router.put(
+    "/profile/new-user",
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      authMiddleware(req as AuthRequest, res, next);
+    },
+    controller.setNewUserStatus.bind(controller)
+  );
+
+  router.post(
+    "/profile/admin/mark-new",
+    (req: express.Request, res: express.Response, next: express.NextFunction) => {
+      authMiddleware(req as AuthRequest, res, next);
+    },
+    adminOnly,
+    controller.markUserAsNew.bind(controller)
   );
 
   return router;

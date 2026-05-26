@@ -47,10 +47,32 @@ export default class UserRepository {
     );
   }
 
+  async updateIsNewUser(userId: number, isNewUser: boolean) {
+    await this.pool.query(
+      `
+    UPDATE users
+    SET is_new_user = $1
+    WHERE id = $2
+    `,
+      [isNewUser, userId],
+    );
+  }
+
+  async updateIsNewUserByEmail(email: string, isNewUser: boolean) {
+    await this.pool.query(
+      `
+    UPDATE users
+    SET is_new_user = $1
+    WHERE email = $2
+    `,
+      [isNewUser, email],
+    );
+  }
+
   async findByIdWithDetails(id: number) {
     const result = await this.pool.query(
       `
-      SELECT id, email, role, first_name, last_name, created_at
+      SELECT id, email, role, first_name, last_name, is_new_user, created_at
       FROM users WHERE id = $1;
       `,
       [id],

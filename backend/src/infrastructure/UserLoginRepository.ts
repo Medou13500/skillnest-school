@@ -5,7 +5,7 @@ export default class UserLoginRepository {
 
   async findByEmail(email: string) {
     const query = `
-      SELECT id, email, role, password_hash
+      SELECT id, email, role, password_hash, is_new_user
       FROM public.users
       WHERE email = $1
       LIMIT 1

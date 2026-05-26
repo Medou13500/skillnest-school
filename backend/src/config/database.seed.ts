@@ -66,8 +66,8 @@ async function seedAccount(
 
   await pool.query(
     `
-    INSERT INTO public.users (email, password_hash, role)
-    VALUES ($1, $2, $3)
+    INSERT INTO public.users (email, password_hash, role, is_new_user)
+    VALUES ($1, $2, $3, TRUE)
     `,
     [account.email, passwordHash, account.role]
   );

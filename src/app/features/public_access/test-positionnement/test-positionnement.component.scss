@@ -1,102 +1,141 @@
 :host {
   --ion-color-orange: #f2994a;
-  --bg-cream: #f9f3e9;
+  --bg-cream: #fcf8f2;
 }
 
-.bg-cream {
+ion-content {
   --background: var(--bg-cream);
 }
 
 // Header Bleu
 .header-blue {
-  background: linear-gradient(to bottom, #4a80f0, #385cdb);
-  padding: 20px 20px 60px 20px;
+  background: linear-gradient(135deg, #4a80f0, #385cdb);
+  padding: calc(15px + env(safe-area-inset-top, 0px)) 16px 16px;
   border-bottom-left-radius: 40px;
   border-bottom-right-radius: 40px;
   color: white;
+}
 
-  .btn-retour {
-    --color: white;
-    font-size: 0.9rem;
+.header-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0; // Permet au texte de se réduire si besoin
+
+  .icon-square {
     background: rgba(255, 255, 255, 0.2);
-    border-radius: 20px;
-    height: 36px;
-  }
-
-  .header-content {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    padding: 8px;
     display: flex;
     align-items: center;
-    gap: 15px;
-    margin-top: 20px;
+    justify-content: center;
+    flex-shrink: 0;
+    img { width: 100%; height: auto; }
+  }
 
-    .icon-square {
-      background: rgba(255, 255, 255, 0.2);
-      width: 50px;
-      height: 50px;
-      border-radius: 12px;
-      padding: 10px;
-      img { width: 100%; }
+  .text-group {
+    min-width: 0;
+    h1 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-
-    h1 { font-size: 1.4rem; font-weight: 800; margin: 0; }
-    p { font-size: 0.85rem; margin: 0; opacity: 0.9; }
+    p { font-size: 0.7rem; margin: 2px 0 0; opacity: 0.9; }
   }
 }
 
-// Illustration
-.image-container {
-  margin-top: -40px;
-  text-align: center;
-  padding: 0 20px;
-  .hero-image {
-    width: 100%;
-    border-radius: 20px;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+.admin-logout {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #ef6b3a;
+  font-weight: 700;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  flex-shrink: 0;
+
+  ion-icon {
+    font-size: 16px;
   }
 }
 
-.main-container { padding: 20px; }
+.main-container {
+  padding: 50px 16px 80px;
+  margin-top: -30px;
+}
 
 // Stats Cards
 .stat-card {
   background: white;
-  border-radius: 15px;
-  padding: 15px 5px;
+  border-radius: 16px;
+  padding: 10px 2px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.04);
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 2px;
 
-  .emoji { font-size: 1.2rem; }
-  .val { font-weight: 800; font-size: 1rem; color: #333; }
-  .lab { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+  .emoji { font-size: 1rem; }
+  .val { font-weight: 800; font-size: 0.85rem; color: #111b44; }
+  .lab { font-size: 0.55rem; color: #8b6c52; text-transform: uppercase; font-weight: 700; }
 }
 
-// Description
+// Description Card
 .description-card {
   background: white;
-  border-radius: 20px;
-  padding: 20px;
-  margin: 20px 0;
-  color: #666;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  border-radius: 18px;
+  padding: 14px;
+  margin: 12px 0;
+  color: #555;
+  font-size: 0.8rem;
+  line-height: 1.4;
   text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  p { margin: 0; }
 }
 
 // Thèmes Badges
-.title-label { font-size: 0.95rem; font-weight: 800; margin-bottom: 10px; }
+.title-label {
+  font-size: 0.85rem;
+  font-weight: 800;
+  margin: 15px 0 10px;
+  color: #111b44;
+}
+
 .themes-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-  margin-bottom: 25px;
+  gap: 5px;
+  margin-bottom: 18px;
 
   ion-badge {
-    --padding-top: 8px; --padding-bottom: 8px;
-    --padding-start: 12px; --padding-end: 12px;
-    border-radius: 12px; font-weight: 600;
+    --padding-top: 5px; --padding-bottom: 5px;
+    --padding-start: 8px; --padding-end: 8px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    gap: 3px;
   }
   .badge-var { --background: #43a047; }
   .badge-cond { --background: #ef6c00; }
@@ -108,13 +147,33 @@
 // Levels Box
 .levels-box {
   background: #fdf2e3;
-  border-radius: 20px;
-  padding: 20px;
-  margin-bottom: 30px;
-  h3 { color: #d9822b; font-size: 0.8rem; font-weight: 800; margin-bottom: 15px; }
-  ion-item { 
-    --background: transparent; font-weight: 700; font-size: 0.95rem;
-    span { margin-right: 10px; }
+  border-radius: 18px;
+  padding: 14px;
+  margin-bottom: 20px;
+
+  h3 {
+    color: #d9822b;
+    font-size: 0.7rem;
+    font-weight: 800;
+    margin: 0 0 10px;
+    letter-spacing: 0.5px;
+  }
+
+  ion-list {
+    background: transparent !important;
+    padding: 0;
+
+    ion-item {
+      --background: transparent !important;
+      --padding-start: 0;
+      --inner-padding-end: 0;
+      --min-height: 32px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      --color: #333;
+
+      span { margin-right: 10px; font-size: 1rem; }
+    }
   }
 }
 
@@ -122,18 +181,19 @@
 .btn-start {
   --background: #ed943b;
   --background-activated: #d8832a;
-  --border-radius: 25px;
-  height: 55px;
+  --border-radius: 18px;
+  height: 52px;
   font-weight: 800;
-  font-size: 1.1rem;
-  --box-shadow: 0 4px 15px rgba(237, 148, 59, 0.4);
+  font-size: 1rem;
+  margin-bottom: 8px; /* Réduit pour rapprocher le texte */
+  --box-shadow: 0 8px 18px rgba(237, 148, 59, 0.2);
 }
 
 .footer-text {
   text-align: center;
-  font-size: 0.8rem;
-  color: #888;
-  margin-top: 15px;
+  font-size: 0.7rem;
+  color: #8b6c52;
+  margin-top: 0; /* Remonte le texte juste sous le bouton */
+  opacity: 0.8;
+  padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); /* Espace de sécurité en bas */
 }
-
-.bg-transparent { --background: transparent; }

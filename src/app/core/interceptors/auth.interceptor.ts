@@ -10,12 +10,16 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private authService: AuthService) {}
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const isAuthRequest = req.url.includes('/api/auth/');
     const token = localStorage.getItem('authToken');
-    const authReq = token ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } }) : req;
+
+    const authReq = (token && !isAuthRequest)
+      ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+      : req;
 
     return next.handle(authReq).pipe(
       catchError((err: any) => {
-        if (err && err.status === 401) {
+        if (err && err.status === 401 && !isAuthRequest) {
           const refreshToken = localStorage.getItem('refreshToken');
           if (!refreshToken) {
             // no refresh token -> logout
@@ -24,7 +28,7 @@ export class AuthInterceptor implements HttpInterceptor {
           }
 
           // call refresh endpoint using fetch to avoid circular DI with HttpClient
-          const url = `${environment.apiUrl}/api/auth/auth/refresh`;
+          const url = `${environment.apiUrl}/api/auth/refresh`;
 
           return from(
             fetch(url, {

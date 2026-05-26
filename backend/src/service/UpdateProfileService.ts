@@ -31,7 +31,8 @@ export default class UpdateProfileService {
         email: updatedUser.email,
         firstName: updatedUser.first_name,
         lastName: updatedUser.last_name,
-        role: updatedUser.role
+        role: updatedUser.role,
+        isNewUser: updatedUser.is_new_user === true
       }
     };
   }
@@ -47,7 +48,38 @@ export default class UpdateProfileService {
       email: user.email,
       firstName: user.first_name,
       lastName: user.last_name,
-      role: user.role
+      role: user.role,
+      isNewUser: user.is_new_user === true
+    };
+  }
+
+  async setUserNewStatus(userId: number, isNewUser: boolean) {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new Error("USER_NOT_FOUND");
+    }
+
+    await this.userRepository.updateIsNewUser(userId, isNewUser);
+
+    return {
+      message: "User new status updated",
+      userId,
+      isNewUser
+    };
+  }
+
+  async setUserNewStatusByEmail(email: string, isNewUser: boolean) {
+    const user = await this.userRepository.findByEmail(email);
+    if (!user) {
+      throw new Error("USER_NOT_FOUND");
+    }
+
+    await this.userRepository.updateIsNewUserByEmail(email, isNewUser);
+
+    return {
+      message: "User new status updated",
+      email,
+      isNewUser
     };
   }
 }

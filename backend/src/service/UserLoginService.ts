@@ -34,6 +34,7 @@ export default class UserLoginService {
         id: user.id,
         email: user.email,
         role: user.role,
+        is_new_user: user.is_new_user === true
       },
     };
   }

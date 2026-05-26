@@ -35,6 +35,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/public_access/contenu-matiere/contenu-matiere.page').then(m => m.ContenuMatierePage)
   },
   {
+    path: 'quiz',
+    loadComponent: () => import('./features/public_access/quiz/quiz.page').then(m => m.QuizPage)
+  },
+  {
     path: 'compte',
     loadComponent: () => import('./features/public_access/compte/compte.page').then(m => m.ComptePage)
   },

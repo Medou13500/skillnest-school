@@ -63,6 +63,12 @@ export class MobileMenuComponent {
 
   private updateAuthState(): void {
     const token = !!localStorage.getItem('authToken');
+    const currentUrl = this.router.url;
+
+    // Liste des pages publiques où le menu ne doit JAMAIS apparaître
+    const publicPages = ['/home', '/connexion', '/inscription', '/mot-de-passe-oublie', '/reset-mot-de-passe', '/test-positionnement', '/quiz-test-positionnement'];
+    const isPublicPage = publicPages.some(page => currentUrl.includes(page)) || currentUrl === '/';
+
     let isAdmin = false;
     try {
       const u = localStorage.getItem('user');
@@ -77,8 +83,8 @@ export class MobileMenuComponent {
       // ignore parse errors
     }
 
-    // show mobile menu only when there is a token and user is NOT admin
-    this.isAuthenticated = token && !isAdmin;
+    // Le menu s'affiche si : l'utilisateur a un token ET n'est pas admin ET n'est pas sur une page publique
+    this.isAuthenticated = token && !isAdmin && !isPublicPage;
   }
 
   toggle() {

@@ -9,21 +9,28 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
       role TEXT NOT NULL DEFAULT 'USER',
       first_name TEXT,
       last_name TEXT,
+      is_new_user BOOLEAN NOT NULL DEFAULT false,
       created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
     );
   `);
 
-  // Vérifier si les colonnes first_name et last_name existent déjà
+  // Vérifier si les colonnes first_name, last_name et is_new_user existent déjà
   const columnsExist = await pool.query(`
     SELECT column_name FROM information_schema.columns 
-    WHERE table_name = 'users' AND column_name IN ('first_name', 'last_name')
+    WHERE table_name = 'users' AND column_name IN ('first_name', 'last_name', 'is_new_user')
   `);
 
   if (columnsExist.rows.length === 0) {
     await pool.query(`
       ALTER TABLE public.users 
       ADD COLUMN IF NOT EXISTS first_name TEXT,
-      ADD COLUMN IF NOT EXISTS last_name TEXT
+      ADD COLUMN IF NOT EXISTS last_name TEXT,
+      ADD COLUMN IF NOT EXISTS is_new_user BOOLEAN NOT NULL DEFAULT false
+    `);
+  } else {
+    await pool.query(`
+      ALTER TABLE public.users 
+      ADD COLUMN IF NOT EXISTS is_new_user BOOLEAN NOT NULL DEFAULT false
     `);
   }
 

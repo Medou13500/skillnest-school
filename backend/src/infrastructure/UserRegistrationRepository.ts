@@ -21,8 +21,8 @@ class UserRegistrationRepository {
     lastName?: string
   ) {
     const query = `
-      INSERT INTO public.users (email, password_hash, role, first_name, last_name)
-      VALUES ($1, $2, $3, $4, $5)
+      INSERT INTO public.users (email, password_hash, role, first_name, last_name, is_new_user)
+      VALUES ($1, $2, $3, $4, $5, TRUE)
       RETURNING id, email, role
     `;
 

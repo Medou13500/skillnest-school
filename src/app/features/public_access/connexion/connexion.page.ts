@@ -24,6 +24,7 @@ interface LoginResponse {
     id: number;
     email: string;
     role: string;
+    is_new_user?: boolean;
   };
 }
 
@@ -143,11 +144,14 @@ export class ConnexionPage {
 
       const effectiveRole = (response.user?.role ?? this.role ?? 'student').toLowerCase();
       let targetRoute = '/liste-matiere';
+      const isNewStudent = effectiveRole === 'student' && response.user?.is_new_user === true;
 
       if (effectiveRole === 'admin') {
         targetRoute = '/admin';
       } else if (effectiveRole === 'parent') {
         targetRoute = '/parent';
+      } else if (isNewStudent) {
+        targetRoute = '/test-positionnement';
       }
 
       await this.router.navigate([targetRoute], {

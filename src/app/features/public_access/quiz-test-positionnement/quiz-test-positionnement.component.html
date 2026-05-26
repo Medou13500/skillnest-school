@@ -1,5 +1,5 @@
 <ion-content class="bg-cream">
-  
+
   <!-- État de chargement -->
   <div *ngIf="isLoading" class="loading-container">
     <ion-spinner></ion-spinner>
@@ -14,45 +14,55 @@
   </div>
 
   <!-- Quiz -->
-  <div *ngIf="!isLoading && !error && questions.length > 0">
-    
+  <div *ngIf="!isLoading && !error && questions.length > 0 && !showResults">
+
     <!-- Header de Quiz (Bleu) -->
     <div class="quiz-header">
       <!-- Barre de progression segmentée -->
       <div class="progress-segments">
-        <div class="segment" 
+        <div class="segment"
              *ngFor="let i of questions | slice:0:5; let index = index"
              [class.active]="index <= currentQuestionIndex"></div>
-        <div class="segment" 
+        <div class="segment"
              *ngFor="let i of questions | slice:5; let index = index"
              [class.active]="(index + 5) <= currentQuestionIndex"></div>
       </div>
 
-      <!-- Badges et Compteur -->
-      <div class="quiz-info-row">
+      <!-- Ligne du haut : Badges et Logout -->
+      <div class="header-top-row">
         <div class="badges-group">
           <ion-badge class="badge-topic" *ngIf="currentQuestion?.matiere">
             📦 {{ currentQuestion?.matiere }}
           </ion-badge>
-          <ion-badge class="badge-difficulty" 
+          <ion-badge class="badge-difficulty"
                      [ngClass]="'difficulty-' + currentQuestion?.difficulty">
             {{ currentQuestion?.difficulty }}
           </ion-badge>
         </div>
-        <div class="counter">
-          <span class="current">{{ currentQuestionIndex + 1 }}</span><span class="total"> / {{ questions.length }}</span>
-        </div>
+
+        <button class="admin-logout" type="button" (click)="logout()" aria-label="Logout">
+          <ion-icon name="log-out-outline"></ion-icon>
+          <span>Logout</span>
+        </button>
       </div>
 
-      <!-- Barre de progression continue et Timer -->
-      <div class="timer-row">
+      <!-- Barre de progression temps et Timer -->
+      <div class="quiz-info-row">
         <div class="progress-bar-container">
-          <div class="progress-fill" [style.width.%]="getProgressPercentage()"></div>
+          <div class="progress-fill"
+               [style.width.%]="getTimePercentage()"
+               [class.timer-warning-bar]="remainingTime <= 5"></div>
         </div>
-        <ion-badge class="timer-badge" 
-                   [ngClass]="remainingTime <= 5 ? 'timer-warning' : ''">
-          🟢 {{ remainingTime }}s
-        </ion-badge>
+
+        <div class="quiz-meta">
+          <div class="counter">
+            <span class="current">{{ currentQuestionIndex + 1 }}</span><span class="total"> / {{ questions.length }}</span>
+          </div>
+          <ion-badge class="timer-badge"
+                     [ngClass]="remainingTime <= 5 ? 'timer-warning' : ''">
+            🟢 {{ remainingTime }}s
+          </ion-badge>
+        </div>
       </div>
     </div>
 
@@ -60,15 +70,30 @@
     <div class="question-container" *ngIf="currentQuestion">
       <div class="question-card">
         <h2>{{ currentQuestion.content }}</h2>
+
+        <!-- Thumbnails Container -->
+        <div class="question-thumbnails" *ngIf="currentQuestion.images && (currentQuestion.images.length > 0 || (currentQuestion.images | json) !== '[]')">
+          <div class="thumb-wrapper" *ngFor="let img of (currentAnswersAsArray(currentQuestion.images) | slice:0:4); let i = index" (click)="openFullscreen(i)">
+            <img [src]="img" alt="Miniature question">
+
+            <!-- Badge +N s'il y a plus de 4 images -->
+            <div class="more-overlay" *ngIf="i === 3 && currentAnswersAsArray(currentQuestion.images).length > 4">
+              <span>+{{ currentAnswersAsArray(currentQuestion.images).length - 3 }}</span>
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Options de réponse -->
       <div class="options-list">
-        <div class="option-item" 
+        <div class="option-item"
              *ngFor="let answer of currentAnswers; let i = index"
              (click)="selectAnswer(answer)"
-             [class.selected]="isAnswerSelected(answer)">
-          <div class="letter-circle" [class.selected]="isAnswerSelected(answer)">
+             [class.selected]="isAnswerSelected(answer)"
+             [class.correct]="showFeedback && answer === (currentQuestion.correctAnswer || currentQuestion.correct_answer)"
+             [class.incorrect]="showFeedback && isAnswerSelected(answer) && answer !== (currentQuestion.correctAnswer || currentQuestion.correct_answer)">
+          <div class="letter-circle"
+               [class.selected]="isAnswerSelected(answer)">
             {{ getLetterForIndex(i) }}
           </div>
           <div class="option-text">{{ answer }}</div>
@@ -79,23 +104,15 @@
     <!-- Boutons de navigation fixe en bas -->
     <ion-footer class="ion-no-border bg-transparent">
       <div class="ion-padding quiz-actions">
-        <div class="button-row">
-          <ion-button 
-            expand="block" 
-            fill="outline"
-            (click)="previousQuestion()"
-            [disabled]="!canGoPrevious()">
-            <ion-icon slot="start" name="arrow-back"></ion-icon>
-            Précédent
-          </ion-button>
-
-          <ion-button 
-            expand="block" 
+        <div class="button-row single-button">
+          <ion-button
+            expand="block"
             class="btn-validate"
             (click)="nextQuestion()"
             [disabled]="!currentQuestion || !isAnswerSelected(userAnswers[currentQuestion.id])">
-            <span *ngIf="canGoNext()">Valider</span>
-            <span *ngIf="!canGoNext()">Terminer</span>
+            <span *ngIf="!showFeedback">Valider</span>
+            <span *ngIf="showFeedback && canGoNext()">Suivant</span>
+            <span *ngIf="showFeedback && !canGoNext()">Terminer</span>
             <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
           </ion-button>
         </div>
@@ -106,7 +123,112 @@
         </div>
       </div>
     </ion-footer>
-
   </div>
 
+  <!-- Page de Résultats -->
+  <div *ngIf="showResults" class="results-page">
+    <div class="results-card">
+      <div class="avatar-circle">
+        <span class="emoji">{{ scoreGlobal > 50 ? '🥳' : '😓' }}</span>
+      </div>
+
+      <h2 class="results-title" [class.fail]="scoreGlobal <= 50">
+        {{ scoreGlobal > 50 ? 'Parcours validé !' : 'Parcours non validé' }}
+      </h2>
+
+      <div class="score-global-row">
+        <span class="score-percent">{{ scoreGlobal }}%</span>
+        <span class="score-label">score global</span>
+      </div>
+
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-icon">🧠</span>
+          <strong>{{ notionsMasteredCount }}/{{ subjectsProgress.length }}</strong>
+          <small>Matières maîtrisées</small>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">❓</span>
+          <strong>{{ questions.length }}</strong>
+          <small>Questions totales</small>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">✅</span>
+          <strong>{{ correctAnswersCount }}</strong>
+          <small>Correctes</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Progression par matière -->
+    <div class="notions-card">
+      <div class="notions-header">
+        <span>🗺️ PROGRESSION PAR MATIÈRE</span>
+      </div>
+
+      <div class="notion-list">
+        <div class="notion-row" *ngFor="let subject of subjectsProgress">
+          <div class="notion-left">
+            <span class="notion-icon">{{ subject.icon }}</span>
+            <div class="notion-name-group">
+              <strong>{{ subject.name }}</strong>
+            </div>
+          </div>
+          <div class="notion-right">
+            <span class="status-dash">—</span>
+            <div class="status-details">
+              <span class="status-stats" *ngIf="subject.status !== 'Non évaluée'">
+                {{ subject.correct }}/{{ subject.total }} ({{ subject.percent }}%)
+              </span>
+              <span class="status-text"
+                    [class.mastered]="subject.status === 'Maîtrisé'"
+                    [class.reinforce]="subject.status === 'À renforcer'">
+                {{ subject.status }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="results-actions">
+      <button class="btn-action secondary" (click)="restartQuiz()">
+        <span>Recommencer le parcours</span>
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </button>
+
+      <button class="btn-action primary" routerLink="/dashboard">
+        <span>Retour à l'accueil</span>
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </button>
+    </div>
+
+    <!-- Footer Tab -->
+    <div class="footer-tab">
+      <div class="tab-pill">
+        <ion-icon name="menu-outline"></ion-icon>
+        <span class="pill-icon">🏆</span>
+        <strong>Résultats</strong>
+        <ion-icon name="chevron-up-outline"></ion-icon>
+      </div>
+    </div>
+  </div>
+
+  <!-- Fullscreen Image Viewer -->
+  <div class="fullscreen-overlay" *ngIf="isImageFullscreen" (click)="closeFullscreen()">
+    <button class="close-overlay" (click)="closeFullscreen()">
+      <ion-icon name="close-outline"></ion-icon>
+    </button>
+
+    <div class="fullscreen-swiper" (click)="$event.stopPropagation()">
+      <div [id]="'fs-img-' + i" class="fullscreen-img-wrapper" *ngFor="let img of currentAnswersAsArray(currentQuestion?.images); let i = index">
+        <img [src]="img" alt="Image plein écran">
+      </div>
+    </div>
+
+    <div class="image-counter" *ngIf="currentAnswersAsArray(currentQuestion?.images).length > 1">
+      {{ activeImageIndex + 1 }} / {{ currentAnswersAsArray(currentQuestion?.images).length }}
+    </div>
+  </div>
 </ion-content>

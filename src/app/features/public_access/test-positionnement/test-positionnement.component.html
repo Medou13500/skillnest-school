@@ -1,19 +1,21 @@
 <ion-content class="bg-cream">
   <!-- Section Bleue (Header) -->
   <div class="header-blue">
-    <ion-button fill="clear" class="btn-retour">
-      <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
-      Retour
-    </ion-button>
+    <div class="header-top-row">
+      <div class="header-content">
+        <div class="icon-square">
+          <img src="assets/icon/target.png" alt="target" />
+        </div>
+        <div class="text-group">
+          <h1>Test de positionnement</h1>
+          <p>Évalue ton niveau en quelques minutes</p>
+        </div>
+      </div>
 
-    <div class="header-content">
-      <div class="icon-square">
-        <img src="assets/icon/target.png" alt="target" />
-      </div>
-      <div class="text-group">
-        <h1>Test de positionnement</h1>
-        <p>Évalue ton niveau en quelques minutes</p>
-      </div>
+      <button class="admin-logout" type="button" (click)="logout()" aria-label="Logout">
+        <ion-icon name="log-out-outline"></ion-icon>
+        <span>Logout</span>
+      </button>
     </div>
   </div>
 
@@ -24,14 +26,14 @@
         <ion-col size="4">
           <div class="stat-card">
             <span class="emoji">❓</span>
-            <span class="val">10</span>
+            <span class="val">{{ isLoading ? '...' : questionCount }}</span>
             <span class="lab">Questions</span>
           </div>
         </ion-col>
         <ion-col size="4">
           <div class="stat-card">
             <span class="emoji">⏱️</span>
-            <span class="val">~5 min</span>
+            <span class="val">~30 min</span>
             <span class="lab">Durée</span>
           </div>
         </ion-col>

@@ -43,15 +43,15 @@ ion-content { --background: #{$bg-cream}; }
 
 	.admin-logout {
 		position: absolute;
-		top: 35px;
+		top: 52px;
 		right: 16px;
-		padding: 8px 12px;
-		border-radius: 10px;
-		background: rgba(255,255,255,0.9);
+		padding: 10px 14px;
+		border-radius: 14px;
+		background: rgba(255,255,255,0.95);
 		display: flex;
 		align-items: center;
-		gap: 6px;
-		border: 1px solid rgba(0,0,0,0.06);
+		gap: 8px;
+		border: 1px solid rgba(0,0,0,0.08);
 		color: #ef6b3a;
 		z-index: 1400;
 		font-weight: 600;
@@ -165,6 +165,18 @@ ion-content { --background: #{$bg-cream}; }
 	.tab-bar {
 		padding: 8px 10px 10px;
 	}
+}
+
+.debug-tag {
+  display: inline-block;
+  margin-left: 10px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: rgba(255, 231, 179, 0.95);
+  color: #a35c00;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: none;
 }
 
 /* petits ajustements admin */

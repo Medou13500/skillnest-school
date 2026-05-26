@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 import { addIcons } from 'ionicons';
 import { logOutOutline } from 'ionicons/icons';
 import { AuthService } from '../../../core/services/AuthService';
+import { HttpClient } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-admin-dashboard',
@@ -35,8 +38,9 @@ export class AdminDashboardPage implements OnInit {
 
   constructor(
     public router: Router,
-    private toastController: ToastController
-    , private authService: AuthService
+    private toastController: ToastController,
+    private authService: AuthService,
+    private http: HttpClient
   ) { }
 
   ngOnInit(): void { }
@@ -46,14 +50,37 @@ export class AdminDashboardPage implements OnInit {
     try { addIcons({ 'log-out-outline': logOutOutline }); } catch (e) { /* ignore */ }
   }
 
-  async presentToast(message: string) {
-    const t = await this.toastController.create({ message, duration: 2000, position: 'top' });
+  async presentToast(message: string, color: 'success' | 'danger' | 'warning' = 'success') {
+    const t = await this.toastController.create({ message, duration: 2000, position: 'top', color });
     await t.present();
   }
 
-  goToTest() {
-  this.router.navigateByUrl('/test-positionnement');
-}
+  async markTestAccountAsNew(): Promise<void> {
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      await this.presentToast('Jeton manquant. Veuillez vous reconnecter.', 'danger');
+      return;
+    }
+
+    try {
+      await firstValueFrom(
+        this.http.post(
+          `${environment.apiUrl}/api/auth/profile/admin/mark-new`,
+          { email: 'test@gmail.com' },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          }
+        )
+      );
+      await this.presentToast('Le compte test@gmail.com est maintenant marqué comme nouveau utilisateur.');
+    } catch (error) {
+      console.error('Erreur remise à neuf du compte test@gmail.com :', error);
+      await this.presentToast('Impossible de marquer le compte comme nouveau.', 'danger');
+    }
+  }
 
   logout(): Promise<void> {
     return this.authService.logout();
