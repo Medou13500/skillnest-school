@@ -55,7 +55,7 @@ export class AdminQuizQuestionsPage implements OnInit {
   expandedId: number | null = null; // ID de la question développée
   displayLimit = 5; // Nombre de questions affichées initialement
 
-  readonly matieres = ['Geographie', 'Maths', 'Anglais', 'Francais', 'Sciences', 'SVT'];
+  readonly matieres = ['Histoire-Geographie', 'Maths', 'Anglais', 'Francais', 'Physique-Chimie', 'SVT'];
 
   availableCourseQuizzes: CourseQuizLink[] = [
     {
@@ -64,7 +64,7 @@ export class AdminQuizQuestionsPage implements OnInit {
       chapitre: 'Test de positionnement',
       coursTitre: 'Test de positionnement',
       quizTitre: 'Test initial',
-      matiere: 'Geographie'
+      matiere: 'Histoire-Geographie'
     },
     {
       id: 1,
@@ -72,7 +72,7 @@ export class AdminQuizQuestionsPage implements OnInit {
       chapitre: 'Quiz',
       coursTitre: 'Notion 1',
       quizTitre: 'Quiz notion 1',
-      matiere: 'Geographie'
+      matiere: 'Histoire-Geographie'
     },
     {
       id: 2,

@@ -37,7 +37,7 @@ import {
   ]
 })
 export class ContenuMatierePage {
-  currentMatiere = (history.state?.matiere as string) || 'Geographie';
+  currentMatiere = (history.state?.matiere as string) || 'Histoire-Geographie';
   objectivesOpen = false;
 
   themes = [

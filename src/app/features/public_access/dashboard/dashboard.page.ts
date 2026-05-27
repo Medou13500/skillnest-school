@@ -1,8 +1,9 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, AfterViewInit, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 import { Chart, registerables } from 'chart.js';
 import { addIcons } from 'ionicons';
 import {
@@ -17,6 +18,7 @@ import {
   timeOutline
 } from 'ionicons/icons';
 import { MenuComponent } from '../../../shared/menu/menu.component';
+import { environment } from '../../../../environments/environment';
 
 Chart.register(...registerables);
 
@@ -28,6 +30,8 @@ Chart.register(...registerables);
   imports: [IonicModule, CommonModule, FormsModule, MenuComponent]
 })
 export class DashboardPage implements OnInit, AfterViewInit {
+  private http = inject(HttpClient);
+
   @ViewChild('lineChart') lineChart!: ElementRef;
   @ViewChild('barChart') barChart!: ElementRef;
 
@@ -45,22 +49,13 @@ export class DashboardPage implements OnInit, AfterViewInit {
 
   stats = [
     { label: 'Score moyen', value: '72 %', icon: '🎯', color: 'blue-icon' },
-    { label: 'Quizz terminés', value: '24', icon: '✅', color: 'green-icon' },
-    { label: 'Notions maîtrisées', value: '8 / 15', icon: '🧠', color: 'purple-icon' },
-    { label: 'Série actuelle', value: '5 j', icon: '🔥', color: 'orange-icon' }
+    { label: 'Quizz terminés', value: '0', icon: '✅', color: 'green-icon' },
+    { label: 'Questions', value: '0', icon: '❓', color: 'purple-icon' },
+    { label: 'Série actuelle', value: '0 j', icon: '🔥', color: 'orange-icon' }
   ];
 
   // Données de la dernière session
-  lastSession = {
-    titre: 'Variables',
-    categorie: 'Algorithmie',
-    date: 'Auj. 14h32',
-    duree: '4min',
-    score: 8,
-    total: 10,
-    pourcentage: 80,
-    icon: '🧮'
-  };
+  lastSession: any = null;
 
   constructor(
     public router: Router,
@@ -94,13 +89,117 @@ export class DashboardPage implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.showLoginSuccessToastIfNeeded();
+    this.loadUserData();
+    this.loadStats();
+    this.loadHistory();
+  }
+
+  loadUserData() {
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      const u = JSON.parse(userJson);
+      const firstName = u.first_name || 'Emma';
+      const lastName = u.last_name || 'Dubois';
+
+      this.user = {
+        nom: firstName + ' ' + lastName,
+        niveau: 'Intermédiaire',
+        email: u.email,
+        initiales: (firstName[0] || '') + (lastName[0] || '') || 'ED'
+      };
+    }
+  }
+
+  loadStats() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    this.http.get(`${environment.apiUrl}/api/answers/stats`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (data: any) => {
+        if (data.global) {
+          this.stats[0].value = `${data.global.averageScore} %`;
+          this.stats[1].value = data.global.totalQuizzes.toString();
+          this.stats[2].value = data.global.totalAnswers.toString();
+          this.stats[3].value = `${data.global.streak} j`;
+        }
+
+        if (data.subjects && data.subjects.length > 0) {
+          this.updateBarChart(data.subjects);
+        }
+      },
+      error: (err: any) => console.error('Erreur stats dashboard:', err)
+    });
+
+    this.loadPerformanceData();
+  }
+
+  loadPerformanceData() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    this.http.get(`${environment.apiUrl}/api/answers/performance?period=${this.selectedPeriod}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (data: any) => {
+        this.updateLineChart(data);
+      },
+      error: (err) => console.error('Erreur performance dashboard:', err)
+    });
+  }
+
+  changePeriod(period: string) {
+    this.selectedPeriod = period;
+    this.loadPerformanceData();
+  }
+
+  updateLineChart(data: any[]) {
+    if (!this.lineChartInstance) return;
+
+    if (!data || data.length === 0) {
+      this.lineChartInstance.data.labels = ['Aucune donnée'];
+      this.lineChartInstance.data.datasets[0].data = [0];
+    } else {
+      this.lineChartInstance.data.labels = data.map(d => d.day);
+      this.lineChartInstance.data.datasets[0].data = data.map(d => d.score);
+    }
+    this.lineChartInstance.update();
+  }
+
+  loadHistory() {
+    const token = localStorage.getItem('authToken');
+    if (!token) return;
+
+    this.http.get(`${environment.apiUrl}/api/answers/history`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (data: any) => {
+        if (Array.isArray(data) && data.length > 0) {
+          this.lastSession = data[0];
+        }
+      },
+      error: (err: any) => console.error('Erreur history dashboard:', err)
+    });
+  }
+
+  updateBarChart(subjects: any[]) {
+    if (!this.barChartInstance) return;
+
+    const labels = subjects.map(s => s.name.substring(0, 5) + '.');
+    const values = subjects.map(s => s.score);
+
+    this.barChartInstance.data.labels = labels;
+    this.barChartInstance.data.datasets[0].data = values;
+    this.barChartInstance.update();
   }
 
   ngAfterViewInit() {
     setTimeout(() => {
       this.createLineChart();
       this.createBarChart();
-    }, 200);
+      this.loadStats();
+    }, 500);
   }
 
   createLineChart() {
@@ -110,7 +209,7 @@ export class DashboardPage implements OnInit, AfterViewInit {
       data: {
         labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
         datasets: [{
-          data: [55, 70, 62, 80, 75, 88, 72],
+          data: [0, 0, 0, 0, 0, 0, 0],
           borderColor: '#ff823a',
           backgroundColor: 'rgba(255, 130, 58, 0.1)',
           fill: true,
@@ -136,9 +235,9 @@ export class DashboardPage implements OnInit, AfterViewInit {
     this.barChartInstance = new Chart(this.barChart.nativeElement, {
       type: 'bar',
       data: {
-        labels: ['Vari.', 'Cond.', 'Bouc.', 'Fonc.', 'Tabl.', 'Algo.'],
+        labels: ['...', '...', '...', '...', '...', '...'],
         datasets: [{
-          data: [85, 70, 60, 40, 30, 18],
+          data: [0, 0, 0, 0, 0, 0],
           backgroundColor: ['#42b883', '#4d7cfe', '#ff823a', '#a855f7', '#facd15', '#ef4444'],
           borderRadius: 8
         }]

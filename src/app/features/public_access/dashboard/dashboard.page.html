@@ -12,22 +12,6 @@
         </div>
       </div>
 
-      <div class="quick-stats-row">
-        <div class="q-stat">
-          <strong>24</strong>
-          <span>Quiz</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="q-stat">
-          <strong>72%</strong>
-          <span>Moyenne</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="q-stat">
-          <strong>5j</strong>
-          <span>Série 🔥</span>
-        </div>
-      </div>
     </header>
 
     <div class="main-body">
@@ -65,8 +49,8 @@
             <h3>Performance</h3>
           </div>
           <div class="period-toggle">
-            <span [class.active]="selectedPeriod === '7'" (click)="selectedPeriod = '7'">7j</span>
-            <span [class.active]="selectedPeriod === '30'" (click)="selectedPeriod = '30'">30j</span>
+            <span [class.active]="selectedPeriod === '7'" (click)="changePeriod('7')">7j</span>
+            <span [class.active]="selectedPeriod === '30'" (click)="changePeriod('30')">30j</span>
           </div>
         </div>
 
@@ -75,11 +59,11 @@
         </div>
       </section>
 
-      <!-- Score by Notion -->
+      <!-- Score by Subject -->
       <section class="chart-section">
         <div class="section-title">
           <ion-icon name="pie-chart-outline"></ion-icon>
-          <h3>Maîtrise par notion</h3>
+          <h3>Maîtrise par matière</h3>
         </div>
         <div class="chart-container card-look">
           <canvas #barChart></canvas>

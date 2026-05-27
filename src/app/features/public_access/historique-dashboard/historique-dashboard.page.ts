@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { IonicModule, ToastController } from '@ionic/angular';
+import { HttpClient } from '@angular/common/http';
 import { addIcons } from 'ionicons';
-import { arrowBackOutline, calendarOutline, bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline } from 'ionicons/icons';
+import { arrowBackOutline, calendarOutline, bookOutline, ribbonOutline, personOutline, logOutOutline, speedometerOutline, timeOutline, addCircleOutline, removeCircleOutline } from 'ionicons/icons';
 import { MenuComponent } from '../../../shared/menu/menu.component';
+import { environment } from '../../../../environments/environment';
 
 interface Session {
   id: number;
@@ -16,7 +18,7 @@ interface Session {
   total: number;
   pourcentage: number;
   icon: string;
-  statusColor: string; // 'green' ou 'red'
+  statusColor: string;
 }
 
 @Component({
@@ -28,24 +30,15 @@ interface Session {
 })
 export class HistoriqueDashboardPage implements OnInit {
 
-  filtres = ['Tout', 'Variables', 'Conditions', 'Boucles', 'Fonctions'];
-  filtreActif = 'Tout';
   visibleCount = 5;
-
-  sessions: Session[] = [
-    { id: 1, titre: 'Variables', categorie: 'Algorithmique', date: 'Auj. 14h32', duree: '4min', score: 8, total: 10, pourcentage: 80, icon: '🧮', statusColor: 'green' },
-    { id: 2, titre: 'Boucles', categorie: 'Programmation', date: 'Hier 10h15', duree: '6min', score: 6, total: 10, pourcentage: 60, icon: '🔄', statusColor: 'green' },
-    { id: 3, titre: 'Conditions', categorie: 'Algorithmique', date: 'Hier 09h00', duree: '5min', score: 5, total: 10, pourcentage: 50, icon: '🔀', statusColor: 'red' },
-    { id: 4, titre: 'Fonctions', categorie: 'Maths', date: 'Lun. 16h20', duree: '5min', score: 7, total: 10, pourcentage: 70, icon: '⚙️', statusColor: 'green' },
-    { id: 5, titre: 'Variables', categorie: 'Programmation', date: 'Lun. 11h05', duree: '3min', score: 9, total: 10, pourcentage: 90, icon: '📦', statusColor: 'green' },
-    { id: 6, titre: 'Tableaux', categorie: 'Algorithmique', date: 'Dim. 15h40', duree: '7min', score: 4, total: 10, pourcentage: 40, icon: '📋', statusColor: 'red' },
-    { id: 7, titre: 'Algorithmes', categorie: 'Maths', date: 'Sam. 18h00', duree: '8min', score: 6, total: 10, pourcentage: 60, icon: '📉', statusColor: 'green' },
-    { id: 8, titre: 'Boucles', categorie: 'Programmation', date: 'Ven. 20h15', duree: '5min', score: 8, total: 10, pourcentage: 80, icon: '🔁', statusColor: 'green' },
-  ];
+  sessions: Session[] = [];
+  isLoading = false;
+  user = { nom: 'Emma Dubois', initiales: 'ED' };
 
   constructor(
     public router: Router,
-    private toastController: ToastController
+    private toastController: ToastController,
+    private http: HttpClient
   ) {
     addIcons({
       'arrow-back-outline': arrowBackOutline,
@@ -54,7 +47,46 @@ export class HistoriqueDashboardPage implements OnInit {
       'ribbon-outline': ribbonOutline,
       'person-outline': personOutline,
       'log-out-outline': logOutOutline,
-      'speedometer-outline': speedometerOutline
+      'speedometer-outline': speedometerOutline,
+      'time-outline': timeOutline,
+      'add-circle-outline': addCircleOutline,
+      'remove-circle-outline': removeCircleOutline
+    });
+  }
+
+  ngOnInit() {
+    this.loadUserData();
+    this.loadHistory();
+  }
+
+  loadUserData() {
+    const userJson = localStorage.getItem('user');
+    if (userJson) {
+      const u = JSON.parse(userJson);
+      // Fallback sur Emma Dubois si les noms ne sont pas renseignés
+      const firstName = u.first_name || 'Emma';
+      const lastName = u.last_name || 'Dubois';
+
+      this.user.nom = firstName + ' ' + lastName;
+      this.user.initiales = (firstName[0] || '') + (lastName[0] || '') || 'ED';
+    }
+  }
+
+  loadHistory() {
+    this.isLoading = true;
+    const token = localStorage.getItem('authToken');
+
+    this.http.get(`${environment.apiUrl}/api/answers/history`, {
+      headers: { Authorization: `Bearer ${token}` }
+    }).subscribe({
+      next: (data: any) => {
+        this.sessions = data;
+        this.isLoading = false;
+      },
+      error: (err: any) => {
+        console.error('Erreur chargement historique:', err);
+        this.isLoading = false;
+      }
     });
   }
 
@@ -80,21 +112,13 @@ export class HistoriqueDashboardPage implements OnInit {
     void this.router.navigate(['/connexion'], { replaceUrl: true });
   }
 
-  ngOnInit() {}
-
   goBack(): void {
     void this.router.navigate(['/dashboard']);
   }
 
-  setFiltre(f: string) {
-    this.filtreActif = f;
-  }
-
   onTabClick(event: Event): void {
     const target = (event.target as HTMLElement)?.closest('.tab');
-    if (!target) {
-      return;
-    }
+    if (!target) return;
 
     const tabElements = Array.from(target.parentElement?.querySelectorAll('.tab') ?? []);
     const clickedIndex = tabElements.indexOf(target);
@@ -110,8 +134,6 @@ export class HistoriqueDashboardPage implements OnInit {
         return;
       case 3:
         void this.presentToast('La page badges sera disponible bientot.');
-        return;
-      default:
         return;
     }
   }

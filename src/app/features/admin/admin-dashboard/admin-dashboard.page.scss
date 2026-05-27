@@ -34,9 +34,20 @@ ion-content { --background: #{$bg-cream}; }
 		}
 		h2 { font-size: 22px; margin: 0; font-weight: 700; }
 		.badge-row {
-			display: flex; align-items: center; gap: 10px; margin-top: 5px;
+			display: flex; align-items: center; gap: 10px; margin-top: 5px; flex-wrap: wrap;
 			.level-badge { background: rgba(255,255,255,0.2); padding: 4px 10px; border-radius: 20px; font-size: 12px;background: #ff823a; }
 			.user-email { font-size: 12px; opacity: 0.8; }
+		}
+
+		@media (max-width: 520px) {
+			.user-profile {
+				flex-direction: column;
+				align-items: flex-start;
+			}
+
+			.badge-row {
+				gap: 8px;
+			}
 		}
 	}
 
@@ -70,7 +81,7 @@ ion-content { --background: #{$bg-cream}; }
 .main-content { padding: 0 15px; }
 
 .custom-tabs {
-	display: flex; background: white; margin: -20px 0 20px; border-radius: 15px;
+	display: flex; background: white; margin: 0px 0 20px; border-radius: 15px;
 	box-shadow: 0 4px 15px rgba(0,0,0,0.05);
 	.tab {
 		appearance: none;

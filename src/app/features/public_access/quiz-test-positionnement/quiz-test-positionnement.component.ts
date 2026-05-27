@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { Router, RouterModule } from '@angular/router';
 import { QuestionService, ApiQuestion } from '../../../core/services/question.service';
@@ -16,7 +17,7 @@ import { environment } from '../../../../environments/environment';
   templateUrl: './quiz-test-positionnement.component.html',
   styleUrls: ['./quiz-test-positionnement.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, RouterModule]
+  imports: [CommonModule, FormsModule, IonicModule, RouterModule]
 })
 export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
 
@@ -35,11 +36,11 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
   correctAnswersCount: number = 0;
   notionsMasteredCount: number = 0;
   subjectsProgress: any[] = [
-    { name: 'Geographie', icon: '🌍', status: 'Non évaluée', total: 0, correct: 0, percent: 0 },
+    { name: 'Histoire-Geographie', icon: '🌍', status: 'Non évaluée', total: 0, correct: 0, percent: 0 },
     { name: 'Maths', icon: '🔢', status: 'Non évaluée', total: 0, correct: 0, percent: 0 },
     { name: 'Anglais', icon: '🇬🇧', status: 'Non évaluée', total: 0, correct: 0, percent: 0 },
     { name: 'Francais', icon: '✍️', status: 'Non évaluée', total: 0, correct: 0, percent: 0 },
-    { name: 'Sciences', icon: '🧪', status: 'Non évaluée', total: 0, correct: 0, percent: 0 },
+    { name: 'Physique-Chimie', icon: '🧪', status: 'Non évaluée', total: 0, correct: 0, percent: 0 },
     { name: 'SVT', icon: '🧬', status: 'Non évaluée', total: 0, correct: 0, percent: 0 }
   ];
 
@@ -49,6 +50,7 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
   // Fullscreen image viewer state
   isImageFullscreen = false;
   activeImageIndex = 0;
+  isMagnified = false;
 
   // Timer
   remainingTime: number = 30;
@@ -95,7 +97,6 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.error = null;
 
-    // On utilise getAllQuestions pour être sûr de voir ce qui existe en base
     this.questionService.getAllQuestions()
       .pipe(
         takeUntil(this.destroy$),
@@ -106,24 +107,57 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
           return of([]);
         })
       )
-      .subscribe(questions => {
-        // On filtre : soit type 'test', soit les questions qui n'ont pas de notionId (notionId null ou -1)
-        const testQuestions = questions.filter(q =>
+      .subscribe(allQuestions => {
+        // 1. Filtrer les questions éligibles au test
+        const testPool = allQuestions.filter(q =>
           q.type === 'test' || (q as any).notionId === null || (q as any).notion_id === null || (q as any).notionId === -1
         );
 
-        if (testQuestions.length > 0) {
-          this.questions = testQuestions;
-          this.startTimer();
-        } else if (questions.length > 0) {
-          // Si on n'a rien trouvé de spécifique, on prend les premières questions pour ne pas bloquer l'utilisateur
-          this.questions = questions.slice(0, 10);
-          this.startTimer();
+        if (testPool.length === 0 && allQuestions.length > 0) {
+          // Si aucune question "test", on prend dans la base globale pour ne pas bloquer
+          this.generateRandomTest(allQuestions);
+        } else if (testPool.length > 0) {
+          this.generateRandomTest(testPool);
         } else {
           this.error = 'Aucune question disponible dans la base de données.';
         }
+
         this.isLoading = false;
       });
+  }
+
+  /**
+   * Génère un test avec max 8 questions aléatoires par matière
+   */
+  private generateRandomTest(pool: ApiQuestion[]) {
+    const groupedBySubject: Record<string, ApiQuestion[]> = {};
+
+    // Groupement
+    pool.forEach(q => {
+      const subject = this.normalizeSubjectName(q.matiere || 'Inconnue');
+      if (!groupedBySubject[subject]) groupedBySubject[subject] = [];
+      groupedBySubject[subject].push(q);
+    });
+
+    let finalQuestions: ApiQuestion[] = [];
+
+    // Sélection aléatoire de 8 questions par groupe
+    Object.keys(groupedBySubject).forEach(subject => {
+      const subjectQuestions = groupedBySubject[subject];
+      // Mélange (Fisher-Yates)
+      const shuffled = [...subjectQuestions].sort(() => 0.5 - Math.random());
+      // On en garde 8 max
+      finalQuestions = [...finalQuestions, ...shuffled.slice(0, 8)];
+    });
+
+    // On remélange le tout pour ne pas avoir les matières à la suite (optionnel)
+    this.questions = finalQuestions.sort(() => 0.5 - Math.random());
+
+    if (this.questions.length > 0) {
+      this.startTimer();
+    } else {
+      this.error = 'Erreur de génération du test.';
+    }
   }
 
   /**
@@ -141,7 +175,7 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
 
       if (this.remainingTime <= 0) {
         clearInterval(this.timerInterval);
-        this.nextQuestion(); // Auto-avancer si timeout
+        this.remainingTime = 0;
       }
     }, 1000);
   }
@@ -204,8 +238,12 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
    * Passe à la question suivante ou valide la réponse
    */
   nextQuestion() {
-    if (!this.showFeedback) {
-      // Étape 1 : On affiche la correction
+    if (!this.currentQuestion) {
+      return;
+    }
+
+    if (!this.showFeedback && this.currentQuestion.type === 'quiz') {
+      // Étape 1 : On affiche la correction uniquement pour les QCM
       this.showFeedback = true;
       if (this.timerInterval) clearInterval(this.timerInterval);
       return;
@@ -220,6 +258,17 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
       // Quiz terminé
       this.completeQuiz();
     }
+  }
+
+  isCurrentQuestionAnswered(): boolean {
+    if (!this.currentQuestion) return false;
+    if (this.remainingTime === 0) {
+      return true;
+    }
+    if (this.currentQuestion.type === 'test') {
+      return !!(this.userAnswers[this.currentQuestion.id] || '').trim();
+    }
+    return this.isAnswerSelected(this.userAnswers[this.currentQuestion.id] || '');
   }
 
   /**
@@ -259,7 +308,27 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
       clearInterval(this.timerInterval);
     }
 
-    // Calcul des résultats
+    // 1. Sauvegarder TOUTES les questions du test (même non répondues)
+    const savePromises = this.questions.map((q) => {
+      const answer = this.userAnswers[q.id] || ''; // Vide si non répondue
+      return firstValueFrom(
+        this.http.post(`${environment.apiUrl}/api/answers`, {
+          questionId: q.id,
+          selectedAnswer: answer
+        }, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('authToken')}` }
+        })
+      ).catch(err => console.error(`Erreur sauvegarde question ${q.id}:`, err));
+    });
+
+    try {
+      await Promise.all(savePromises);
+      console.log('Toutes les réponses ont été sauvegardées avec succès');
+    } catch (err) {
+      console.error('Erreur globale lors de la sauvegarde des réponses:', err);
+    }
+
+    // 2. Calcul des résultats pour l'affichage immédiat (Frontend)
     this.correctAnswersCount = 0;
     const resultsBySubject: Record<string, { total: number, correct: number }> = {};
 
@@ -272,9 +341,9 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
       }
       resultsBySubject[subjectName].total++;
 
-      const userAns = this.userAnswers[q.id];
-      const correctAns = q.correctAnswer || q.correct_answer;
-      if (userAns === correctAns) {
+      const userAns = this.normalizeAnswer(this.userAnswers[q.id]);
+      const correctAns = this.normalizeAnswer(q.correctAnswer || q.correct_answer);
+      if (userAns && userAns === correctAns) {
         this.correctAnswersCount++;
         resultsBySubject[subjectName].correct++;
       }
@@ -345,7 +414,20 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
   private normalizeSubjectName(name: string): string {
     return name.trim()
       .toLowerCase()
-      .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Retire les accents (ex: Géographie -> geographie)
+      .normalize("NFD").replace(/[\u0300-\u036f]/g, ""); // Retire les accents (ex: Histoire-Géographie -> histoire-geographie)
+  }
+
+  private normalizeAnswer(value: string | undefined | null): string {
+    if (!value) {
+      return '';
+    }
+
+    return value
+      .trim()
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/\s+/g, ' ');
   }
 
   restartQuiz() {
@@ -359,6 +441,7 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
   openFullscreen(index: number): void {
     this.activeImageIndex = index;
     this.isImageFullscreen = true;
+    this.isMagnified = false;
 
     // Attendre que le DOM soit rendu pour scroller
     setTimeout(() => {
@@ -369,8 +452,13 @@ export class QuizTestPositionnementComponent implements OnInit, OnDestroy {
     }, 50);
   }
 
+  toggleMagnify(): void {
+    this.isMagnified = !this.isMagnified;
+  }
+
   closeFullscreen(): void {
     this.isImageFullscreen = false;
+    this.isMagnified = false;
   }
 
   /**

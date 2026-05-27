@@ -51,7 +51,7 @@
         <div class="progress-bar-container">
           <div class="progress-fill"
                [style.width.%]="getTimePercentage()"
-               [class.timer-warning-bar]="remainingTime <= 5"></div>
+               [ngClass]="{'timer-warning-bar': remainingTime <= 5}"></div>
         </div>
 
         <div class="quiz-meta">
@@ -85,7 +85,7 @@
       </div>
 
       <!-- Options de réponse -->
-      <div class="options-list">
+      <div class="options-list" *ngIf="currentQuestion.type === 'quiz'">
         <div class="option-item"
              *ngFor="let answer of currentAnswers; let i = index"
              (click)="selectAnswer(answer)"
@@ -99,6 +99,18 @@
           <div class="option-text">{{ answer }}</div>
         </div>
       </div>
+
+      <div class="open-answer-input" *ngIf="currentQuestion.type === 'test'">
+        <ion-item lines="none" class="custom-input">
+          <ion-textarea
+            placeholder="Tape ta réponse ici..."
+            [(ngModel)]="userAnswers[currentQuestion.id]"
+            [autoGrow]="true"
+            rows="3">
+          </ion-textarea>
+        </ion-item>
+        <p class="input-hint">Ta réponse sera vérifiée automatiquement à la fin.</p>
+      </div>
     </div>
 
     <!-- Boutons de navigation fixe en bas -->
@@ -109,17 +121,12 @@
             expand="block"
             class="btn-validate"
             (click)="nextQuestion()"
-            [disabled]="!currentQuestion || !isAnswerSelected(userAnswers[currentQuestion.id])">
+            [disabled]="!currentQuestion || !isCurrentQuestionAnswered()">
             <span *ngIf="!showFeedback">Valider</span>
             <span *ngIf="showFeedback && canGoNext()">Suivant</span>
             <span *ngIf="showFeedback && !canGoNext()">Terminer</span>
             <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
           </ion-button>
-        </div>
-
-        <!-- Info réponses -->
-        <div class="quiz-stats">
-          <small>Questions répondues : {{ getAnsweredCount() }} / {{ questions.length }}</small>
         </div>
       </div>
     </ion-footer>
@@ -193,25 +200,10 @@
 
     <!-- Actions -->
     <div class="results-actions">
-      <button class="btn-action secondary" (click)="restartQuiz()">
-        <span>Recommencer le parcours</span>
-        <ion-icon name="arrow-forward-outline"></ion-icon>
-      </button>
-
-      <button class="btn-action primary" routerLink="/dashboard">
+      <button class="btn-action primary" routerLink="/liste-matiere">
         <span>Retour à l'accueil</span>
         <ion-icon name="arrow-forward-outline"></ion-icon>
       </button>
-    </div>
-
-    <!-- Footer Tab -->
-    <div class="footer-tab">
-      <div class="tab-pill">
-        <ion-icon name="menu-outline"></ion-icon>
-        <span class="pill-icon">🏆</span>
-        <strong>Résultats</strong>
-        <ion-icon name="chevron-up-outline"></ion-icon>
-      </div>
     </div>
   </div>
 
@@ -223,7 +215,10 @@
 
     <div class="fullscreen-swiper" (click)="$event.stopPropagation()">
       <div [id]="'fs-img-' + i" class="fullscreen-img-wrapper" *ngFor="let img of currentAnswersAsArray(currentQuestion?.images); let i = index">
-        <img [src]="img" alt="Image plein écran">
+        <img [src]="img"
+             alt="Image plein écran"
+             (click)="toggleMagnify()"
+             [class.magnified]="isMagnified">
       </div>
     </div>
 

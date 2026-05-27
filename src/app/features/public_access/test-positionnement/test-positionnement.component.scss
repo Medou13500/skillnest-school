@@ -80,7 +80,7 @@ ion-content {
 
 .main-container {
   padding: 50px 16px 80px;
-  margin-top: -30px;
+  margin-top: 20vh;
 }
 
 // Stats Cards
@@ -185,6 +185,7 @@ ion-content {
   height: 52px;
   font-weight: 800;
   font-size: 1rem;
+  margin-top: 30px; /* Ajoute l'espace entre les stats et le bouton */
   margin-bottom: 8px; /* Réduit pour rapprocher le texte */
   --box-shadow: 0 8px 18px rgba(237, 148, 59, 0.2);
 }

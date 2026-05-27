@@ -15,11 +15,7 @@
       </div>
     </div>
 
-    <div class="mini-stats">
-      <div class="m-stat"><strong>{{ usersCount }}</strong><span>USERS</span></div>
-      <div class="m-stat"><strong>{{ coursesCount }}</strong><span>COURS</span></div>
-      <div class="m-stat"><strong>{{ pendingReports }}</strong><span>SIGNAL.</span></div>
-    </div>
+    
   </div>
 
   <div class="main-content">
@@ -45,10 +41,17 @@
       </ion-row>
     </ion-grid>
 
-  <ion-button color="secondary" (click)="markTestAccountAsNew()">
-    Marquer test@gmail.com comme nouveau utilisateur
-    <span class="debug-tag">débug</span>
-  </ion-button>
+  <div class="actions">
+    <ion-button color="secondary" (click)="markTestAccountAsNew()" expand="block">
+      Reset "Nouveau" (test@gmail.com)
+      <span class="debug-tag">débug</span>
+    </ion-button>
+
+    <ion-button color="danger" (click)="resetTestAccountHistory()" expand="block">
+      Reset Historique (test@gmail.com)
+      <span class="debug-tag">débug</span>
+    </ion-button>
+  </div>
 
   </div>
 </ion-content>

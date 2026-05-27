@@ -12,7 +12,7 @@ import { authMiddleware } from "../middleware/auth.middlware";
 export default function answerRoute(controller: AnswerController) {
   const router = Router();
 
-  
+
 
 
 
@@ -142,11 +142,36 @@ export default function answerRoute(controller: AnswerController) {
 
    */
 
- 
+
   router.post(
     "/answers",
     authMiddleware,
     controller.submitAnswer.bind(controller),
+  );
+
+  router.get(
+    "/answers/stats",
+    authMiddleware,
+    controller.getStats.bind(controller)
+  );
+
+  router.get(
+    "/answers/performance",
+    authMiddleware,
+    controller.getPerformance.bind(controller)
+  );
+
+  router.get(
+    "/answers/history",
+    authMiddleware,
+    controller.getHistory.bind(controller)
+  );
+
+  router.post(
+    "/answers/reset-history",
+    authMiddleware,
+    // On pourrait ajouter adminOnly ici si on veut restreindre
+    controller.resetHistory.bind(controller)
   );
 
   return router;

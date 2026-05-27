@@ -129,7 +129,7 @@
 
 .plans-list {
   flex: 1; /* Prend tout l'espace restant */
-  padding: 15px 16px;
+  padding: 15px 16px; /* Rétablissement du padding standard */
   background: #f8eddd;
   display: flex;
   gap: 16px;
@@ -142,6 +142,11 @@
   &::-webkit-scrollbar {
     display: none;
   }
+
+  /* Utilisation d'une marge négative sur le dernier enfant pour simuler un padding de fin fonctionnel */
+  .plan-card:last-child {
+    margin-right: 16px;
+  }
 }
 
 .plan-card {
@@ -151,13 +156,13 @@
   padding: 20px 18px;
   border: 1px solid rgba(226, 207, 184, 0.7);
   box-shadow: 0 8px 22px rgba(44, 53, 103, 0.06);
-  flex: 0 0 88%;
-  scroll-snap-align: center;
+  flex: 0 0 88%; /* Rétablissement de la largeur initiale */
+  scroll-snap-align: center; /* Rétablissement du centrage magnétique */
   display: flex;
   flex-direction: column;
-  height: 100%; /* S'adapte à la hauteur disponible */
+  height: 100%;
   box-sizing: border-box;
-  overflow-y: auto; /* Si le contenu d'une carte est trop long, on scrolle à l'intérieur d'elle */
+  overflow-y: auto;
 
   & + .plan-card {
     margin-top: 0;

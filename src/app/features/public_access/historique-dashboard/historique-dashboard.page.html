@@ -7,30 +7,14 @@
           <div class="back-nav" (click)="goBack()">
             <ion-icon name="arrow-back-outline"></ion-icon>
           </div>
-          <div class="avatar">ED</div>
+          <div class="avatar">{{ user.initiales }}</div>
           <div class="user-text">
             <p class="greeting">Bonjour,</p>
-            <h2>Emma Dubois</h2>
+            <h2>{{ user.nom }}</h2>
           </div>
         </div>
       </div>
 
-      <div class="quick-stats-row">
-        <div class="q-stat">
-          <strong>24</strong>
-          <span>Quiz</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="q-stat">
-          <strong>72%</strong>
-          <span>Moyenne</span>
-        </div>
-        <div class="stat-divider"></div>
-        <div class="q-stat">
-          <strong>5j</strong>
-          <span>Série 🔥</span>
-        </div>
-      </div>
     </header>
 
     <div class="main-body">
@@ -40,16 +24,6 @@
         <div class="tab" (click)="router.navigate(['/notions'])">Notions</div>
         <div class="tab active">Historique</div>
         <div class="tab">Badges</div>
-      </div>
-
-      <!-- Filters Section -->
-      <div class="filters-scroll">
-        <div class="chip"
-             *ngFor="let f of filtres"
-             [class.active]="filtreActif === f"
-             (click)="setFiltre(f)">
-          {{ f }}
-        </div>
       </div>
 
       <!-- Sessions List -->
@@ -70,7 +44,10 @@
                 <h4>{{ s.titre }}</h4>
                 <span class="session-score" [class]="s.statusColor">{{ s.score }}/{{ s.total }}</span>
               </div>
-              <p class="session-meta">{{ s.categorie }} • {{ s.date }} • {{ s.duree }}</p>
+              <p class="session-meta">
+                {{ s.categorie }} • {{ s.date }}
+                <span *ngIf="s.duree"> • {{ s.duree }}</span>
+              </p>
               <div class="session-progress">
                 <div class="progress-track">
                   <div class="progress-fill" [style.width.%]="s.pourcentage" [class]="s.statusColor"></div>

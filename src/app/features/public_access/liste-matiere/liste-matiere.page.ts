@@ -29,7 +29,7 @@ interface Matiere {
   progressColor: string;
 }
 
-type MatiereQuizKey = 'geographie' | 'maths' | 'anglais' | 'francais' | 'sciences' | 'svt';
+type MatiereQuizKey = 'histoire-geographie' | 'maths' | 'anglais' | 'francais' | 'physique-chimie' | 'svt';
 
 @Component({
   selector: 'app-liste-matiere',
@@ -44,7 +44,7 @@ type MatiereQuizKey = 'geographie' | 'maths' | 'anglais' | 'francais' | 'science
 export class ListeMatierePage {
   matieres: Matiere[] = [
     {
-      nom: 'Geographie',
+      nom: 'Histoire-Geographie',
       icon: '🌍',
       leconsFaites: 8,
       leconsTotal: 10,
@@ -88,7 +88,7 @@ export class ListeMatierePage {
       progressColor: '#26b85f'
     },
     {
-      nom: 'Sciences',
+      nom: 'Physique-Chimie',
       icon: '🧪',
       leconsFaites: 0,
       leconsTotal: 14,
@@ -178,7 +178,9 @@ export class ListeMatierePage {
     switch (matiere.toLowerCase()) {
       case 'geographie':
       case 'géographie':
-        return 'geographie';
+      case 'histoire-geographie':
+      case 'histoire-géographie':
+        return 'histoire-geographie';
       case 'maths':
         return 'maths';
       case 'anglais':
@@ -187,7 +189,8 @@ export class ListeMatierePage {
       case 'français':
         return 'francais';
       case 'sciences':
-        return 'sciences';
+      case 'physique-chimie':
+        return 'physique-chimie';
       case 'svt':
         return 'svt';
       default:

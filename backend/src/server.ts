@@ -25,6 +25,7 @@ import AnswerRepository from "./infrastructure/AnswerRepository";
 import AnswerService from "./service/AnswerService";
 import AnswerController from "./controllers/AnswerController";
 import answerRoute from "./routes/AnswerRoute";
+import adminRoute from "./routes/AdminRoute";
 
 // ===================== AUTH LOGIN =====================
 
@@ -190,6 +191,8 @@ const questionController = new QuestionController(questionService);
 
 const answerController = new AnswerController(answerService);
 
+const adminController = new (require("./controllers/AdminController").default)();
+
 
 
 // AUTH
@@ -205,6 +208,7 @@ app.use("/api/auth", updateProfileRoute(updateProfileController));
 
 app.use("/api", questionRoute(questionController));
 app.use("/api", answerRoute(answerController));
+app.use("/api", adminRoute(adminController));
 
 // ===================== HEALTH =====================
 

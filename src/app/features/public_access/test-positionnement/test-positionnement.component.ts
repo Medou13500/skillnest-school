@@ -24,6 +24,7 @@ interface Level {
 export class TestPositionnementComponent implements OnInit {
 
   public questionCount: number = 0;
+  public subjectCount: number = 0;
   public isLoading: boolean = true;
 
   // Données pour la liste des niveaux (Capture_decran_2026-03-25_143313.png)
@@ -53,13 +54,30 @@ export class TestPositionnementComponent implements OnInit {
 
   loadQuestionCount() {
     this.isLoading = true;
-    // On utilise la même logique de filtrage que dans le quiz pour la cohérence
     this.questionService.getAllQuestions().subscribe({
       next: (questions) => {
-        const testQuestions = questions.filter(q =>
+        // 1. Filtrer les questions éligibles au test
+        const testPool = questions.filter(q =>
           q.type === 'test' || (q as any).notionId === null || (q as any).notion_id === null || (q as any).notionId === -1
         );
-        this.questionCount = testQuestions.length > 0 ? testQuestions.length : questions.slice(0, 10).length;
+
+        const poolToUse = testPool.length > 0 ? testPool : questions;
+
+        // 2. Simuler la logique du quiz : regrouper par matière et limiter à 8
+        const grouped: Record<string, number> = {};
+        poolToUse.forEach(q => {
+          const subject = (q.matiere || 'Inconnue').trim().toLowerCase();
+          grouped[subject] = (grouped[subject] || 0) + 1;
+        });
+
+        let totalCalculated = 0;
+        const subjects = Object.keys(grouped);
+        subjects.forEach(subject => {
+          totalCalculated += Math.min(grouped[subject], 8);
+        });
+
+        this.questionCount = totalCalculated;
+        this.subjectCount = subjects.length;
         this.isLoading = false;
       },
       error: () => {

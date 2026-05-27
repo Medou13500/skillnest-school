@@ -25,7 +25,7 @@ interface QuizQuestion {
 	images: string[];
 }
 
-type SubjectKey = 'geographie' | 'maths' | 'anglais' | 'francais' | 'sciences' | 'svt';
+type SubjectKey = 'histoire-geographie' | 'maths' | 'anglais' | 'francais' | 'physique-chimie' | 'svt';
 
 interface PlacementSubject {
 	key: SubjectKey;
@@ -53,8 +53,8 @@ export class QuizPage implements OnInit {
 
 	subjects: PlacementSubject[] = [
 		{
-			key: 'geographie',
-			title: 'Geographie',
+			key: 'histoire-geographie',
+			title: 'Histoire-Geographie',
 			description: 'Repérage, cartes et notions de territoire.',
 			duration: '0 questions',
 			accent: '#4caf50',
@@ -89,8 +89,8 @@ export class QuizPage implements OnInit {
 			questions: []
 		},
 		{
-			key: 'sciences',
-			title: 'Sciences',
+			key: 'physique-chimie',
+			title: 'Physique-Chimie',
 			description: 'Observation, démarche scientifique et notions de base.',
 			duration: '0 questions',
 			accent: '#0f9bb0',
@@ -268,7 +268,9 @@ export class QuizPage implements OnInit {
 		switch (val) {
 			case 'geographie':
 			case 'géographie':
-				return 'geographie';
+			case 'histoire-geographie':
+			case 'histoire-géographie':
+				return 'histoire-geographie';
 			case 'maths':
 				return 'maths';
 			case 'anglais':
@@ -277,7 +279,8 @@ export class QuizPage implements OnInit {
 			case 'français':
 				return 'francais';
 			case 'sciences':
-				return 'sciences';
+			case 'physique-chimie':
+				return 'physique-chimie';
 			case 'svt':
 				return 'svt';
 			default:

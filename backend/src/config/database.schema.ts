@@ -16,20 +16,20 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
 
   // Vérifier si les colonnes first_name, last_name et is_new_user existent déjà
   const columnsExist = await pool.query(`
-    SELECT column_name FROM information_schema.columns 
+    SELECT column_name FROM information_schema.columns
     WHERE table_name = 'users' AND column_name IN ('first_name', 'last_name', 'is_new_user')
   `);
 
   if (columnsExist.rows.length === 0) {
     await pool.query(`
-      ALTER TABLE public.users 
+      ALTER TABLE public.users
       ADD COLUMN IF NOT EXISTS first_name TEXT,
       ADD COLUMN IF NOT EXISTS last_name TEXT,
       ADD COLUMN IF NOT EXISTS is_new_user BOOLEAN NOT NULL DEFAULT false
     `);
   } else {
     await pool.query(`
-      ALTER TABLE public.users 
+      ALTER TABLE public.users
       ADD COLUMN IF NOT EXISTS is_new_user BOOLEAN NOT NULL DEFAULT false
     `);
   }
@@ -135,5 +135,21 @@ export async function initializeDatabaseSchema(pool: Pool): Promise<void> {
   await pool.query(`
     CREATE INDEX IF NOT EXISTS idx_questions_notion_id
       ON public.questions(notion_id);
+  `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS public.answers (
+      id SERIAL PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+      question_id INTEGER NOT NULL REFERENCES public.questions(id) ON DELETE CASCADE,
+      selected_answer TEXT NOT NULL,
+      is_correct BOOLEAN NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    );
+  `);
+
+  await pool.query(`
+    CREATE INDEX IF NOT EXISTS idx_answers_user_id
+      ON public.answers(user_id);
   `);
 }

@@ -68,8 +68,8 @@ export class ParentPage {
     },
     {
       id: 2,
-      titre: 'Quiz Géographie',
-      matiere: 'Géographie',
+      titre: 'Quiz Histoire-Géographie',
+      matiere: 'Histoire-Géographie',
       date: '2026-05-03',
       score: 8,
       totalQuestions: 10,

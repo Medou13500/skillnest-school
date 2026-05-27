@@ -39,47 +39,19 @@
         </ion-col>
         <ion-col size="4">
           <div class="stat-card">
-            <span class="emoji">📊</span>
-            <span class="val">5</span>
-            <span class="lab">Niveaux</span>
+            <span class="emoji">📚</span>
+            <span class="val">{{ isLoading ? '...' : subjectCount }}</span>
+            <span class="lab">Matières</span>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
 
-    <!-- Description Card -->
-    <div class="description-card">
-      <p>
-        Ce test couvre les <strong>5 grands thèmes</strong> du programme : Variables, Conditions, Boucles, Fonctions et Algorithmes. Tes réponses permettront à SkillNest de <strong>personnaliser ton parcours</strong> et de te proposer des quizz adaptés à ton niveau réel.
-      </p>
-    </div>
-
-    <!-- Thèmes évalués (Badges colorés) -->
-    <h2 class="title-label">Thèmes évalués</h2>
-    <div class="themes-grid">
-      <ion-badge class="badge-var">📦 Variables</ion-badge>
-      <ion-badge class="badge-cond">🔀 Conditions</ion-badge>
-      <ion-badge class="badge-loop">🔁 Boucles</ion-badge>
-      <ion-badge class="badge-func">⚙️ Fonctions</ion-badge>
-      <ion-badge class="badge-algo">🧮 Algorithmes</ion-badge>
-    </div>
-
-    <!-- Niveaux possibles -->
-    <div class="levels-box">
-      <h3>NIVEAUX POSSIBLES</h3>
-      <ion-list lines="none" class="bg-transparent">
-        <ion-item *ngFor="let lvl of levels">
-          <span slot="start">{{ lvl.emoji }}</span>
-          <ion-label [style.color]="lvl.color">{{ lvl.name }}</ion-label>
-        </ion-item>
-      </ion-list>
-    </div>
-
     <!-- Bouton Démarrer -->
-<ion-button expand="block" class="btn-start" routerLink="/quiz-test-positionnement">
-  Démarrer le test
-  <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
-</ion-button>
+    <ion-button expand="block" class="btn-start" routerLink="/quiz-test-positionnement">
+      Démarrer le test
+      <ion-icon slot="end" name="arrow-forward-circle"></ion-icon>
+    </ion-button>
 
     <p class="footer-text">
       Tu pourras refaire le test à tout moment depuis ton profil.
