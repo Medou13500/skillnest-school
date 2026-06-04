@@ -83,6 +83,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/public_access/suppression-compte/suppression-compte.page').then(m => m.SuppressionComptePage)
   },
   {
+    path: 'quiz',
+    loadComponent: () => import('./features/public_access/quiz/quiz.page').then(m => m.QuizPage)
+  },
+  {
     path: 'test-positionnement',
     loadComponent: () => import('./features/public_access/test-positionnement/test-positionnement.component').then(m => m.TestPositionnementComponent)
   },

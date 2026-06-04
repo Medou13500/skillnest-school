@@ -117,22 +117,27 @@
 .panel-header {
   display: flex;
   justify-content: flex-end;
-  padding: calc(20px + env(safe-area-inset-top, 0px)) 16px 10px;
+  padding: calc(15px + env(safe-area-inset-top, 0px)) 15px 10px;
 }
 
 .panel-header .close {
-  background: #f5f5f5;
-  border: none;
-  width: 44px;
-  height: 44px;
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.05);
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  cursor: pointer;
 }
 
-.panel-header .close ion-icon { font-size: 22px; color: #666; }
+.panel-header .close ion-icon {
+  font-size: 20px;
+  color: #ef8431; /* Orange color for the X as seen in user image */
+  font-weight: bold;
+}
 
 .nav-item {
   width: 100%;
